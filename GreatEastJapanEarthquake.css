@@ -1,0 +1,17 @@
+.clear{
+    float: right;
+
+    background-color: aqua;
+}
+
+header{
+    font-size: 50px;
+}
+
+p{
+    font-size: 20px;
+}
+
+.color-css{
+    color: red;
+}

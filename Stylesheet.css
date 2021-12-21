@@ -1,0 +1,30 @@
+p{
+    color: skyblue;
+    text-align: center;
+    vertical-align: middle;
+    font-size: large;
+    font-weight: 600;
+}
+.search_bar{
+    display: list-item; /*アイコン、テキストボックスを調整する*/
+    background-color: #ddd;
+    text-align: center;
+    vertical-align: middle;
+    height: 50px;
+    width: 50%;
+}
+
+.search_icon{ /*アイコンに一定のスペースを設ける*/
+    height: 30px;
+    width: 30px;
+    padding: 5px 5px;
+}
+
+#text{
+    font-size: 16px;
+    width: 50%; /*flexの中で100%広げる*/
+    background-color: #ddd;
+    border: none; /*枠線非表示*/
+    outline: none; /*フォーカス時の枠線非表示*/
+    box-sizing: border-box; /*横幅の解釈をpadding, borderまでとする*/
+}
