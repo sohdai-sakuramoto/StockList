@@ -7,36 +7,13 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js" type="text/javascript"></script>
     </head>
     <body>
-      <div id="wrapper">   
         <header>
          <a href="/Users/sohdaisakuramoto/Desktop/StockList/Hompage.html" class="homeback1">ホーム</a>
          <br>日経平均と大きな出来事
         </header>
-        <p>2011年3月11日　東日本大震災発生1日前から後1ヶ月の日経平均</p>
-        <section>
-        <div style="width:300px;height:150px;overflow:auto;" class="clear">
-         <h2>大きな出来事</h2>
-         <h3>3月11日 東北地方太平洋沖地震発生</h3>
-         <h5>大引け間近の14時46分に発生。売り注文が殺到し、10分あまりで100円以上下落。</h5>
-         <h3>3月12日 福島第一原子力発電所爆発事故発生：土曜日のため株式市場は休場</h3>
-         <h3>3月14日 震災後初の株式市場</h3>
-         <h5>大震災の影響を懸念し、寄り付きから売り注文が殺到。下落幅は前週末比、633円安となった。
-            <br>また、福島第一原子力発電所爆発事故の影響により東京電力の株価はストップ安となり、大引けまで取引成立せず。
-         </h5>
-         <h3>3月15日 東京証券取引所第一部 過去3番目の下落率(10.55%)を記録</h3>
-         <h5>
-            福島原発事故による放射線量の以上な上昇が報じられると、午後に入り下げ幅は一時1,400円を記録。<br>終値は1015円安となった。
-         </h5>
-         <h3>3月16日 買い戻しにより、大幅反発。9000円台回復。</h3>
-         <h5>震災発生から続いていた下げは止まり、前日比488円高となった。
-            <br>一時、買いが一巡し震災の被害の詳細がわからないことから売り注文が進む展開も見られた。
-            <br>しかし、先物の上昇により大引けに掛けて相場を引き上げた。
-         </h5>    
-        </div>
-        </section>
-      </div> 
-        <canvas id="graph-area" height="450" width="600"></canvas>
+        <p>2011年3月11日 東日本大震災発生1日前から後1ヶ月の日経平均</p>
 
+        <canvas id="graph-area" height="550" width="900"></canvas>
         <script type="text/javascript">
 
             // ▼グラフの中身
@@ -63,9 +40,9 @@
             window.onload = function(){
                var ctx = document.getElementById("graph-area").getContext("2d");
                window.myLine = new Chart(ctx).Line(lineChartData);
-            }
+            }            
          
-         </script>
+         </script> 
          <h2>この時の個別株</h2>
          <select id="change_js">
             <option value="">海運業</option>
@@ -99,6 +76,25 @@
             selectedAirLine.onchange = function() {
                 window.location.href = selectedAirLine.value;
             };
-         </script>      
+         </script>    
+        <div style="width:1000px;height:850px;overflow:auto;position:absolute;left:1000px;top: 1px;" class="clear">
+         <h2>大きな出来事</h2>
+         <h3>3月11日 東北地方太平洋沖地震発生</h3>
+         <h5>大引け間近の14時46分に発生。売り注文が殺到し、10分あまりで100円以上下落。</h5>
+         <h3>3月12日 福島第一原子力発電所爆発事故発生：土曜日のため株式市場は休場</h3>
+         <h3>3月14日 震災後初の株式市場</h3>
+         <h5>大震災の影響を懸念し、寄り付きから売り注文が殺到。下落幅は前週末比、633円安となった。
+            <br>また、福島第一原子力発電所爆発事故の影響により東京電力の株価はストップ安となり、大引けまで取引成立せず。
+         </h5>
+         <h3>3月15日 東京証券取引所第一部 過去3番目の下落率(10.55%)を記録</h3>
+         <h5>
+            福島原発事故による放射線量の以上な上昇が報じられると、午後に入り下げ幅は一時1,400円を記録。<br>終値は1015円安となった。
+         </h5>
+         <h3>3月16日 買い戻しにより、大幅反発。9000円台回復。</h3>
+         <h5>震災発生から続いていた下げは止まり、前日比488円高となった。
+            <br>一時、買いが一巡し震災の被害の詳細がわからないことから売り注文が進む展開も見られた。
+            <br>しかし、先物の上昇により大引けに掛けて相場を引き上げた。
+         </h5>    
+        </div>                 
      </body>    
 </html>
