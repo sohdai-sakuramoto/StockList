@@ -1,6 +1,6 @@
-.clear{
+#clear{
     float: right;
-
+    width:50%;
     background-color: aqua;
 }
 
@@ -15,3 +15,13 @@ p{
 .color-css{
     color: red;
 }
+section{
+    min-height: 100vh;
+    padding: 30px;
+}
+
+#wrapper{
+    position: relative;/*position stickyの基点にするため relativeをかける*/
+    display: flex;/*左エリア、右エリア横並び指定*/
+    margin: 0 0 0 auto;
+  }
