@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ビッグニュースと株価の相関（統合版サンプル）</title>
+
+  <!-- Chart.js（あなたの既存HTMLと同じ系統：1.0.2） -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Noto Sans JP", Segoe UI, Roboto, Helvetica, Arial, sans-serif; margin: 0; }
+    header { padding: 14px 18px; border-bottom: 1px solid #e5e5e5; font-weight: 700; }
+    header a { font-weight: 600; text-decoration: none; color: #0b57d0; }
+    .wrap { display: grid; grid-template-columns: 1fr 520px; gap: 18px; padding: 18px; }
+    .left { min-width: 0; }
+    .right { border-left: 1px solid #efefef; padding-left: 18px; min-width: 0; }
+    .panel-title { font-size: 16px; font-weight: 800; margin: 0 0 10px 0; }
+    .sub { color: #666; font-size: 13px; margin: 6px 0 12px; }
+    .canvas-box { border: 1px solid #eee; border-radius: 8px; padding: 12px; background: #fff; }
+    .news-box { border: 1px solid #eee; border-radius: 8px; padding: 12px; height: 760px; overflow: auto; background: #fff; }
+    .news-item { padding: 10px 0; border-bottom: 1px solid #f2f2f2; }
+    .news-item:last-child { border-bottom: none; }
+    .news-date { font-size: 12px; color: #666; margin-bottom: 2px; }
+    .news-title a { color: #0b57d0; text-decoration: none; font-weight: 700; }
+    .news-summary { font-size: 13px; line-height: 1.5; margin-top: 4px; }
+    .kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 12px 0; }
+    .kpi { border: 1px solid #eee; border-radius: 8px; padding: 10px; background: #fff; }
+    .kpi .k { font-size: 12px; color: #666; }
+    .kpi .v { font-size: 16px; font-weight: 800; margin-top: 2px; }
+    .bottom { padding: 0 18px 18px; }
+    .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 10px 0 12px; }
+    select { padding: 8px 10px; border-radius: 8px; border: 1px solid #ddd; background: #fff; }
+    .symbol-area { display: grid; grid-template-columns: 1fr 520px; gap: 18px; }
+    .symbol-left { min-width: 0; }
+    .symbol-right { min-width: 0; }
+    .note { font-size: 12px; color: #666; margin-top: 10px; line-height: 1.6; }
+    .badge { display:inline-block; font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid #ddd; margin-left: 8px; color:#444; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <a href="#" onclick="alert('年表へのリンク先を設定してください'); return false;">年表へ戻る</a>
+    <span style="margin-left:10px;">日経平均と大きな出来事</span>
+  </header>
+
+  <!-- 上段：イベント（左：指数、右：イベントニュース） -->
+  <div class="wrap">
+    <div class="left">
+      <h1 class="panel-title" id="event-title">2011年3月11日 東日本大震災（サンプル）</h1>
+      <div class="sub" id="event-sub">震災前1営業日〜後20営業日（例）の日経平均</div>
+
+      <div class="canvas-box">
+        <canvas id="index-chart" height="260"></canvas>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi">
+          <div class="k">最大下落率（指数）</div>
+          <div class="v" id="kpi-dd">-</div>
+        </div>
+        <div class="kpi">
+          <div class="k">底値まで（日数）</div>
+          <div class="v" id="kpi-bottom-days">-</div>
+        </div>
+        <div class="kpi">
+          <div class="k">回復まで（参考）</div>
+          <div class="v" id="kpi-recovery-days">-</div>
+        </div>
+      </div>
+
+      <div class="note">
+        このHTMLは「同一ページ内で銘柄切替」を実現する統合版サンプルです。<br>
+        実データ運用では <b>/data/events/&lt;EVENT_ID&gt;/</b> 配下に CSV/JSON を置き、fetchで読み込みます。
+      </div>
+    </div>
+
+    <div class="right">
+      <h2 class="panel-title">大きな出来事 <span class="badge" id="event-category">災害</span></h2>
+      <div class="news-box" id="event-news"></div>
+    </div>
+  </div>
+
+  <!-- 下段：個別株（左：銘柄チャート、右：銘柄ニュース） -->
+  <div class="bottom">
+    <h2 class="panel-title">この時の個別株</h2>
+
+    <div class="controls">
+      <select id="sector-select">
+        <option value="">業種を選択</option>
+      </select>
+
+      <select id="symbol-select" disabled>
+        <option value="">銘柄を選択</option>
+      </select>
+
+      <span id="symbol-title" style="font-weight:800;">銘柄を選択してください</span>
+    </div>
+
+    <div class="symbol-area">
+      <div class="symbol-left">
+        <div class="canvas-box">
+          <canvas id="symbol-chart" height="240"></canvas>
+        </div>
+      </div>
+
+      <div class="symbol-right">
+        <div class="news-box" id="symbol-news" style="height: 360px;"></div>
+      </div>
+    </div>
+
+    <div class="note">
+      1) ニュース本文は保持せず「見出し＋要約＋リンク」に寄せることで、権利・運用リスクを抑えられます。<br>
+      2) MVPではニュースは手動JSONで十分です。伸びてからAPI/自動化を検討してください。
+    </div>
+  </div>
+
+  <script>
+    /*****************************************************************
+     * 設定値（イベントIDを変えるだけивать: ページの“骨格”はそのまま）
+     *****************************************************************/
+    const EVENT_ID = "20110311_gej";
+
+    // 実運用時のデータ配置例（public配下）
+    // /data/events/20110311_gej/
+    //   index_nikkei.csv                (date,close)
+    //   event_news.json                 ([{date,title,summary,url},...])
+    //   symbols.json                    ([{symbol,name,sector},...])
+    //   /symbols/
+    //     9101.csv                      (date,close)
+    //     9101_news.json                ([{date,title,summary,url},...])
+
+    /*****************************************************************
+     * MVPサンプル用：埋め込みデータ（ファイルが無くても動く）
+     *****************************************************************/
+    const sample = {
+      event: {
+        title: "2011年3月11日 東日本大震災（サンプル）",
+        sub: "震災前1営業日〜後20営業日（例）の日経平均",
+        category: "災害"
+      },
+      // CSV相当（date, close）
+      index: [
+        { date: "2011/3/10", close: 10434.38 },
+        { date: "3/11", close: 10254.43 },
+        { date: "3/14", close: 9620.49 },
+        { date: "3/15", close: 8605.15 },
+        { date: "3/16", close: 9093.72 },
+        { date: "3/17", close: 8962.67 },
+        { date: "3/18", close: 9206.75 },
+        { date: "3/22", close: 9608.32 },
+        { date: "3/23", close: 9449.47 },
+        { date: "3/24", close: 9435.01 },
+        { date: "3/25", close: 9536.13 },
+        { date: "3/28", close: 9478.53 },
+        { date: "3/29", close: 9459.08 },
+        { date: "3/30", close: 9708.79 },
+        { date: "3/31", close: 9755.10 },
+        { date: "4/1", close: 9708.39 },
+        { date: "4/4", close: 9718.89 },
+        { date: "4/5", close: 9615.55 },
+        { date: "4/6", close: 9584.37 },
+        { date: "4/7", close: 9590.93 },
+        { date: "4/8", close: 9768.08 },
+        { date: "4/11", close: 9719.70 }
+      ],
+      eventNews: [
+        { date: "2011-03-11", title: "地震発生、引け間近に急落", summary: "14:46発生。売り注文が殺到し短時間で大きく下落。", url: "https://example.com/news/20110311" },
+        { date: "2011-03-14", title: "震災後初の取引、売り先行", summary: "寄り付きから売り注文が殺到し大幅安。", url: "https://example.com/news/20110314" },
+        { date: "2011-03-15", title: "下落率が大きい局面", summary: "原発関連報道などで下げ幅が拡大した局面。", url: "https://example.com/news/20110315" }
+      ],
+      symbols: [
+        { symbol: "9101", name: "日本郵船（サンプル）", sector: "海運" },
+        { symbol: "9104", name: "商船三井（サンプル）", sector: "海運" },
+        { symbol: "9984", name: "ソフトバンクG（サンプル）", sector: "情報・通信" }
+      ],
+      symbolPrices: {
+        "9101": [
+          { date: "2011/3/10", close: 260 }, { date: "3/11", close: 255 }, { date: "3/14", close: 220 },
+          { date: "3/15", close: 200 }, { date: "3/16", close: 210 }, { date: "3/17", close: 205 },
+          { date: "3/18", close: 215 }, { date: "3/22", close: 225 }
+        ],
+        "9104": [
+          { date: "2011/3/10", close: 330 }, { date: "3/11", close: 325 }, { date: "3/14", close: 290 },
+          { date: "3/15", close: 270 }, { date: "3/16", close: 280 }, { date: "3/17", close: 275 },
+          { date: "3/18", close: 285 }, { date: "3/22", close: 295 }
+        ],
+        "9984": [
+          { date: "2011/3/10", close: 3200 }, { date: "3/11", close: 3150 }, { date: "3/14", close: 2900 },
+          { date: "3/15", close: 2750 }, { date: "3/16", close: 2820 }, { date: "3/17", close: 2790 },
+          { date: "3/18", close: 2870 }, { date: "3/22", close: 2950 }
+        ]
+      },
+      symbolNews: {
+        "9101": [
+          { date: "2011-03-14", title: "物流混乱の影響を警戒", summary: "需給・物流面の不透明感が意識された。", url: "https://example.com/symbol/9101/20110314" }
+        ],
+        "9104": [
+          { date: "2011-03-15", title: "海運市況への波及懸念", summary: "先行き不透明感が重し。", url: "https://example.com/symbol/9104/20110315" }
+        ],
+        "9984": [
+          { date: "2011-03-16", title: "通信インフラ需要に注目", summary: "復旧局面での需要がテーマに。", url: "https://example.com/symbol/9984/20110316" }
+        ]
+      }
+    };
+
+    /*****************************************************************
+     * ユーティリティ
+     *****************************************************************/
+    function escapeHtml(str) {
+      return (str || "").replace(/[&<>"']/g, (m) => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;" }[m]));
+    }
+
+    function renderNews(containerId, items) {
+      const el = document.getElementById(containerId);
+      el.innerHTML = (items || []).map(x => `
+        <div class="news-item">
+          <div class="news-date">${escapeHtml(x.date)}</div>
+          <div class="news-title"><a href="${escapeHtml(x.url)}" target="_blank" rel="noopener">${escapeHtml(x.title)}</a></div>
+          <div class="news-summary">${escapeHtml(x.summary || "")}</div>
+        </div>
+      `).join("") || `<div style="color:#666;">データがありません</div>`;
+    }
+
+    function calcKPIs(rows) {
+      // rows: [{date, close}, ...]
+      const closes = rows.map(r => Number(r.close));
+      const start = closes[0];
+      let peak = start;
+      let maxDD = 0;
+      let bottomIdx = 0;
+
+      for (let i = 0; i < closes.length; i++) {
+        const v = closes[i];
+        if (v > peak) peak = v;
+        const dd = (v - peak) / peak; // negative
+        if (dd < maxDD) { maxDD = dd; bottomIdx = i; }
+      }
+
+      // recovery: start値に戻る最初の日（見つからなければ null）
+      let recoveryIdx = null;
+      for (let i = 0; i < closes.length; i++) {
+        if (closes[i] >= start) { recoveryIdx = i; break; }
+      }
+
+      return {
+        maxDrawdownPct: (maxDD * 100),
+        bottomDays: bottomIdx,
+        recoveryDays: recoveryIdx === null ? "-" : recoveryIdx
+      };
+    }
+
+    /*****************************************************************
+     * Chart.js（1.0.2）描画
+     *****************************************************************/
+    let indexChartInstance = null;
+    let symbolChartInstance = null;
+
+    function drawLineChart(canvasId, rows) {
+      const labels = rows.map(r => r.date);
+      const values = rows.map(r => Number(r.close));
+
+      const ctx = document.getElementById(canvasId).getContext("2d");
+      // destroyが無い場合もあるため、生成し直し戦略
+      // （Chart.js 1.0.2はdestroyが無いケースがあるため、canvasを差し替えるのが安全）
+      // ここでは最小化のため、毎回canvasをリセットする
+      const canvas = document.getElementById(canvasId);
+      const parent = canvas.parentNode;
+      const newCanvas = canvas.cloneNode(true);
+      parent.replaceChild(newCanvas, canvas);
+
+      const ctx2 = document.getElementById(canvasId).getContext("2d");
+
+      const data = {
+        labels: labels,
+        datasets: [{
+          fillColor : "rgba(92,220,92,0.2)",
+          strokeColor : "rgba(92,220,92,1)",
+          pointColor : "rgba(92,220,92,1)",
+          pointStrokeColor : "white",
+          data : values
+        }]
+      };
+
+      return new Chart(ctx2).Line(data);
+    }
+
+    /*****************************************************************
+     * セレクタ（業種→銘柄）
+     *****************************************************************/
+    function initSelectors(symbols) {
+      const sectorSel = document.getElementById("sector-select");
+      const symbolSel = document.getElementById("symbol-select");
+
+      const sectors = Array.from(new Set(symbols.map(s => s.sector))).sort();
+      sectorSel.innerHTML = `<option value="">業種を選択</option>` + sectors.map(sec => `<option value="${escapeHtml(sec)}">${escapeHtml(sec)}</option>`).join("");
+
+      sectorSel.onchange = () => {
+        const sec = sectorSel.value;
+        symbolSel.disabled = !sec;
+        symbolSel.innerHTML = `<option value="">銘柄を選択</option>`;
+        if (!sec) return;
+
+        const filtered = symbols.filter(s => s.sector === sec);
+        symbolSel.innerHTML += filtered.map(s => `<option value="${escapeHtml(s.symbol)}">${escapeHtml(s.name)}</option>`).join("");
+      };
+
+      symbolSel.onchange = () => {
+        const symbol = symbolSel.value;
+        if (!symbol) return;
+        loadSymbol(symbol, symbols);
+      };
+    }
+
+    /*****************************************************************
+     * データロード（MVP：ファイルがあればファイル優先。無ければサンプルで動作）
+     *****************************************************************/
+    async function tryFetchJson(path) {
+      const r = await fetch(path, { cache: "no-store" });
+      if (!r.ok) throw new Error("fetch failed: " + path);
+      return await r.json();
+    }
+
+    async function tryFetchText(path) {
+      const r = await fetch(path, { cache: "no-store" });
+      if (!r.ok) throw new Error("fetch failed: " + path);
+      return await r.text();
+    }
+
+    function parseCSV(text) {
+      const lines = text.trim().split("\n");
+      const headers = lines[0].split(",").map(s => s.trim());
+      return lines.slice(1).map(line => {
+        const cols = line.split(",").map(s => s.trim());
+        const obj = {};
+        headers.forEach((h, i) => obj[h] = cols[i]);
+        return obj;
+      });
+    }
+
+    async function loadEvent() {
+      // 画面見出し（サンプルを先に出す：UX向上）
+      document.getElementById("event-title").textContent = sample.event.title;
+      document.getElementById("event-sub").textContent = sample.event.sub;
+      document.getElementById("event-category").textContent = sample.event.category;
+
+      // 右ニュース（まずサンプル）
+      renderNews("event-news", sample.eventNews);
+
+      // 左指数（まずサンプル）
+      indexChartInstance = drawLineChart("index-chart", sample.index);
+
+      const k = calcKPIs(sample.index);
+      document.getElementById("kpi-dd").textContent = `${k.maxDrawdownPct.toFixed(2)}%`;
+      document.getElementById("kpi-bottom-days").textContent = `${k.bottomDays}日`;
+      document.getElementById("kpi-recovery-days").textContent = `${k.recoveryDays}`;
+
+      // セレクタ（まずサンプル）
+      initSelectors(sample.symbols);
+
+      // 実データがあるなら上書き
+      const base = `/data/events/${EVENT_ID}`;
+      try {
+        const eventNews = await tryFetchJson(`${base}/event_news.json`);
+        renderNews("event-news", eventNews);
+      } catch (_) {}
+
+      try {
+        const indexCSV = await tryFetchText(`${base}/index_nikkei.csv`);
+        const rows = parseCSV(indexCSV).map(r => ({ date: r.date, close: Number(r.close) }));
+        indexChartInstance = drawLineChart("index-chart", rows);
+        const k2 = calcKPIs(rows);
+        document.getElementById("kpi-dd").textContent = `${k2.maxDrawdownPct.toFixed(2)}%`;
+        document.getElementById("kpi-bottom-days").textContent = `${k2.bottomDays}日`;
+        document.getElementById("kpi-recovery-days").textContent = `${k2.recoveryDays}`;
+      } catch (_) {}
+
+      try {
+        const symbols = await tryFetchJson(`${base}/symbols.json`);
+        initSelectors(symbols);
+      } catch (_) {}
+    }
+
+    async function loadSymbol(symbol, symbolsMaster) {
+      const sym = symbolsMaster.find(s => s.symbol === symbol);
+      document.getElementById("symbol-title").textContent = sym ? `${sym.name} (${symbol})` : `(${symbol})`;
+
+      // まずサンプル描画
+      const sampleRows = sample.symbolPrices[symbol] || [];
+      if (sampleRows.length) {
+        symbolChartInstance = drawLineChart("symbol-chart", sampleRows);
+        renderNews("symbol-news", sample.symbolNews[symbol] || []);
+      } else {
+        // データが無ければ空
+        document.getElementById("symbol-news").innerHTML = "<div style='color:#666;'>この銘柄のサンプルデータはありません</div>";
+        // チャートは空に
+        drawLineChart("symbol-chart", [{date:"-", close:0}]);
+      }
+
+      // 実データがあるなら上書き
+      const base = `/data/events/${EVENT_ID}/symbols`;
+      try {
+        const priceCSV = await tryFetchText(`${base}/${symbol}.csv`);
+        const rows = parseCSV(priceCSV).map(r => ({ date: r.date, close: Number(r.close) }));
+        symbolChartInstance = drawLineChart("symbol-chart", rows);
+      } catch (_) {}
+
+      try {
+        const news = await tryFetchJson(`${base}/${symbol}_news.json`);
+        renderNews("symbol-news", news);
+      } catch (_) {}
+    }
+
+    // 初期化
+    window.onload = loadEvent;
+  </script>
+</body>
+</html>
