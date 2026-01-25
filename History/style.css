@@ -1,0 +1,59 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif;
+    margin: 0;
+    background: #f7f7f7;
+    color: #222;
+  }
+  
+  header {
+    background: #111;
+    color: #fff;
+    padding: 20px;
+  }
+  
+  header h1 {
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  .subtitle {
+    font-size: 14px;
+    opacity: 0.8;
+  }
+  
+  main {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 0 16px;
+  }
+  
+  .panel {
+    background: #fff;
+    padding: 16px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+  }
+  
+  .event-selector {
+    margin-bottom: 16px;
+  }
+  
+  select {
+    padding: 6px;
+    font-size: 14px;
+  }
+  
+  .disclaimer {
+    font-size: 12px;
+    color: #666;
+    border-top: 1px solid #ddd;
+    padding-top: 12px;
+  }
+  
+  footer {
+    text-align: center;
+    font-size: 12px;
+    padding: 20px;
+    color: #888;
+  }
+  
