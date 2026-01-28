@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Stock Shock Timeline</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <h1 class="title">Stock Shock Timeline</h1>
+      <p class="subtitle">非常事態の相場の動きとニュースを、1ヶ月スパンで俯瞰する</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>出来事を選ぶ</h2>
+        <div class="controls">
+          <label class="control">
+            <span>出来事</span>
+            <select id="eventSelect"></select>
+          </label>
+
+          <label class="control">
+            <span>表示系列</span>
+            <select id="seriesSelect">
+              <option value="close" selected>終値</option>
+              <option value="ohlc">四本値（OHLC）</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="panel-body">
+        <div class="grid">
+          <!-- 左：概要 -->
+          <section class="card meta">
+            <h3 class="card-title">概要</h3>
+            <div id="eventMeta" class="meta"></div>
+          </section>
+      
+          <!-- 中：グラフ -->
+          <section class="card chart">
+            <h3 class="card-title">日経平均（1ヶ月・日次）</h3>
+            <div class="chart-wrap">
+              <canvas id="chart" width="980" height="360"></canvas>
+              <div id="chartLegend" class="legend"></div>
+            </div>
+            <div class="note" id="dataNote"></div>
+          </section>
+      
+          <!-- 右：関連ニュース（ここが白枠側に行く） -->
+          <section class="card news">
+            <h3 class="card-title">関連ニュース</h3>
+            <div id="newsList" class="news"></div>
+          </section>
+        </div>
+      </div>
+      
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <small>
+        ※ 本サイトは教育・情報提供目的です。投資助言ではありません。データ利用は各提供元の規約・ライセンスに従ってください。
+      </small>
+    </div>
+  </footer>
+
+  <script type="module" src="./app.js"></script>
+  <script>console.log("inline script OK");</script>
+</body>
+</html>

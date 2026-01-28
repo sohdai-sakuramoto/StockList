@@ -1,0 +1,376 @@
+:root{
+    --bg:#0b0d12;
+    --panel:#121622;
+    --card:#171c2a;
+    --text:#e8ecf5;
+    --muted:#aab3c7;
+    --line:#2a3246;
+    --accent:#6ea8fe;
+  }
+  
+  *{box-sizing:border-box}
+  /*body{
+    height: 100vh;
+    overflow: hidden;
+    margin:0;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", sans-serif;
+
+  }
+  .container{
+    height:calc(100vh - 0px);
+    overflow: hidden;
+    max-width:1100px;
+    margin:0 auto;
+    padding:20px
+    
+  }*/
+
+  /* ===== 見やすさ改善（安全版） ===== */
+
+/* 背景と文字コントラスト調整 */
+body{
+  background: radial-gradient(
+    1200px 520px at 50% -10%,
+    #273055 0%,
+    #141a2f 55%,
+    #0b0f1a 100%
+  );
+  color: #eef2ff;
+}
+
+/* パネルを少し明るく */
+.panel,
+.card{
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+/* 見出しを強調 */
+.panel-head h2,
+.card-title{
+  font-weight: 800;
+}
+
+/* メタ情報の可読性 */
+.meta .v{
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* ニュースカード */
+.news-item{
+  background: rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+
+/* スクロールバー（任意） */
+#newsList::-webkit-scrollbar{
+  width: 10px;
+}
+#newsList::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,0.25);
+  border-radius: 10px;
+}
+
+  
+  .header{
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg, #0f1320, #0b0d12);
+  }
+  .title{margin:0;font-size:26px}
+  .subtitle{margin:8px 0 0;color:var(--muted)}
+  
+  /*.panel{
+    height: calc(100vh - 140 px);
+    overflow:hidden;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+  }*/
+  .panel-head{
+    padding:16px 16px 10px;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .panel-head h2{margin:0;font-size:18px}
+  .controls{display:flex;gap:12px;flex-wrap:wrap}
+  .control{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    font-size:12px;
+    color:var(--muted);
+  }
+  select{
+    background:#0e1220;
+    border:1px solid var(--line);
+    color:var(--text);
+    padding:10px 10px;
+    border-radius:10px;
+    min-width:260px;
+    outline:none;
+  }
+  
+  /*.panel-body{
+    height: calc(100% - 72px);
+    padding:16px;
+    overflow: auto;
+
+  }*/
+
+  .grid{
+    display: grid;
+    grid-template-columns: 360px 1fr 420px;
+    grid-template-areas:"meta chart news";
+    gap: 18px;
+    align-items: start;
+  }
+
+  /* ===== Grid area の割当（これがないと右にいかない） ===== */
+.card.meta { grid-area: meta; }
+.card.chart { grid-area: chart; }
+.card.news { grid-area: news; }
+
+  @media (max-width: 1100px){
+    .grid{
+      grid-template-columns: 1fr;
+      grid-template-areas: 
+        "meta"
+        "chart"
+        "news";
+    }
+  }
+  
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px;
+  }
+  .card-title{margin:0 0 10px;font-size:14px;color:var(--muted);letter-spacing:.02em}
+  
+  .meta{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    line-height:1.6;
+  }
+  .meta .k{color:var(--muted);font-size:12px}
+  .meta .v{font-size:14px}
+  
+  .chart-wrap{
+    border:1px solid var(--line);
+    background:#0e1220;
+    border-radius:12px;
+    padding:10px;
+  }
+  canvas{width:100%;height:auto;display:block}
+  .legend{margin-top:8px;color:var(--muted);font-size:12px}
+  .note{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.6}
+  
+  .news{display:flex;flex-direction:column;gap:10px}
+  .news a{
+    color:var(--text);
+    text-decoration:none;
+    border:1px solid var(--line);
+    background:#0e1220;
+    padding:12px;
+    border-radius:12px;
+  }
+  .news a:hover{border-color:#3b4766}
+  .news .src{color:var(--muted);font-size:12px;margin-top:6px}
+  
+  .footer{
+    border-top:1px solid var(--line);
+    color:var(--muted);
+  }
+  
+  .news-item h3{
+    color: #ffffff;
+  }
+  .news-item p{
+    margin:0 0 10px;
+    color:var(--muted);
+    line-height:1.6;
+  }
+  .news-item a{
+    color: #9fb5ff;
+  }
+  .news-item a:hover{
+    text-decoration:underline;
+  }
+  .highlight{
+    margin:0 0 8px;
+    font-size:13px;
+  }
+
+/* 見た目を整える：項目間 */
+#newsList .news-item{
+  margin-bottom: 10px;
+}
+
+.card.news h2{
+  flex: 0 0 auto;
+}
+
+.card.news{
+  display: flex;
+  flex-direction: column;
+  height: 560px; /* 好みで 360〜520 */
+}
+
+.card.news #newsList{
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px;
+}
+
+/* ===== Readability upgrade pack ===== */
+:root{
+  --bg: #0f1424;                /* 少し明るく */
+  --panel: rgba(255,255,255,0.06);
+  --card: rgba(255,255,255,0.07);
+  --line: rgba(255,255,255,0.10);
+  --line-strong: rgba(255,255,255,0.16);
+
+  --text: #eef2ff;
+  --muted: rgba(238,242,255,0.75);
+  --muted2: rgba(238,242,255,0.62);
+  --accent: #7db3ff;
+
+  --shadow: 0 18px 50px rgba(0,0,0,0.40);
+}
+
+body{
+  background: radial-gradient(1200px 520px at 50% -10%,
+    #273055 0%,
+    #141a2f 55%,
+    #0b0f1a 100%);
+  color: var(--text);
+  line-height: 1.65;
+  letter-spacing: .01em;
+}
+
+/* コンテナを少し広く、余白増やす */
+.container{
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 28px 22px;
+}
+
+/* ヘッダーの可読性UP */
+.title{ font-size: 30px; font-weight: 800; letter-spacing: .02em; }
+.subtitle{ font-size: 14px; color: var(--muted); }
+
+/* パネルを“浮かせる” */
+.panel{
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.04));
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+/* パネル見出し・区切り線を強める */
+.panel-head{
+  border-bottom: 1px solid var(--line-strong);
+  padding: 18px 18px 12px;
+}
+.panel-head h2{
+  font-size: 20px;
+  font-weight: 800;
+}
+
+/* コントロール */
+.control{ font-size: 12px; color: var(--muted2); }
+select{
+  background: rgba(10,16,30,0.65);
+  border: 1px solid var(--line-strong);
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: 12px;
+  min-width: 280px;
+}
+select:focus{
+  outline: none;
+  border-color: rgba(125,179,255,0.75);
+  box-shadow: 0 0 0 4px rgba(125,179,255,0.15);
+}
+
+/* 2カラムの余白を増やし、読みやすく */
+.grid{ gap: 18px; }
+.card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.04));
+  border: 1px solid var(--line);
+  padding: 16px;
+}
+.card-title{
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+
+/* メタ情報の文字サイズUP */
+.meta .k{ font-size: 12px; color: var(--muted2); }
+.meta .v{ font-size: 15px; font-weight: 650; }
+
+/* グラフ枠を明るく・縁を強める */
+.chart-wrap{
+  background: rgba(10,16,30,0.55);
+  border: 1px solid var(--line-strong);
+  padding: 12px;
+}
+.legend{ color: var(--muted); font-size: 13px; }
+.note{ color: var(--muted2); font-size: 13px; }
+
+/* 関連ニュース：スクロール内で完結させる（重要） */
+#newsList{
+  max-height: 420px;          /* 画面に合わせて 360〜520 */
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px;
+}
+
+/* ニュースカードを読みやすく */
+.news-item{
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+.news-item h3{
+  margin: 0 0 10px;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: .01em;
+}
+.news-item p{
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.news-item a{
+  color: var(--accent);
+  font-weight: 700;
+}
+.news-item a:hover{ text-decoration: underline; }
+
+/* スクロールバーを薄く見やすく（Chrome/Safari） */
+#newsList::-webkit-scrollbar{ width: 10px; }
+#newsList::-webkit-scrollbar-track{
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+}
+#newsList::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,0.18);
+  border-radius: 10px;
+}
+#newsList::-webkit-scrollbar-thumb:hover{
+  background: rgba(255,255,255,0.26);
+}
+

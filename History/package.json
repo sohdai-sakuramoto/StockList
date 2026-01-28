@@ -1,0 +1,11 @@
+{
+    "name": "stock-shock-timeline",
+    "private": true,
+    "type": "module",
+    "scripts": {
+      "fetch:ishiba": "node ./scripts/fetch_nikkei225_range.mjs 20240927 20241027 ./data/nikkei225_ishiba.json",
+      "fetch:covid": "node ./scripts/fetch_nikkei225_range.mjs 20200220 20200320 ./data/nikkei225_covid.json",
+      "fetch:lehman": "node ./scripts/fetch_nikkei225_range.mjs 20080915 20081015 ./data/nikkei225_lehman.json",
+      "fetch:geje": "node ./scripts/fetch_nikkei225_range.mjs 20110311 20110411 ./data/nikkei225_great-east-japan.json"
+    }
+  }  
