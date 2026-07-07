@@ -328,30 +328,40 @@ export function evaluateConfig(rows, cfg) {
   const { states, fires } = run;
 
   // --- 必須イベント ---
+  //  検出の定義(状態ベース): イベント期間中にサイトが crash モードを表示していれば「検出成功」。
+  //  すなわち「ウィンドウ内で新規に crash へ遷移した(=in-window fire)」だけでなく、
+  //  「イベント前から続く急落局面で既に crash 状態のままウィンドウに入った」ケースも検出とみなす。
+  //  (9.11 や 2016年年初のように、遷移ベースだと取りこぼす局面を正しく拾うための改良)
+  //  参考として、旧・遷移ベースの判定 (detectedStrict) も併せて記録する。
   const eventResults = MUST_EVENTS.map((ev) => {
     const w = windowToIdx(rows, ev.start, ev.end, BUFFER_BDAYS);
-    if (!w) return { ...ev, detected: false, note: "データ範囲外" };
+    if (!w) return { ...ev, detected: false, detectedStrict: false, detectionType: "none", note: "データ範囲外" };
     const inWin = fires.filter((f) => f.i >= w.lo && f.i <= w.hi);
-    const detected = inWin.length > 0;
-    // 診断: ウィンドウ中に crash 状態だった日があるか(遷移が無くても)
     let crashStateInWindow = false;
     for (let i = w.lo; i <= w.hi; i++) if (states[i] === "crash") { crashStateInWindow = true; break; }
+    const detectedStrict = inWin.length > 0;                 // 旧定義: ウィンドウ内に遷移あり
+    const detected = inWin.length > 0 || crashStateInWindow; // 新定義: 状態ベース
+    const detectionType = inWin.length > 0 ? "fire" : crashStateInWindow ? "carry" : "none";
     const warmupOverlap = w.hi < cfg.lookback;
-    const first = inWin[0] || null;
+    // 発火日・DD等は、ウィンドウ内の初回発火を優先。無ければ当ウィンドウを覆う直近の発火(局面開始)を割当。
+    let attr = inWin[0] || null;
+    if (!attr && crashStateInWindow) {
+      for (let k = fires.length - 1; k >= 0; k--) if (fires[k].i <= w.hi) { attr = fires[k]; break; }
+    }
     return {
-      ...ev, detected, crashStateInWindow, warmupOverlap,
-      fireDate: first ? first.date : null,
-      leadDays: first ? first.leadDays : null,
-      ddAtFire: first ? first.dd : null,
-      conditions: first ? first.conditions : null,
-      notify: first ? first.notify : null,
+      ...ev, detected, detectedStrict, detectionType, crashStateInWindow, warmupOverlap,
+      fireDate: attr ? attr.date : null,
+      leadDays: attr ? attr.leadDays : null,
+      ddAtFire: attr ? attr.dd : null,
+      conditions: attr ? attr.conditions : null,
+      notify: attr ? attr.notify : null,
     };
   });
   const detectedCount = eventResults.filter((e) => e.detected).length;
   const recall = detectedCount / MUST_EVENTS.length;
-  // 参考指標: 遷移が無くても crash 状態がウィンドウ内にあれば「捕捉」とみなす緩和版
-  const recallRelaxed =
-    eventResults.filter((e) => e.detected || e.crashStateInWindow).length / MUST_EVENTS.length;
+  // 参考: 旧・遷移ベースの recall(ウィンドウ内に新規遷移があった件数のみ)
+  const recallStrict =
+    eventResults.filter((e) => e.detectedStrict).length / MUST_EVENTS.length;
 
   // --- precision ---
   const mustWindows = MUST_EVENTS
@@ -380,7 +390,10 @@ export function evaluateConfig(rows, cfg) {
   const falseFires = falseFireDetails.reduce((s, p) => s + p.weighted, 0);
 
   // --- リードタイム ---
-  const leads = eventResults.filter((e) => e.detected).map((e) => e.leadDays);
+  // 「イベント時期内の peak 日 → crash 遷移日」の営業日数。仕様どおり、ウィンドウ内で
+  // 実際に発火した (detectionType="fire") イベントのみを対象にする(局面継続で捕捉した
+  // carry イベントは遷移がウィンドウ外なので中央値の対象外)。
+  const leads = eventResults.filter((e) => e.detectionType === "fire").map((e) => e.leadDays);
   const medianLeadTime = median(leads);
 
   // --- 発動頻度 (notify=true のみ) ---
@@ -396,7 +409,7 @@ export function evaluateConfig(rows, cfg) {
   return {
     cfg, run,
     metrics: {
-      recall, recallRelaxed, detectedCount, precision,
+      recall, recallStrict, detectedCount, precision,
       boundaryViolations, falseFires, medianLeadTime,
       firesTotal: fires.length, firesNotify: notifyFires, firesPerYear, score,
       years,
@@ -445,7 +458,7 @@ const num = (x, digits = 4) => (x == null ? "" : Number(x).toFixed(digits));
 function writeResultsCsv(outPath, results) {
   const header = [
     "config_id", "lookback", "depth_th", "single_day_th", "speed_th", "speed_window",
-    "recall", "recall_relaxed", "detected_events", "precision",
+    "recall", "recall_strict", "detected_events", "precision",
     "boundary_violations", "false_fires", "median_lead_time_bd",
     "fires_total", "fires_notify", "fires_per_year", "score", "passed_criteria",
   ].join(",");
@@ -455,7 +468,7 @@ function writeResultsCsv(outPath, results) {
     return [
       r.cfg.id, c.lookback, c.depthTh, c.singleDayTh,
       c.speed ? c.speed.th : "", c.speed ? c.speed.window : "",
-      num(m.recall), num(m.recallRelaxed), m.detectedCount, num(m.precision),
+      num(m.recall), num(m.recallStrict), m.detectedCount, num(m.precision),
       m.boundaryViolations, num(m.falseFires, 1),
       m.medianLeadTime == null ? "" : m.medianLeadTime,
       m.firesTotal, m.firesNotify, num(m.firesPerYear, 3), num(m.score), passed,
@@ -494,7 +507,7 @@ function bestConfigJson(best, passedSpec, note, dataInfo) {
     },
     metrics: {
       recall: m.recall,
-      recall_relaxed: m.recallRelaxed,
+      recall_strict: m.recallStrict,
       precision: m.precision,
       boundary_violations: m.boundaryViolations,
       false_fires: m.falseFires,
@@ -526,20 +539,22 @@ function buildReport(best, passedSpec, note, results, dataInfo) {
   L.push("");
   if (!passedSpec) {
     L.push(`> **⚠ 注意: 合格基準 (recall=1.0) を満たす設定は存在しませんでした。** 下記は ${note} した暫定採用です。`);
-    L.push(`> 未検出イベントの多くは「イベント発生前から既に crash 状態が継続しており、ウィンドウ内に *新規遷移* が発生しない」構造的な取りこぼしです(§3の診断列を参照)。`);
-    L.push(`> 発動ルールではなくイベント判定方法(遷移ベース→状態ベース)や再発動条件の見直しが有効と考えられます。`);
     L.push("");
   } else {
     L.push(`> ${note}`);
     L.push("");
   }
+  L.push(`> **検出の定義(状態ベース)**: イベント期間中にサイトが crash モードを表示していれば「検出」とみなす。` +
+    `ウィンドウ内で新規に発火した場合(下表 診断=発火)に加え、イベント前からの急落局面が継続して既に crash 状態でウィンドウに入った場合(診断=局面継続で捕捉)も含む。` +
+    `参考として旧・遷移ベースの recall (recall_strict) も併記する。`);
+  L.push("");
   L.push(`- **設定ID**: \`${cfg.id}\``);
   L.push(`- **内容**: ${describeCfg(cfg)}`);
   L.push("");
   L.push(`| 指標 | 値 |`);
   L.push(`|---|---|`);
-  L.push(`| recall | ${num(m.recall, 3)} (${m.detectedCount}/${MUST_EVENTS.length}) |`);
-  L.push(`| recall (状態ベース緩和・参考) | ${num(m.recallRelaxed, 3)} |`);
+  L.push(`| recall (状態ベース) | ${num(m.recall, 3)} (${m.detectedCount}/${MUST_EVENTS.length}) |`);
+  L.push(`| recall_strict (旧・遷移ベース・参考) | ${num(m.recallStrict, 3)} |`);
   L.push(`| precision | ${num(m.precision, 3)} |`);
   L.push(`| boundary_violations | ${m.boundaryViolations} |`);
   L.push(`| false_fires | ${num(m.falseFires, 1)} |`);
@@ -554,10 +569,10 @@ function buildReport(best, passedSpec, note, results, dataInfo) {
   L.push(`| ID | イベント | 検出 | 発動日 | リードタイム(営業日) | 発動時DD | 条件 | notify | 診断 |`);
   L.push(`|---|---|---|---|---|---|---|---|---|`);
   for (const e of eventResults) {
-    const diag = e.detected ? ""
-      : e.warmupOverlap ? "ウォームアップ期間と重複"
-      : e.crashStateInWindow ? "既に crash 状態が継続中(新規遷移なし)"
-      : "未発動";
+    const diag = e.detectionType === "fire" ? "発火(ウィンドウ内で新規遷移)"
+      : e.detectionType === "carry" ? "局面継続で捕捉(遷移はウィンドウ外)"
+      : e.warmupOverlap ? "未検出(ウォームアップ期間と重複)"
+      : "未検出";
     L.push(`| ${e.id} | ${e.name} | ${e.detected ? "✅" : "❌"} | ${e.fireDate ?? "-"} | ${e.leadDays ?? "-"} | ${e.ddAtFire == null ? "-" : pct(e.ddAtFire)} | ${e.conditions ?? "-"} | ${e.notify == null ? "-" : e.notify} | ${diag} |`);
   }
   L.push("");
