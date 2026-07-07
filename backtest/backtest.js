@@ -24,7 +24,13 @@ import { fileURLToPath } from "node:url";
 export const EPS = 1e-9; // 浮動小数点比較の許容
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
-const DATA_URL = "https://stooq.com/q/d/l/?s=^nkx&i=d";
+// 日経225 日次終値のデータソース候補。上から順に試し、正規のCSVを返した最初のものを採用する。
+// Stooq は近年 bot 対策(JavaScript認証)で自動取得が弾かれることがあるため、
+// 認証不要でCSVを配布している FRED (米セントルイス連銀) をフォールバックに置く。
+const DATA_SOURCES = [
+  { name: "Stooq ^NKX", url: "https://stooq.com/q/d/l/?s=^nkx&i=d" },
+  { name: "FRED NIKKEI225", url: "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NIKKEI225" },
+];
 const CACHE_PATH = path.join(SCRIPT_DIR, "data", "nkx_daily.csv");
 const START_DATE = "2000-01-01";
 
@@ -97,12 +103,21 @@ export function configId(c) {
 // ---------------------------------------------------------------------------
 
 export function parseStooqCsv(text, { startDate = START_DATE } = {}) {
+  if (/<!doctype html|<html|requires javascript/i.test(text.slice(0, 500))) {
+    throw new Error("CSVではなくHTML(bot認証ページ等)が返されました");
+  }
   const lines = text.replace(/^﻿/, "").split(/\r?\n/).filter((l) => l.trim() !== "");
   if (lines.length < 2) throw new Error("CSVが空です");
   const header = lines[0].split(",").map((h) => h.trim().toLowerCase());
-  const iDate = header.indexOf("date");
-  const iClose = header.indexOf("close");
-  if (iDate < 0 || iClose < 0) throw new Error(`CSVヘッダに Date/Close が見つかりません: ${lines[0]}`);
+  // 日付列: "date" を含む最初の列 (Stooq:Date / FRED:observation_date,DATE / Yahoo:Date)
+  let iDate = header.findIndex((h) => h.includes("date"));
+  if (iDate < 0) iDate = 0;
+  // 終値列: close → adj close → (2列だけなら日付以外の列) の優先で決定
+  //   Stooq/Yahoo は "Close" 列を持つ。FRED は "DATE,NIKKEI225" の2列形式。
+  let iClose = header.indexOf("close");
+  if (iClose < 0) iClose = header.findIndex((h) => h.replace(/[ _]/g, "") === "adjclose");
+  if (iClose < 0 && header.length === 2) iClose = 1 - iDate;
+  if (iClose < 0) throw new Error(`CSVヘッダに終値の列 (Close 等) が見つかりません: ${lines[0]}`);
   const rows = [];
   for (let k = 1; k < lines.length; k++) {
     const cols = lines[k].split(",");
@@ -134,27 +149,33 @@ async function loadData({ dataPath = null } = {}) {
     console.log(`[data] キャッシュを使用: ${CACHE_PATH}`);
     return parseStooqCsv(fs.readFileSync(CACHE_PATH, "utf8"));
   }
-  console.log(`[data] 取得中: ${DATA_URL}`);
-  let text;
-  try {
-    const res = await fetch(DATA_URL, {
-      headers: { "User-Agent": "Mozilla/5.0 (crash-mode-backtest; research use)" },
-      signal: AbortSignal.timeout(60_000),
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    text = await res.text();
-  } catch (e) {
-    throw new Error(
-      `データ取得に失敗しました (${e.message})。キャッシュ ${CACHE_PATH} も存在しないため停止します。\n` +
-      `ネットワーク到達可能な環境で再実行するか、CSVを手動で ${CACHE_PATH} に配置してください。`
-    );
+  const failures = [];
+  for (const src of DATA_SOURCES) {
+    console.log(`[data] 取得中: ${src.name} (${src.url})`);
+    try {
+      const res = await fetch(src.url, {
+        headers: { "User-Agent": "Mozilla/5.0 (crash-mode-backtest; research use)" },
+        signal: AbortSignal.timeout(60_000),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const text = await res.text();
+      const rows = parseStooqCsv(text);
+      if (rows.length < 100) throw new Error(`行数が異常 (${rows.length}行)`);
+      fs.mkdirSync(path.dirname(CACHE_PATH), { recursive: true });
+      fs.writeFileSync(CACHE_PATH, text, "utf8");
+      console.log(`[data] ${src.name} を採用・キャッシュ保存: ${CACHE_PATH} (${rows.length}営業日)`);
+      return rows;
+    } catch (e) {
+      console.warn(`[data] ${src.name} 失敗: ${e.message} → 次のソースを試行`);
+      failures.push(`${src.name}: ${e.message}`);
+    }
   }
-  const rows = parseStooqCsv(text);
-  if (rows.length < 100) throw new Error(`取得データの行数が異常です (${rows.length}行)。停止します。`);
-  fs.mkdirSync(path.dirname(CACHE_PATH), { recursive: true });
-  fs.writeFileSync(CACHE_PATH, text, "utf8");
-  console.log(`[data] キャッシュ保存: ${CACHE_PATH} (${rows.length}営業日)`);
-  return rows;
+  throw new Error(
+    `すべてのデータソースから取得できませんでした。キャッシュ ${CACHE_PATH} も存在しないため停止します。\n` +
+    failures.map((f) => `  - ${f}`).join("\n") + "\n" +
+    `対処: 到達可能な環境で再実行するか、日経225の日次終値CSVを手動で ${CACHE_PATH} に配置してください。\n` +
+    `  例) FRED: https://fred.stlouisfed.org/graph/fredgraph.csv?id=NIKKEI225 をダウンロードして上記パスに保存`
+  );
 }
 
 // ---------------------------------------------------------------------------

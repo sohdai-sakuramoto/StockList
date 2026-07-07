@@ -150,6 +150,26 @@ test("parseStooqCsv: 2000年以前の行・不正行を除外し昇順で返す"
   assert.equal(rows[0].close, 19002);
 });
 
+test("parseStooqCsv: FRED形式 (DATE,NIKKEI225 の2列・欠測は '.') も読める", () => {
+  const csv = [
+    "observation_date,NIKKEI225",
+    "1999-12-30,18934.34",   // 2000年以前は除外
+    "2000-01-04,19002.86",
+    "2000-01-05,.",           // 欠測はスキップ
+    "2000-01-06,18542.55",
+  ].join("\n");
+  const rows = parseStooqCsv(csv);
+  assert.deepEqual(rows.map((r) => r.date), ["2000-01-04", "2000-01-06"]);
+  assert.equal(rows[0].close, 19002.86);
+});
+
+test("parseStooqCsv: HTML(bot認証ページ)は明示エラーで弾く", () => {
+  assert.throws(
+    () => parseStooqCsv('<!DOCTYPE html><html><head></head><body>This site requires JavaScript</body></html>'),
+    /HTML/,
+  );
+});
+
 test("windowToIdx: 前後バッファが営業日単位で効く", () => {
   const rows = makeRows(flat(30));
   const w = windowToIdx(rows, rows[15].date, rows[15].date, 10);

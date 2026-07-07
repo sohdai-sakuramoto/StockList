@@ -11,9 +11,23 @@ node --test test.js       # ユニットテスト
 ```
 
 - データは `data/nkx_daily.csv` にキャッシュされ、**2回目以降はキャッシュ優先**。
-- 取得失敗かつキャッシュ無しの場合はエラーで停止する(仕様どおり)。
-  その場合は到達可能な環境で CSV を取得して `data/nkx_daily.csv` に置けばよい。
 - 追加パッケージ不要(Node 18+ の組み込み `fetch` / `node:test` のみ使用)。
+
+### データソースと自動フォールバック
+
+仕様の検証用ソースは Stooq (`^nkx`) だが、近年 Stooq は bot 対策(JavaScript認証)で
+自動取得が弾かれ、CSVの代わりに認証HTMLを返すことがある。そのため取得は次の順で試行し、
+**正規のCSVを返した最初のソースを採用**する:
+
+1. Stooq: `https://stooq.com/q/d/l/?s=^nkx&i=d`
+2. FRED (米セントルイス連銀): `https://fred.stlouisfed.org/graph/fredgraph.csv?id=NIKKEI225`(認証不要)
+
+CSVパーサは Stooq(`Date,…,Close,…`)/ FRED(`DATE,NIKKEI225` の2列)/ Yahoo(`Adj Close`)の
+いずれの列形式も自動判別する。全ソースに到達できない場合はエラーで停止する(仕様どおり)。
+
+**手動でデータを置く場合**: 上記いずれかのCSVをダウンロードして `data/nkx_daily.csv` に保存し、
+`node backtest.js` を実行すればキャッシュとして使われる(取得はスキップ)。
+特定ファイルを直接指定するなら `node backtest.js --data <path>`。
 
 ### ネットワークが遮断された環境での動作確認(デモ)
 
