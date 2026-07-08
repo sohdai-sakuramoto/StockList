@@ -138,7 +138,7 @@ export function parseStooqCsv(text, { startDate = START_DATE } = {}) {
   return dedup;
 }
 
-async function loadData({ dataPath = null } = {}) {
+export async function loadData({ dataPath = null } = {}) {
   if (dataPath) {
     const p = path.resolve(dataPath);
     if (!fs.existsSync(p)) throw new Error(`--data で指定されたファイルがありません: ${p}`);

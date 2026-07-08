@@ -1,0 +1,73 @@
+/*
+ * 急落モード バナー — サイト共通スタイル
+ * state.json の mode に応じて画面上部に状態バナーを表示する。
+ * サイトの既存トーン(濃紺 #1b2538 / 赤 #da3c41)に合わせた配色。
+ */
+
+.cm-banner {
+  --cm-bg: #1b2538;
+  --cm-fg: #ffffff;
+  --cm-accent: #8aa2c8;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 20px;
+  background: var(--cm-bg);
+  color: var(--cm-fg);
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic UI", system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  border-bottom: 3px solid var(--cm-accent);
+}
+
+/* モード別アクセント */
+.cm-banner[data-mode="normal"]   { --cm-bg: #1b2538; --cm-accent: #4c8a5a; }
+.cm-banner[data-mode="caution"]  { --cm-bg: #6a5316; --cm-accent: #f4c454; }
+.cm-banner[data-mode="crash"]    { --cm-bg: #7a1f22; --cm-accent: #da3c41; }
+.cm-banner[data-mode="recovery"] { --cm-bg: #14503a; --cm-accent: #1baf7a; }
+
+.cm-dot {
+  flex: none;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--cm-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cm-accent) 32%, transparent);
+}
+/* 急落モードだけ、注意を引く控えめな明滅 */
+.cm-banner[data-mode="crash"] .cm-dot { animation: cm-pulse 1.8s ease-in-out infinite; }
+@keyframes cm-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--cm-accent) 32%, transparent); }
+  50%      { box-shadow: 0 0 0 6px color-mix(in srgb, var(--cm-accent) 12%, transparent); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cm-banner[data-mode="crash"] .cm-dot { animation: none; }
+}
+
+.cm-label {
+  flex: none;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.cm-text { flex: 1 1 auto; min-width: 0; }
+.cm-text .cm-headline { font-weight: 600; }
+.cm-text .cm-tone { color: var(--cm-accent); }
+
+.cm-metrics {
+  flex: none;
+  display: flex;
+  gap: 16px;
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  color: var(--cm-accent);
+}
+.cm-metrics b { color: var(--cm-fg); font-weight: 700; }
+.cm-asof { flex: none; font-size: 12px; opacity: 0.7; }
+
+@media (max-width: 720px) {
+  .cm-banner { flex-wrap: wrap; gap: 8px 12px; font-size: 13px; padding: 9px 14px; }
+  .cm-metrics { order: 3; width: 100%; }
+  .cm-asof { display: none; }
+}

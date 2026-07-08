@@ -1,0 +1,26 @@
+{
+  "schema": "stocklist-crash-mode/1",
+  "generated_at": "2026-07-08T13:03:52.129Z",
+  "as_of": "2025-07-04",
+  "mode": "normal",
+  "label": "平常モード",
+  "headline": "市場は落ち着いています。",
+  "message": "いつもどおり、あわてず。",
+  "metrics": {
+    "close": 39811,
+    "drawdown": -0.0167,
+    "daily_return": -0.0018,
+    "peak_date": "2025-06-30",
+    "peak_close": 40487
+  },
+  "last_crash_notified": {
+    "date": "2024-08-02",
+    "drawdown": -0.1495
+  },
+  "config_source": "default",
+  "data_range": [
+    "2000-01-04",
+    "2025-07-04"
+  ],
+  "disclaimer": "検証用データ(Stooq/FRED)に基づく参考値。投資判断は自己責任で。"
+}
