@@ -1,0 +1,12 @@
+{
+  "name": "crash-mode-backtest",
+  "private": true,
+  "type": "module",
+  "description": "急落モード発動ルールのバックテスト(日経平均 2000年以降)",
+  "scripts": {
+    "start": "node backtest.js",
+    "test": "node --test test.js",
+    "demo:data": "node scripts/generate_demo_data.js",
+    "demo": "node scripts/generate_demo_data.js && node backtest.js --data data/nkx_daily.demo.csv --out out_demo"
+  }
+}

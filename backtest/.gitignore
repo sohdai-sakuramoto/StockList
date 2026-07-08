@@ -1,0 +1,8 @@
+# 取得データ・生成物はコミットしない
+data/
+out_demo/
+results.csv
+best_config.json
+report.md
+fires_for_trends.csv
+node_modules/
