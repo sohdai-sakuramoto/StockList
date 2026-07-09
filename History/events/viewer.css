@@ -71,4 +71,10 @@ a { color: var(--accent); }
 .slv-item .src { font-size: 12px; color: var(--muted); margin-top: 3px; }
 .slv-item .src a { text-decoration: none; }
 
+.slv-cta { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--red); border-radius: 12px; padding: 18px 20px; margin: 26px 0 0; }
+.slv-cta .slv-cta-lead { font-weight: 700; font-size: 16px; margin: 0; }
+.slv-cta .slv-cta-sub { color: var(--ink-2); font-size: 14px; margin: 4px 0 12px; }
+.slv-cta .slv-cta-btn { display: inline-block; background: var(--red); color: #fff; font-weight: 700; text-decoration: none; padding: 11px 20px; border-radius: 10px; }
+.slv-cta .slv-cta-btn:hover { filter: brightness(1.05); }
+
 .slv-foot { color: var(--muted); font-size: 12px; margin-top: 26px; border-top: 1px solid var(--line); padding-top: 14px; }
