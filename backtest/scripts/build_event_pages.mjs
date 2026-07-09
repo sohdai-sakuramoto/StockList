@@ -25,34 +25,82 @@ const EVENTS_JSON = path.join(EVENTS_DIR, "events.json");
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const jsonForScript = (o) => JSON.stringify(o).replace(/</g, "\\u003c");
 
+const yearMonth = (d) => { const [y, m] = d.split("-"); return `${y}年${Number(m)}月`; };
+const ddPct = (dd) => `${dd < 0 ? "−" : ""}${Math.abs(Math.round(dd * 100))}%`;
+// 底までの期間: 素早い暴落(90営業日以内)は営業日、それ以上は月で表示
+function bottomPeriodStr(c) {
+  return c.bdays_to_bottom <= 90 ? `約${c.bdays_to_bottom}営業日` : `約${c.months_to_bottom}ヶ月`;
+}
+// 高値回復まで: 24ヶ月以上は「約◯年」、未満は「約◯ヶ月」、未回復は「未回復」
+function recoverStr(c) {
+  if (!c.recovered) return "未回復";
+  return c.months_to_recover >= 24 ? `約${Math.round(c.months_to_recover / 12)}年` : `約${c.months_to_recover}ヶ月`;
+}
+
 function pageHtml(cfg, series) {
   const url = `${SITE_URL}/History/events/${cfg.id}.html`;
-  const title = `${cfg.title}の日経平均チャートと当時のニュース｜StockList`;
-  const dd = series?.kpi ? `最大下落率 ${(series.kpi.max_drawdown * 100).toFixed(1)}%。` : "";
-  const desc = `${cfg.title}（${cfg.date}前後）の日経平均を週次チャートで振り返る。${dd}当時の株価に影響したニュースと合わせて追体験できます。`;
+  const c = series && series.conclusion ? series.conclusion : null;
+
+  // title/meta は検索クエリ対応の形式に統一
+  const title = `${cfg.title}で日経平均は何%下落?回復まで何年?｜StockList`;
+  const desc = c
+    ? `${cfg.title}で日経平均は高値から約${ddPct(c.drawdown)}下落。底は${yearMonth(c.trough.date)}、高値回復まで${recoverStr(c)}。週次チャートと当時のニュースで、下落率・底・回復の流れを振り返ります。`
+    : `${cfg.title}（${cfg.date}前後)の日経平均を週次チャートと当時のニュースで振り返ります。`;
   const ogImg = `${SITE_URL}/IMG_3857.jpg`;
+  const modified = (series && series.generated_at ? series.generated_at : new Date().toISOString()).slice(0, 10);
 
   const jsonld = {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: `${cfg.title}｜日経平均の暴落を追体験する`,
-    description: cfg.summary || desc,
+    headline: title,
+    description: desc,
     datePublished: cfg.date,
+    dateModified: modified,
     about: cfg.title,
-    keywords: [cfg.title, "日経平均", "暴落", "株価", "チャート"].join(","),
+    keywords: [cfg.title, "日経平均", "下落率", "底", "回復", "チャート"].join(","),
     mainEntityOfPage: url,
+    image: ogImg,
     author: { "@type": "Organization", name: "StockList" },
-    publisher: { "@type": "Organization", name: "StockList" },
+    publisher: { "@type": "Organization", name: "StockList", url: `${SITE_URL}/` },
   };
   const breadcrumb = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "ホーム", item: `${SITE_URL}/` },
-      { "@type": "ListItem", position: 2, name: "大きな出来事", item: `${SITE_URL}/History/History.html` },
+      { "@type": "ListItem", position: 2, name: "暴落アーカイブ", item: `${SITE_URL}/History/History.html` },
       { "@type": "ListItem", position: 3, name: cfg.title, item: url },
     ],
   };
+  // FAQPage: 画面表示のFAQと完全に同一文言(events.json の faq)
+  const faq = Array.isArray(cfg.faq) ? cfg.faq : [];
+  const faqLd = faq.length ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  } : null;
+
+  // 結論ボックス(最上部)
+  const verdictHtml = c ? `
+    <section class="slv-verdict" aria-label="30秒でわかる結論">
+      <h2 class="slv-verdict-h">30秒でわかる結論</h2>
+      <div class="slv-verdict-grid">
+        <div class="slv-vc"><div class="k">最大下落率</div><div class="v neg">${ddPct(c.drawdown)}</div><div class="note">高値からの下落</div></div>
+        <div class="slv-vc"><div class="k">底までの期間</div><div class="v">${bottomPeriodStr(c)}</div><div class="note">${yearMonth(c.trough.date)}に大底</div></div>
+        <div class="slv-vc"><div class="k">高値回復まで</div><div class="v">${recoverStr(c)}</div><div class="note">${c.recovered ? esc(cfg.recoveryNote || "高値を回復") : yearMonth(c.as_of) + "時点で未回復"}</div></div>
+      </div>
+    </section>` : "";
+
+  // FAQ(タイムラインの後・末尾)。details/summary でJS不要・全文クローラブル
+  const faqHtml = faq.length ? `
+    <section class="slv-faq" aria-label="よくある質問">
+      <h2 class="slv-faq-h">よくある質問</h2>
+      ${faq.map((f) => `<details><summary>${esc(f.q)}</summary><div class="slv-faq-a">${esc(f.a)}</div></details>`).join("\n      ")}
+    </section>` : "";
 
   const nav = ALL.map((e) =>
     `<a href="${e.id}.html"${e.id === cfg.id ? ' aria-current="true"' : ""}>${esc(e.title)}</a>`).join("");
@@ -84,6 +132,7 @@ function pageHtml(cfg, series) {
   <script src="../../crash-mode.js" data-state="../../state.json" defer></script>
   <script type="application/ld+json">${JSON.stringify(jsonld)}</script>
   <script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>
+  ${faqLd ? `<script type="application/ld+json">${JSON.stringify(faqLd)}</script>` : ""}
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-06EHKG0SQ2"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-06EHKG0SQ2');</script>
@@ -101,14 +150,14 @@ function pageHtml(cfg, series) {
       <span class="date">${esc(cfg.date || "")} 前後</span>
     </div>
     <p class="slv-summary">${esc(cfg.summary || "")}</p>
-
+${verdictHtml}
     <div id="slv-root"></div>
 
     <noscript>
       <h2>当時の主なニュース</h2>
       <ul>${newsHtml}</ul>
     </noscript>
-
+${faqHtml}
     <aside class="slv-cta">
       <p class="slv-cta-lead">暴落は、歴史的にはいつか戻ってきました。</p>
       <p class="slv-cta-sub">狼狽売りより、次の下落に備えて少額から。長期・積立の第一歩は口座づくりから。</p>
