@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,9 +14,7 @@
         <meta property="og:image" content="https://stock-list-kem9.vercel.app/IMG_3857.jpg">
         <meta name="twitter:card" content="summary_large_image">
         <link rel="icon" type="image/png" href="favicon2.png">
-        <link rel="stylesheet" href="index.css">
         <link rel="stylesheet" href="crash-mode.css">
-        <link href="https://fonts.googleapis.com/earlyaccess/notosansjapanese.css" rel="stylesheet" />
         <script src="crash-mode.js" data-state="state.json" defer></script>
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-06EHKG0SQ2"></script>
@@ -24,27 +22,128 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        
         gtag('config', 'G-06EHKG0SQ2');
         </script>
+        <style>
+          :root {
+            --navy:#1b2538; --navy-2:#243149; --red:#da3c41; --ink:#16202e; --ink-2:#56606e;
+            --muted:#8a929e; --line:#e7e9ee; --surface:#ffffff; --plane:#f4f6f9; --accent:#2f6fd0;
+            --shadow:0 1px 2px rgba(16,32,46,.06), 0 10px 28px rgba(16,32,46,.09);
+          }
+          @media (prefers-color-scheme: dark){
+            :root { --navy:#0f1626; --navy-2:#16203a; --red:#e0575c; --ink:#e9edf4; --ink-2:#aab3c2;
+              --muted:#7d8695; --line:#263042; --surface:#161d2b; --plane:#0e131d; --accent:#6ea3f0;
+              --shadow:0 1px 2px rgba(0,0,0,.3), 0 12px 32px rgba(0,0,0,.4); }
+          }
+          * { box-sizing:border-box; }
+          body { margin:0; background:var(--plane); color:var(--ink);
+            font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI",system-ui,-apple-system,sans-serif;
+            line-height:1.7; }
+          a { text-decoration:none; color:inherit; }
+
+          /* ナビ */
+          .nav { background:var(--navy); color:#fff; display:flex; align-items:center; gap:6px 22px;
+            padding:14px 22px; flex-wrap:wrap; }
+          .nav .logo { font-weight:800; font-size:17px; letter-spacing:.01em; margin-right:auto; }
+          .nav a { color:#cdd7ea; font-size:14px; font-weight:600; padding:4px 2px; }
+          .nav a:hover, .nav a.active { color:#fff; }
+          .nav a.active { border-bottom:2px solid var(--red); }
+
+          /* ヒーロー */
+          .hero { position:relative; min-height:62vh; display:flex; align-items:center; justify-content:center;
+            text-align:center; color:#fff; padding:64px 22px; overflow:hidden;
+            background:linear-gradient(180deg, rgba(15,22,38,.72), rgba(15,22,38,.86)), url("IMG_3857.jpg") center/cover no-repeat; }
+          .hero-inner { max-width:720px; }
+          .hero .eyebrow { font-size:12px; letter-spacing:.24em; color:#a9b8d4; margin:0 0 16px; text-transform:uppercase; }
+          .hero h1 { font-size:clamp(32px,6vw,56px); line-height:1.28; margin:0 0 18px; font-weight:800; letter-spacing:.01em; }
+          .hero p.sub { font-size:clamp(15px,2.2vw,17px); color:#e4e9f2; margin:0 auto 30px; max-width:30em; }
+          .cta-row { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+          .btn { display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:15px;
+            padding:14px 26px; border-radius:12px; transition:.16s; }
+          .btn-primary { background:var(--red); color:#fff; }
+          .btn-primary:hover { filter:brightness(1.06); transform:translateY(-1px); }
+          .btn-ghost { background:rgba(255,255,255,.1); color:#fff; border:1px solid rgba(255,255,255,.35); }
+          .btn-ghost:hover { background:rgba(255,255,255,.18); transform:translateY(-1px); }
+
+          /* できること */
+          .wrap { max-width:1080px; margin:0 auto; padding:56px 22px 72px; }
+          .sec-title { text-align:center; font-size:22px; font-weight:800; margin:0 0 6px; letter-spacing:-.01em; }
+          .sec-sub { text-align:center; color:var(--muted); font-size:14px; margin:0 0 32px; }
+          .cards { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:18px; }
+          .card { display:flex; flex-direction:column; background:var(--surface); border:1px solid var(--line);
+            border-radius:16px; padding:24px 22px; box-shadow:var(--shadow);
+            transition:transform .18s ease, border-color .18s ease; }
+          .card:hover { transform:translateY(-4px); border-color:color-mix(in srgb, var(--red) 35%, var(--line)); }
+          .card .ic { width:44px; height:44px; border-radius:12px; display:grid; place-items:center; margin-bottom:14px;
+            background:color-mix(in srgb, var(--red) 12%, transparent); }
+          .card h3 { font-size:17px; margin:0 0 6px; }
+          .card p { color:var(--ink-2); font-size:14px; margin:0 0 16px; flex:1 1 auto; }
+          .card .go { color:var(--accent); font-weight:700; font-size:14px; }
+          .card:hover .go { text-decoration:underline; }
+
+          /* フッター */
+          footer.site { background:var(--navy); color:#cdd7ea; text-align:center; padding:22px; font-size:12.5px; }
+          footer.site a { color:#cdd7ea; margin:0 10px; }
+          footer.site a:hover { color:#fff; }
+          footer.site .tagline { color:#8ea0c0; margin:0 0 8px; }
+        </style>
     </head>
-    <header>
-        <ul class="topnav">
-            <li><a class="active" href="#home">Home</a></li>
-            <li><a href="History/History.html">大きな出来事</a></li>
-            <li><a href="start/">はじめての証券口座</a></li>
-            <li><a href="News/NewsFeed.html">お知らせ</a></li>
-            <li><a href="ContactForm.html">お問い合わせ</a></li>
-            <li href="rogo.png" style="width:620px;height:750px;overflow:auto;position:absolute;left:800px;top:60px;"></li>
-        </ul>
-    </header>
     <body>
-        <h1 class="wf-notosansjapanese">暴落しても、<br>焦らないこと。
-            <br><p class="StockList">powerd by StockList</p>
-        </h1>
-        <footer style="position:fixed;bottom:0;left:0;right:0;z-index:10;padding:10px 24px;font-size:12px;color:#cdd7ea;background:rgba(27,37,56,0.92);">
-            <a href="/privacy/" style="color:#cdd7ea;margin-right:16px;">プライバシーポリシー・運営者情報</a>
-            <a href="/disclosure/" style="color:#cdd7ea;">アフィリエイト表記・免責事項</a>
+        <nav class="nav">
+            <a href="/" class="logo">StockList</a>
+            <a href="/" class="active">ホーム</a>
+            <a href="History/History.html">暴落の歴史</a>
+            <a href="start/">はじめての証券口座</a>
+            <a href="News/NewsFeed.html">お知らせ</a>
+            <a href="ContactForm.html">お問い合わせ</a>
+        </nav>
+
+        <header class="hero">
+            <div class="hero-inner">
+                <p class="eyebrow">Nikkei 225 Crash Timeline</p>
+                <h1>暴落しても、<br>焦らないこと。</h1>
+                <p class="sub">日経平均の歴史的な暴落を、週次チャートと当時のニュースで追体験。市場が急落すると、サイトが自動で「急落モード」に切り替わります。</p>
+                <div class="cta-row">
+                    <a class="btn btn-primary" href="History/History.html">暴落の歴史を見る</a>
+                    <a class="btn btn-ghost" href="start/">はじめての証券口座</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="wrap">
+            <h2 class="sec-title">このサイトでできること</h2>
+            <p class="sec-sub">恐怖で来た人を、落ち着いて次の一歩へ。</p>
+            <div class="cards">
+                <a class="card" href="History/History.html">
+                    <span class="ic" aria-hidden="true">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M19 9l-5 5-4-4-4 4"/></svg>
+                    </span>
+                    <h3>暴落の歴史を振り返る</h3>
+                    <p>リーマン・コロナ・令和のブラックマンデー…。主要な暴落を週次チャートと当時のニュースでたどれます。</p>
+                    <span class="go">年表を見る →</span>
+                </a>
+                <a class="card" href="start/">
+                    <span class="ic" aria-hidden="true">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </span>
+                    <h3>暴落に備える第一歩</h3>
+                    <p>歴史的に、暴落はいつか回復してきました。次に備える「はじめての証券口座」をやさしく診断・比較。</p>
+                    <span class="go">証券口座を見る →</span>
+                </a>
+                <a class="card" href="History/History.html">
+                    <span class="ic" aria-hidden="true">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/></svg>
+                    </span>
+                    <h3>いまの相場の状態</h3>
+                    <p>市場が下げると、画面上部のバーが「警戒」「急落」モードに自動で切り替わり、現在のドローダウンを表示します。</p>
+                    <span class="go">状態を確認 →</span>
+                </a>
+            </div>
+        </main>
+
+        <footer class="site">
+            <p class="tagline">暴落しても、焦らないこと。 — powered by StockList</p>
+            <a href="/privacy/">プライバシーポリシー・運営者情報</a>・<a href="/disclosure/">アフィリエイト表記・免責事項</a>
         </footer>
     </body>
 </html>
