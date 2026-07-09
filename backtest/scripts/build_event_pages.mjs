@@ -141,6 +141,7 @@ function main() {
     { loc: `${SITE_URL}/start/`, pri: "0.9" },
     { loc: `${SITE_URL}/History/History.html`, pri: "0.8" },
     { loc: `${SITE_URL}/disclosure/`, pri: "0.3" },
+    { loc: `${SITE_URL}/privacy/`, pri: "0.3" },
   ];
   for (const cfg of ALL) {
     const dataPath = path.join(EVENTS_DIR, `${cfg.id}.json`);
