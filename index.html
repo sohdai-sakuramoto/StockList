@@ -57,13 +57,15 @@
           .hero .eyebrow { font-size:12px; letter-spacing:.24em; color:#a9b8d4; margin:0 0 16px; text-transform:uppercase; }
           .hero h1 { font-size:clamp(32px,6vw,56px); line-height:1.28; margin:0 0 18px; font-weight:800; letter-spacing:.01em; }
           .hero p.sub { font-size:clamp(15px,2.2vw,17px); color:#e4e9f2; margin:0 auto 30px; max-width:30em; }
-          .cta-row { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+          .cta-col { display:flex; flex-direction:column; align-items:center; gap:16px; }
           .btn { display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:15px;
             padding:14px 26px; border-radius:12px; transition:.16s; }
           .btn-primary { background:var(--red); color:#fff; }
-          .btn-primary:hover { filter:brightness(1.06); transform:translateY(-1px); }
-          .btn-ghost { background:rgba(255,255,255,.1); color:#fff; border:1px solid rgba(255,255,255,.35); }
-          .btn-ghost:hover { background:rgba(255,255,255,.18); transform:translateY(-1px); }
+          .btn-primary:hover { filter:brightness(1.06); transform:translateY(-2px); }
+          .btn-lg { font-size:18px; padding:18px 42px; border-radius:14px; box-shadow:0 10px 26px rgba(218,60,65,.4); }
+          .link-secondary { color:#dbe3f0; font-size:14.5px; font-weight:600;
+            border-bottom:1px solid rgba(219,227,240,.4); padding-bottom:2px; }
+          .link-secondary:hover { color:#fff; border-color:#fff; }
 
           /* できること */
           .wrap { max-width:1080px; margin:0 auto; padding:56px 22px 72px; }
@@ -92,7 +94,7 @@
         <nav class="nav">
             <a href="/" class="logo">StockList</a>
             <a href="/" class="active">ホーム</a>
-            <a href="History/History.html">暴落の歴史</a>
+            <a href="History/History.html">相場の歴史</a>
             <a href="start/">はじめての証券口座</a>
             <a href="News/NewsFeed.html">お知らせ</a>
             <a href="ContactForm.html">お問い合わせ</a>
@@ -100,12 +102,12 @@
 
         <header class="hero">
             <div class="hero-inner">
-                <p class="eyebrow">Nikkei 225 Crash Timeline</p>
-                <h1>暴落しても、<br>焦らないこと。</h1>
-                <p class="sub">日経平均の歴史的な暴落を、週次チャートと当時のニュースで追体験。市場が急落すると、サイトが自動で「急落モード」に切り替わります。</p>
-                <div class="cta-row">
-                    <a class="btn btn-primary" href="History/History.html">暴落の歴史を見る</a>
-                    <a class="btn btn-ghost" href="start/">はじめての証券口座</a>
+                <p class="eyebrow">Nikkei 225 Market History</p>
+                <h1>相場が荒れても、<br>焦らないこと。</h1>
+                <p class="sub">日経平均が大きく動いた歴史的な局面を、週次チャートと当時のニュースで追体験。市場が急落すると、サイトが自動で「急落モード」に切り替わります。</p>
+                <div class="cta-col">
+                    <a class="btn btn-primary btn-lg" href="History/History.html">相場が動いた歴史を見る</a>
+                    <a class="link-secondary" href="start/">はじめての証券口座 →</a>
                 </div>
             </div>
         </header>
@@ -118,8 +120,8 @@
                     <span class="ic" aria-hidden="true">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M19 9l-5 5-4-4-4 4"/></svg>
                     </span>
-                    <h3>暴落の歴史を振り返る</h3>
-                    <p>リーマン・コロナ・令和のブラックマンデー…。主要な暴落を週次チャートと当時のニュースでたどれます。</p>
+                    <h3>相場が動いた歴史を振り返る</h3>
+                    <p>リーマン・コロナ・令和のブラックマンデー…。相場が大きく動いた局面を、週次チャートと当時のニュースでたどれます。</p>
                     <span class="go">年表を見る →</span>
                 </a>
                 <a class="card" href="start/">
@@ -142,7 +144,7 @@
         </main>
 
         <footer class="site">
-            <p class="tagline">暴落しても、焦らないこと。 — powered by StockList</p>
+            <p class="tagline">相場が荒れても、焦らないこと。 — powered by StockList</p>
             <a href="/privacy/">プライバシーポリシー・運営者情報</a>・<a href="/disclosure/">アフィリエイト表記・免責事項</a>
         </footer>
     </body>
