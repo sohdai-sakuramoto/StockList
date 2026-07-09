@@ -46,6 +46,24 @@
     .steps li { counter-increment:s; position:relative; padding:6px 0 6px 34px; }
     .steps li::before { content:counter(s); position:absolute; left:0; top:6px; width:24px; height:24px; border-radius:50%; background:var(--navy); color:#fff; font-size:13px; font-weight:700; display:grid; place-items:center; }
     .faq dt { font-weight:700; margin-top:14px; } .faq dd { margin:2px 0 0; color:var(--ink-2); font-size:14px; }
+    /* かんたん診断 */
+    .diag { background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:20px; }
+    .diag-step { font-size:12px; color:var(--muted); font-variant-numeric:tabular-nums; margin:0 0 4px; }
+    .diag-question { font-size:17px; font-weight:700; margin:0 0 14px; }
+    .diag-opts { display:grid; gap:10px; }
+    .diag-opts button { font:inherit; text-align:left; cursor:pointer; padding:13px 16px; border-radius:10px; border:1px solid var(--line); background:var(--plane); color:var(--ink); font-weight:600; transition:.15s; }
+    .diag-opts button:hover { border-color:var(--accent); color:var(--accent); }
+    .diag-back { font:inherit; font-size:13px; margin-top:14px; background:none; border:none; color:var(--muted); cursor:pointer; padding:0; }
+    .diag-back:hover { color:var(--accent); }
+    .diag-result { display:none; }
+    .diag-result.show { display:block; }
+    .diag-result .badge { display:inline-block; font-size:12px; font-weight:700; color:#fff; background:var(--good); border-radius:999px; padding:2px 12px; margin-bottom:8px; }
+    .diag-result h3 { font-size:21px; margin:0 0 6px; }
+    .diag-result .why { color:var(--ink-2); font-size:14px; margin:0 0 14px; }
+    .diag-result .diag-cta-row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    .diag-result .more { font-size:13px; }
+    .diag-reset { font:inherit; font-size:13px; margin-top:16px; background:none; border:none; color:var(--muted); cursor:pointer; padding:0; }
+    .diag-reset:hover { color:var(--accent); }
     footer { margin-top:40px; border-top:1px solid var(--line); padding-top:16px; color:var(--muted); font-size:12.5px; }
     footer a { color:var(--muted); }
   </style>
@@ -66,7 +84,70 @@
       <p>だからこそ、急落時に慌てて売るより、<strong>次の下落に備えて少額から積み立てる</strong>ほうが、結果的に多くの局面で報われてきました。その第一歩が、証券口座を持つことです。焦らず、あなたのペースで。</p>
     </div>
 
-    <h2>初心者向け ネット証券のやさしい比較</h2>
+    <h2 id="diag-title">かんたん診断:あなたに合う証券口座は?</h2>
+    <p class="note">最大3つの質問で、あなたに合いそうなネット証券をご提案します。各社サービスの特徴に基づく参考情報であり、投資助言ではありません。</p>
+
+    <div class="diag" id="diag">
+      <div id="diag-panel">
+        <p class="diag-step" id="diag-step"></p>
+        <p class="diag-question" id="diag-question"></p>
+        <div class="diag-opts" id="diag-opts"></div>
+        <button type="button" class="diag-back" id="diag-back" hidden>← ひとつ戻る</button>
+      </div>
+
+      <div class="diag-result" data-broker="sbi">
+        <span class="badge">あなたへのご提案</span>
+        <h3>SBI証券</h3>
+        <p class="why" data-why></p>
+        <div class="diag-cta-row">
+          <a class="broker-cta" data-aff="sbi">口座開設(無料)</a>
+          <a class="more" href="#broker-cards">くわしい特徴を見る ↓</a>
+        </div>
+        <button type="button" class="diag-reset">← もう一度診断する</button>
+      </div>
+      <div class="diag-result" data-broker="rakuten">
+        <span class="badge">あなたへのご提案</span>
+        <h3>楽天証券</h3>
+        <p class="why" data-why></p>
+        <div class="diag-cta-row">
+          <a class="broker-cta" data-aff="rakuten">口座開設(無料)</a>
+          <a class="more" href="#broker-cards">くわしい特徴を見る ↓</a>
+        </div>
+        <button type="button" class="diag-reset">← もう一度診断する</button>
+      </div>
+      <div class="diag-result" data-broker="monex">
+        <span class="badge">あなたへのご提案</span>
+        <h3>マネックス証券</h3>
+        <p class="why" data-why></p>
+        <div class="diag-cta-row">
+          <a class="broker-cta" data-aff="monex">口座開設(無料)</a>
+          <a class="more" href="#broker-cards">くわしい特徴を見る ↓</a>
+        </div>
+        <button type="button" class="diag-reset">← もう一度診断する</button>
+      </div>
+      <div class="diag-result" data-broker="matsui">
+        <span class="badge">あなたへのご提案</span>
+        <h3>松井証券</h3>
+        <p class="why" data-why></p>
+        <div class="diag-cta-row">
+          <a class="broker-cta" data-aff="matsui">口座開設(無料)</a>
+          <a class="more" href="#broker-cards">くわしい特徴を見る ↓</a>
+        </div>
+        <button type="button" class="diag-reset">← もう一度診断する</button>
+      </div>
+      <div class="diag-result" data-broker="moomoo">
+        <span class="badge">あなたへのご提案</span>
+        <h3>moomoo証券</h3>
+        <p class="why" data-why></p>
+        <div class="diag-cta-row">
+          <a class="broker-cta" data-aff="moomoo">口座開設(無料)</a>
+          <a class="more" href="#broker-cards">くわしい特徴を見る ↓</a>
+        </div>
+        <button type="button" class="diag-reset">← もう一度診断する</button>
+      </div>
+    </div>
+
+    <h2 id="broker-cards-title">初心者向け ネット証券のやさしい比較</h2>
     <p class="note">※ NISA対応・ネットで完結・少額から始めやすい主要ネット証券をまとめました。手数料や条件は変更されることがあります。最新・正確な情報は必ず各公式サイトでご確認ください。</p>
 
     <div class="cards" id="broker-cards">
@@ -170,6 +251,104 @@
     </footer>
   </div>
 
+  <script>
+    // かんたん診断(決定木)。result は比較カードと同じ broker id。
+    (function () {
+      "use strict";
+      var TREE = {
+        start: {
+          q: "証券口座は、すでにお持ちですか?",
+          opts: [
+            { label: "いいえ、はじめて作ります", next: "points" },
+            { label: "はい(2つ目の口座を探しています)", next: "second" },
+          ],
+        },
+        points: {
+          q: "普段よく使う・貯めているポイントはありますか?",
+          opts: [
+            { label: "楽天ポイント(楽天市場・楽天カードをよく使う)", result: "rakuten",
+              why: "楽天ポイントが貯まる・使えるので、いつもの買い物と投資がつながります。国内株手数料が無料になるコースやNISAにも対応。楽天経済圏の方の定番です。" },
+            { label: "Vポイント(三井住友カードを使っている)", result: "sbi",
+              why: "三井住友カードとの組み合わせでポイントを貯めながら積立ができます。口座開設数トップクラスの総合力で、NISA・投資信託の品ぞろえも豊富です。" },
+            { label: "特にない・わからない", next: "style" },
+          ],
+        },
+        style: {
+          q: "どんなふうに始めたいですか?",
+          opts: [
+            { label: "NISAでコツコツ積立(王道でいきたい)", result: "sbi",
+              why: "迷ったら総合力。口座開設数トップクラス、NISA対応・投資信託の取扱が豊富で、手数料無料コースもあります。まず1つ持つ口座として定番です。" },
+            { label: "アプリで学びながら、少しずつ", result: "moomoo",
+              why: "高機能アプリで相場情報が見やすく、初心者向けの学習コンテンツも充実。「見て学びながら慣れる」スタイルに向いています。" },
+            { label: "困ったとき電話で相談したい", result: "matsui",
+              why: "100年以上の歴史がある老舗で、電話サポートの手厚さに定評があります。ネット証券が初めてでも安心して始めやすい選択です。" },
+          ],
+        },
+        second: {
+          q: "2つ目の口座に求めるものは?",
+          opts: [
+            { label: "米国株を本格的にやりたい", result: "monex",
+              why: "米国株の取扱銘柄が豊富で、分析ツール・投資情報も充実。メイン口座と使い分ける「米国株用の2口座目」として選ばれています。" },
+            { label: "高機能アプリ・投資情報がほしい", result: "moomoo",
+              why: "情報量の多い分析アプリが強み。メイン口座はそのままに、情報収集・分析用として追加する使い方と相性が良いです。" },
+            { label: "メイン口座そのものを見直したい", next: "points" },
+          ],
+        },
+      };
+
+      var stepEl = document.getElementById("diag-step");
+      var qEl = document.getElementById("diag-question");
+      var optsEl = document.getElementById("diag-opts");
+      var backBtn = document.getElementById("diag-back");
+      var panel = document.getElementById("diag-panel");
+      var history = [];
+
+      function show(nodeId) {
+        var node = TREE[nodeId];
+        stepEl.textContent = "質問 " + (history.length + 1);
+        qEl.textContent = node.q;
+        optsEl.innerHTML = "";
+        node.opts.forEach(function (opt) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.textContent = opt.label;
+          b.addEventListener("click", function () {
+            if (opt.result) return finish(opt);
+            history.push(nodeId);
+            show(opt.next);
+          });
+          optsEl.appendChild(b);
+        });
+        backBtn.hidden = history.length === 0;
+      }
+
+      function finish(opt) {
+        panel.style.display = "none";
+        var card = document.querySelector('.diag-result[data-broker="' + opt.result + '"]');
+        card.querySelector("[data-why]").textContent = opt.why;
+        card.classList.add("show");
+        if (typeof window.gtag === "function") {
+          window.gtag("event", "diagnosis_result", { broker: opt.result, page: location.pathname });
+        }
+      }
+
+      backBtn.addEventListener("click", function () {
+        var prev = history.pop();
+        if (prev) show(prev);
+      });
+
+      Array.prototype.forEach.call(document.querySelectorAll(".diag-reset"), function (b) {
+        b.addEventListener("click", function () {
+          Array.prototype.forEach.call(document.querySelectorAll(".diag-result"), function (c) { c.classList.remove("show"); });
+          history = [];
+          panel.style.display = "";
+          show("start");
+        });
+      });
+
+      show("start");
+    })();
+  </script>
   <script src="../affiliate-config.js"></script>
 </body>
 </html>
