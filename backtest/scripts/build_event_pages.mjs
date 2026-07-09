@@ -109,6 +109,12 @@ function pageHtml(cfg, series) {
       <ul>${newsHtml}</ul>
     </noscript>
 
+    <aside class="slv-cta">
+      <p class="slv-cta-lead">暴落は、歴史的にはいつか戻ってきました。</p>
+      <p class="slv-cta-sub">狼狽売りより、次の下落に備えて少額から。長期・積立の第一歩は口座づくりから。</p>
+      <a class="slv-cta-btn" href="/start/">はじめての証券口座を見る →</a>
+    </aside>
+
     <p class="slv-foot">
       ※ 教育・情報提供目的のページです。投資助言ではありません。株価データは検証用（Stooq/FRED）、ニュースは見出し・要約とリンクに留めています。
     </p>
@@ -132,7 +138,9 @@ function main() {
   ALL = JSON.parse(fs.readFileSync(EVENTS_JSON, "utf8"));
   const urls = [
     { loc: `${SITE_URL}/`, pri: "1.0" },
+    { loc: `${SITE_URL}/start/`, pri: "0.9" },
     { loc: `${SITE_URL}/History/History.html`, pri: "0.8" },
+    { loc: `${SITE_URL}/disclosure/`, pri: "0.3" },
   ];
   for (const cfg of ALL) {
     const dataPath = path.join(EVENTS_DIR, `${cfg.id}.json`);
