@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,72 +12,135 @@
         <meta property="og:description" content="日経平均が大きく動いた歴史的な出来事の年表。週次チャートと当時のニュースで振り返る。">
         <meta property="og:url" content="https://stock-list-kem9.vercel.app/History/History.html">
         <meta property="og:image" content="https://stock-list-kem9.vercel.app/IMG_3857.jpg">
-        <link rel="stylesheet" href="History.css">
+        <link rel="stylesheet" href="../crash-mode.css">
+        <script src="../crash-mode.js" data-state="../state.json" defer></script>
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-06EHKG0SQ2"></script>
         <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        
         gtag('config', 'G-06EHKG0SQ2');
         </script>
+        <style>
+          :root {
+            --navy:#1b2538; --navy-2:#243149; --red:#da3c41; --ink:#16202e; --ink-2:#56606e;
+            --muted:#8a929e; --line:#e7e9ee; --surface:#ffffff; --plane:#f4f6f9; --accent:#2f6fd0;
+            --shadow:0 1px 2px rgba(16,32,46,.06), 0 8px 24px rgba(16,32,46,.08);
+          }
+          @media (prefers-color-scheme: dark){
+            :root { --navy:#0f1626; --navy-2:#16203a; --red:#e0575c; --ink:#e9edf4; --ink-2:#aab3c2;
+              --muted:#7d8695; --line:#263042; --surface:#161d2b; --plane:#0e131d; --accent:#6ea3f0;
+              --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35); }
+          }
+          * { box-sizing:border-box; }
+          body { margin:0; background:var(--plane); color:var(--ink);
+            font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI",system-ui,-apple-system,sans-serif; line-height:1.7; }
+          a { color:inherit; text-decoration:none; }
+          .topbar { background:var(--navy); color:#fff; padding:12px 20px; display:flex; gap:16px; align-items:center; }
+          .topbar a { color:#cdd7ea; font-weight:600; font-size:14px; } .topbar a:hover { color:#fff; }
+          .hero { background:linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%); color:#fff; padding:52px 20px 56px; text-align:center; position:relative; overflow:hidden; }
+          .hero::after { content:""; position:absolute; left:0; right:0; bottom:0; height:4px; background:var(--red); }
+          .hero .eyebrow { font-size:12px; letter-spacing:.22em; color:#9fb0cc; margin:0 0 10px; text-transform:uppercase; }
+          .hero h1 { font-size:clamp(26px,4.4vw,40px); margin:0 0 10px; letter-spacing:-.01em; font-weight:800; }
+          .hero p { margin:0 auto; max-width:34em; color:#c7d1e2; font-size:15px; }
+          .wrap { max-width:1120px; margin:0 auto; padding:36px 20px 88px; }
+          .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:18px; }
+          .card { position:relative; display:flex; flex-direction:column; background:var(--surface);
+            border:1px solid var(--line); border-radius:16px; padding:22px 22px 18px; box-shadow:var(--shadow);
+            transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease; overflow:hidden; }
+          .card::before { content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--red); opacity:.85; }
+          .card:hover { transform:translateY(-4px); border-color:color-mix(in srgb, var(--red) 40%, var(--line));
+            box-shadow:0 6px 14px rgba(16,32,46,.1), 0 18px 42px rgba(16,32,46,.14); }
+          .card .cat { align-self:flex-start; font-size:11.5px; font-weight:700; color:var(--red);
+            background:color-mix(in srgb, var(--red) 12%, transparent); border-radius:999px; padding:3px 11px; margin-bottom:12px; }
+          .card .date { font-size:13px; color:var(--muted); font-variant-numeric:tabular-nums; margin-bottom:2px; }
+          .card h2 { font-size:21px; margin:0 0 8px; letter-spacing:-.01em; }
+          .card .desc { color:var(--ink-2); font-size:14px; margin:0 0 18px; flex:1 1 auto; }
+          .card .foot { display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid var(--line); padding-top:14px; }
+          .card .dd { display:inline-flex; align-items:baseline; gap:6px; font-size:12.5px; color:var(--muted); }
+          .card .dd b { font-size:19px; font-weight:800; color:var(--red); font-variant-numeric:tabular-nums; letter-spacing:-.01em; }
+          .card .go { font-size:13.5px; font-weight:700; color:var(--accent); white-space:nowrap; }
+          .card:hover .go { text-decoration:underline; }
+          .foot-note { color:var(--muted); font-size:12px; text-align:center; margin-top:34px; }
+          .foot-note a { color:var(--accent); }
+        </style>
     </head>
-    <header>
-      <a href="/index" class="homeback" style="color: aliceblue;">ホーム</a>
-    </header>
-<section class="section intro">
-    <div class="container">
-      <h1>株価が大きく動いた出来事</h1>
-    </div>
-</section>
-  
-<section class="timeline">
-    <ol>
-      <li>
-        <div>
-          <time>2008/9/15</time>
-          <a href="events/lehman.html">リーマンショック</a>
-          <br>リーマンブラザーズの経営破綻により株価が大暴落した。
-        </div>
-      </li>
-      <li>
-        <div>
-          <time>2011/3/11</time>
-          <a href="events/great-east-japan.html">東日本大震災</a>
-          <br>M9を超える地震が東北地方を襲い、未曾有の大災害となった。
-        </div>
-      </li>
-      <li>
-        <div>
-          <time>2020/1~2021</time>
-          <a href="events/covid.html">Covid-19(新型コロナウイルス)パンデミック</a>
-          <br>中国・武漢で発生した新型コロナウイルスの感染拡大により世界経済が混乱に陥った。
-        </div>
-      </li>
-      <li>
-        <div>
-          <time>2024/9/27</time>
-          <a href="events/ishiba.html">石破ショック</a>
-          <br>自民党総裁選の結果を受け、政策不安から週明けに日経平均が大幅反落した。
-        </div>
-      </li>
-      <!--<li>
-        <div>
-          <time>1943</time> In mattis elit vitae odio posuere, nec maximus massa varius. Suspendisse varius volutpat mattis. Vestibulum id magna est.
-        </div>
-      </li>-->
-    </ol>
-    
-    <div class="arrows">
-      <button class="arrow arrow__prev disabled" disabled>
-        <script type="text/javascript" src="History.js"></script>
-        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/arrow_prev.svg" alt="prev timeline arrow">
-      </button>
-      <button class="arrow arrow__next">
-        <script type="text/javascript" src="History.js"></script>
-        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/arrow_next.svg" alt="next timeline arrow">
-      </button>
-    </div>
-</section>
+    <body>
+        <div class="topbar"><a href="/">← StockList トップ</a></div>
+
+        <header class="hero">
+            <p class="eyebrow">Nikkei 225 · Timeline</p>
+            <h1>株価が大きく動いた出来事</h1>
+            <p>歴史的な暴落を、週次チャートと当時のニュースで追体験する。カードを選ぶと、その相場の動きが見られます。</p>
+        </header>
+
+        <main class="wrap">
+            <div class="grid">
+                <a class="card" href="events/lehman.html">
+                    <span class="cat">金融危機</span>
+                    <div class="date">2008年9月</div>
+                    <h2>リーマンショック</h2>
+                    <p class="desc">リーマン・ブラザーズの経営破綻を引き金に世界的な信用収縮が発生。日経平均は約2か月でバブル後最安値まで急落した。</p>
+                    <div class="foot">
+                        <span class="dd" data-event="lehman">最大下落率 <b>—</b></span>
+                        <span class="go">チャートで見る →</span>
+                    </div>
+                </a>
+
+                <a class="card" href="events/great-east-japan.html">
+                    <span class="cat">災害</span>
+                    <div class="date">2011年3月</div>
+                    <h2>東日本大震災</h2>
+                    <p class="desc">M9.0の地震・津波と福島第一原発事故が重なりリスクオフが進行。震災後2営業日で大きく下落した。</p>
+                    <div class="foot">
+                        <span class="dd" data-event="great-east-japan">最大下落率 <b>—</b></span>
+                        <span class="go">チャートで見る →</span>
+                    </div>
+                </a>
+
+                <a class="card" href="events/covid.html">
+                    <span class="cat">パンデミック</span>
+                    <div class="date">2020年2月</div>
+                    <h2>コロナショック</h2>
+                    <p class="desc">新型コロナウイルスの世界的拡大とロックダウン懸念でグローバル同時株安。急落と急反発が交互に出た局面。</p>
+                    <div class="foot">
+                        <span class="dd" data-event="covid">最大下落率 <b>—</b></span>
+                        <span class="go">チャートで見る →</span>
+                    </div>
+                </a>
+
+                <a class="card" href="events/ishiba.html">
+                    <span class="cat">政治</span>
+                    <div class="date">2024年9月</div>
+                    <h2>石破ショック</h2>
+                    <p class="desc">自民党総裁選の結果を受け、政策不安から週明けに日経平均が大幅反落。円高・先物急落が重なった。</p>
+                    <div class="foot">
+                        <span class="dd" data-event="ishiba">最大下落率 <b>—</b></span>
+                        <span class="go">チャートで見る →</span>
+                    </div>
+                </a>
+            </div>
+
+            <p class="foot-note">
+                株価データは検証用（Stooq/FRED）に基づく参考値です。
+                <a href="/disclosure/">免責事項</a>
+            </p>
+        </main>
+
+        <script>
+            // 各カードに実データの最大下落率を差し込む(取得できなければ「—」のまま)
+            document.querySelectorAll(".dd[data-event]").forEach(function (el) {
+                var id = el.getAttribute("data-event");
+                fetch("events/" + id + ".json", { cache: "no-store" })
+                    .then(function (r) { return r.ok ? r.json() : null; })
+                    .then(function (j) {
+                        if (j && j.kpi && typeof j.kpi.max_drawdown === "number") {
+                            el.querySelector("b").textContent = (j.kpi.max_drawdown * 100).toFixed(1) + "%";
+                        }
+                    })
+                    .catch(function () {});
+            });
+        </script>
+    </body>
 </html>
