@@ -56,6 +56,64 @@ function toWeekly(rows) {
 }
 
 const round2 = (x) => Math.round(x * 100) / 100;
+const round4 = (x) => Math.round(x * 10000) / 10000;
+
+function shiftMonths(dateStr, m) {
+  const d = new Date(dateStr + "T00:00:00Z");
+  d.setUTCMonth(d.getUTCMonth() + m);
+  return d.toISOString().slice(0, 10);
+}
+function monthsBetween(a, b) {
+  const da = new Date(a + "T00:00:00Z"), db = new Date(b + "T00:00:00Z");
+  return Math.max(0, Math.round((db - da) / (1000 * 60 * 60 * 24 * 30.4375)));
+}
+
+// 高値の探索は「イベント期間開始前の直近◯ヶ月」に限定(遠い別局面の高値を拾わないため)
+export const PEAK_LOOKBACK_MONTHS = 15;
+
+/**
+ * 「30秒でわかる結論」の数値を実データから機械算出する(指示書の定義に準拠)。
+ *  rows: 昇順の [{date, close}](全期間の日次)
+ *  ev:   { window:[start,end], date }
+ *
+ *  高値 peak    = イベント期間開始前(直近 PEAK_LOOKBACK_MONTHS ヶ月)の終値最高値
+ *  底  trough   = 高値の日以降・イベント期間終了までの終値最安値
+ *  最大下落率    = trough/peak - 1(終値ベース)
+ *  底までの期間  = 高値日→底日(営業日数 と 月数)
+ *  高値回復まで  = 高値日→ 終値が高値を初めて上回った日(全期間を前方探索)。無ければ未回復
+ */
+export function computeConclusion(rows, ev) {
+  const [wStart, wEnd] = ev.window;
+  const peakStart = shiftMonths(wStart, -PEAK_LOOKBACK_MONTHS);
+  const pre = rows.filter((r) => r.date >= peakStart && r.date <= wStart);
+  if (pre.length < 2) return null;
+  let peak = pre[0];
+  for (const r of pre) if (r.close > peak.close) peak = r;
+
+  // 底はイベント期間内(window)に限定。高値日〜期間開始の間に別局面の安値があっても拾わない。
+  const seg = rows.filter((r) => r.date >= wStart && r.date <= wEnd);
+  let trough = seg[0];
+  for (const r of seg) if (r.close < trough.close) trough = r;
+
+  const drawdown = trough.close / peak.close - 1;
+  const bdaysToBottom = rows.filter((r) => r.date > peak.date && r.date <= trough.date).length;
+  const monthsToBottom = monthsBetween(peak.date, trough.date);
+
+  let recovery = null;
+  for (const r of rows) { if (r.date <= trough.date) continue; if (r.close >= peak.close) { recovery = r; break; } }
+
+  return {
+    peak: { date: peak.date, close: round2(peak.close) },
+    trough: { date: trough.date, close: round2(trough.close) },
+    drawdown: round4(drawdown),
+    bdays_to_bottom: bdaysToBottom,
+    months_to_bottom: monthsToBottom,
+    recovered: !!recovery,
+    recovery_date: recovery ? recovery.date : null,
+    months_to_recover: recovery ? monthsBetween(peak.date, recovery.date) : null,
+    as_of: rows[rows.length - 1].date,
+  };
+}
 
 function parseArgs(argv) {
   const a = { dataPath: null };
@@ -85,6 +143,7 @@ async function main() {
       if (dd < maxDD) maxDD = dd;
       if (r.close < trough) trough = r.close;
     }
+    const conclusion = computeConclusion(rows, ev);
     const out = {
       id: ev.id,
       title: ev.title,
@@ -97,14 +156,15 @@ async function main() {
         trough_close: round2(trough),
         weeks: points.length,
       },
+      conclusion,
       points,
     };
     const outPath = path.join(EVENTS_DIR, `${ev.id}.json`);
     fs.writeFileSync(outPath, JSON.stringify(out, null, 2) + "\n", "utf8");
-    console.log(`[out] ${ev.id}: ${points.length}週 (${out.data_range[0]}〜${out.data_range[1]}, maxDD=${(maxDD * 100).toFixed(1)}%, source=${source})`);
+    const c = conclusion;
+    console.log(`[out] ${ev.id}: ${points.length}週, 結論 DD=${c ? (c.drawdown * 100).toFixed(0) + "%" : "-"} 底=${c ? c.trough.date : "-"} 回復=${c && c.recovered ? c.months_to_recover + "ヶ月" : "未回復"} (source=${source})`);
   }
 }
 
-const round4 = (x) => Math.round(x * 10000) / 10000;
-
-main().catch((e) => { console.error(`\nERROR: ${e.message}`); process.exit(1); });
+const isDirectRun = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isDirectRun) main().catch((e) => { console.error(`\nERROR: ${e.message}`); process.exit(1); });

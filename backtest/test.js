@@ -8,8 +8,43 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { runStateMachine, parseStooqCsv, windowToIdx, EPS } from "./backtest.js";
+import { computeConclusion } from "./scripts/build_event_data.mjs";
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
+
+test("computeConclusion: 高値・底・回復・下落率が定義どおり算出される", () => {
+  const rows = [
+    { date: "2019-06-03", close: 90 },
+    { date: "2019-12-02", close: 95 },
+    { date: "2020-01-06", close: 100 },   // 高値(イベント期間前の直近最高値)
+    { date: "2020-02-03", close: 88 },     // 期間開始後
+    { date: "2020-02-17", close: 60 },     // 底(期間内の最安値)
+    { date: "2020-03-02", close: 75 },
+    { date: "2020-04-06", close: 92 },
+    { date: "2020-08-03", close: 101 },    // 高値を初めて上回った日=回復
+    { date: "2020-09-07", close: 105 },
+  ];
+  const c = computeConclusion(rows, { window: ["2020-02-01", "2020-05-01"], date: "2020-02-10" });
+  assert.equal(c.peak.close, 100);
+  assert.equal(c.peak.date, "2020-01-06");
+  assert.equal(c.trough.close, 60);
+  assert.equal(c.trough.date, "2020-02-17");
+  assert.ok(Math.abs(c.drawdown - -0.4) < 1e-9, "最大下落率 = 60/100 - 1 = -0.4");
+  assert.equal(c.recovered, true);
+  assert.equal(c.recovery_date, "2020-08-03");
+});
+
+test("computeConclusion: データ期間内に回復しなければ未回復", () => {
+  const rows = [
+    { date: "2019-12-02", close: 95 },
+    { date: "2020-01-06", close: 100 },
+    { date: "2020-02-17", close: 60 },
+    { date: "2020-04-06", close: 80 },
+  ];
+  const c = computeConclusion(rows, { window: ["2020-02-01", "2020-05-01"], date: "2020-02-10" });
+  assert.equal(c.recovered, false);
+  assert.equal(c.recovery_date, null);
+});
 
 /** 2020-01-06(月)起点の連続営業日で終値列から rows を作る */
 function makeRows(closes) {
