@@ -43,18 +43,23 @@ a { color: var(--accent); }
 
 .slv-grid { display: grid; grid-template-columns: 1fr 460px; gap: 18px; align-items: start; }
 @media (max-width: 900px) { .slv-grid { grid-template-columns: 1fr; } }
-.slv-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+/* min-width:0 が無いと 1fr トラックがSVG実寸まで広がり、chartの overflow-x スクロールが効かない */
+.slv-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; min-width: 0; }
 .slv-card > h2 { font-size: 15px; margin: 0 0 4px; }
 .slv-cap { color: var(--muted); font-size: 12.5px; margin: 0 0 10px; }
 
 .slv-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
 .slv-kpi { background: var(--plane); border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px; }
 .slv-kpi .k { font-size: 11.5px; color: var(--muted); }
-.slv-kpi .v { font-size: 20px; font-weight: 800; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.slv-kpi .v { font-size: 20px; font-weight: 800; margin-top: 2px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .slv-kpi .v.neg { color: var(--red); }
 
-.slv-chartwrap { position: relative; }
-.slv-chartwrap svg { display: block; width: 100%; height: auto; }
+.slv-chartwrap { position: relative; overflow-x: auto; overflow-y: hidden; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+/* データが多い局面(回復まで表示)は幅が伸びて横スクロール。高さは一定・実寸表示 */
+.slv-chartwrap svg { display: block; height: 340px; width: auto; max-width: none; }
+.slv-chartwrap::-webkit-scrollbar { height: 8px; }
+.slv-chartwrap::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+.slv-chartwrap::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 .slv-tip { position: absolute; pointer-events: none; display: none; z-index: 5; background: var(--navy); color: #fff; border-radius: 8px; padding: 8px 11px; font-size: 12.5px; line-height: 1.5; white-space: nowrap; box-shadow: 0 6px 18px rgba(0,0,0,.22); }
 .slv-tip .d { color: #aebbd2; font-size: 11.5px; }
 .slv-tip .nw { color: #ffd7d8; margin-top: 3px; max-width: 240px; white-space: normal; }
