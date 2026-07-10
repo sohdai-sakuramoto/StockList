@@ -27,11 +27,9 @@ const jsonForScript = (o) => JSON.stringify(o).replace(/</g, "\\u003c");
 
 const yearMonth = (d) => { const [y, m] = d.split("-"); return `${y}年${Number(m)}月`; };
 const ddPct = (dd) => `${dd < 0 ? "−" : ""}${Math.abs(Math.round(dd * 100))}%`;
-// 底までの期間: 素早い暴落(90営業日以内)は営業日、それ以上は月で表示
-function bottomPeriodStr(c) {
-  return c.bdays_to_bottom <= 90 ? `約${c.bdays_to_bottom}営業日` : `約${c.months_to_bottom}ヶ月`;
-}
-// 高値回復まで: 24ヶ月以上は「約◯年」、未満は「約◯ヶ月」、未回復は「未回復」
+// 底値: 大底の終値を「◯,◯◯◯円」で表示
+const troughPriceStr = (c) => `${Math.round(c.trough.close).toLocaleString("ja-JP")}円`;
+// 下落前の水準に戻るまで: 24ヶ月以上は「約◯年」、未満は「約◯ヶ月」、未回復は「未回復」
 function recoverStr(c) {
   if (!c.recovered) return "未回復";
   return c.months_to_recover >= 24 ? `約${Math.round(c.months_to_recover / 12)}年` : `約${c.months_to_recover}ヶ月`;
@@ -90,8 +88,8 @@ function pageHtml(cfg, series) {
       <h2 class="slv-verdict-h">30秒でわかる結論</h2>
       <div class="slv-verdict-grid">
         <div class="slv-vc"><div class="k">最大下落率</div><div class="v neg">${ddPct(c.drawdown)}</div><div class="note">高値からの下落</div></div>
-        <div class="slv-vc"><div class="k">底までの期間</div><div class="v">${bottomPeriodStr(c)}</div><div class="note">${yearMonth(c.trough.date)}に大底</div></div>
-        <div class="slv-vc"><div class="k">高値回復まで</div><div class="v">${recoverStr(c)}</div><div class="note">${c.recovered ? esc(cfg.recoveryNote || "高値を回復") : yearMonth(c.as_of) + "時点で未回復"}</div></div>
+        <div class="slv-vc"><div class="k">下落前の水準に戻るまで</div><div class="v">${recoverStr(c)}</div><div class="note">${c.recovered ? esc(cfg.recoveryNote || "下落前の高値を回復") : yearMonth(c.as_of) + "時点で未回復"}</div></div>
+        <div class="slv-vc"><div class="k">底値</div><div class="v">${troughPriceStr(c)}</div><div class="note">${yearMonth(c.trough.date)}に大底</div></div>
       </div>
     </section>` : "";
 
