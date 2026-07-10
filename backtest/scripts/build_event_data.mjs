@@ -134,9 +134,10 @@ async function main() {
       console.warn(`[skip] ${ev.id}: window内のデータが不足 (${inWin.length}件, ${start}〜${end})`);
       continue;
     }
-    const points = toWeekly(inWin);
-    // KPI: window内の高値からの最大ドローダウンと底
-    let peak = -Infinity, trough = Infinity, maxDD = 0, peakClose = inWin[0].close;
+    // KPI(最大下落率・底値)はイベント期間(window)基準を維持する。
+    // チャートは「下落前の水準に戻るまで」を見せたいので、回復日まで右側に延長する
+    // （回復途中に別の暴落を挟んでも、KPIと底マーカーはイベント本体のまま）。
+    let peak = -Infinity, trough = Infinity, maxDD = 0;
     for (const r of inWin) {
       if (r.close > peak) peak = r.close;
       const dd = r.close / peak - 1;
@@ -144,13 +145,21 @@ async function main() {
       if (r.close < trough) trough = r.close;
     }
     const conclusion = computeConclusion(rows, ev);
+
+    // チャート表示範囲: window開始 〜 下落前の水準を回復した日(未回復なら window終了)
+    let chartEnd = end;
+    if (conclusion && conclusion.recovered && conclusion.recovery_date > end) chartEnd = conclusion.recovery_date;
+    const chartRows = rows.filter((r) => r.date >= start && r.date <= chartEnd);
+    const points = toWeekly(chartRows);
+
     const out = {
       id: ev.id,
       title: ev.title,
       source,
       generated_at: new Date().toISOString(),
       window: ev.window,
-      data_range: [inWin[0].date, inWin[inWin.length - 1].date],
+      chart_range: [start, chartEnd],
+      data_range: [chartRows[0].date, chartRows[chartRows.length - 1].date],
       kpi: {
         max_drawdown: round4(maxDD),
         trough_close: round2(trough),
@@ -162,7 +171,7 @@ async function main() {
     const outPath = path.join(EVENTS_DIR, `${ev.id}.json`);
     fs.writeFileSync(outPath, JSON.stringify(out, null, 2) + "\n", "utf8");
     const c = conclusion;
-    console.log(`[out] ${ev.id}: ${points.length}週, 結論 DD=${c ? (c.drawdown * 100).toFixed(0) + "%" : "-"} 底=${c ? c.trough.date : "-"} 回復=${c && c.recovered ? c.months_to_recover + "ヶ月" : "未回復"} (source=${source})`);
+    console.log(`[out] ${ev.id}: ${points.length}週(〜${chartEnd}), 結論 DD=${c ? (c.drawdown * 100).toFixed(0) + "%" : "-"} 底=${c ? c.trough.date : "-"} 回復=${c && c.recovered ? c.months_to_recover + "ヶ月" : "未回復"} (source=${source})`);
   }
 }
 

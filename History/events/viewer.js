@@ -29,12 +29,12 @@
       '<div class="slv-grid">' +
         '<section class="slv-card">' +
           '<h2>日経平均（週次）</h2>' +
-          '<p class="slv-cap">1点=1週(週末終値)。<b>●</b> はニュースがあった週。ホバーで詳細、右のニュースをクリックすると該当週を表示。</p>' +
+          '<p class="slv-cap">1点=1週(週末終値)。<b>下落前の水準</b>に戻るまでを表示（横スクロールで全期間、途中の別局面の変動も含む）。<b>●</b>はニュース週、ホバーで詳細。</p>' +
           '<div class="slv-chartwrap"><div class="slv-tip"></div></div>' +
           '<div class="slv-kpis">' +
-            '<div class="slv-kpi"><div class="k">最大下落率（期間内）</div><div class="v neg" data-kpi="dd">-</div></div>' +
-            '<div class="slv-kpi"><div class="k">底値（終値）</div><div class="v" data-kpi="trough">-</div></div>' +
-            '<div class="slv-kpi"><div class="k">表示期間</div><div class="v" data-kpi="weeks">-</div></div>' +
+            '<div class="slv-kpi"><div class="k">最大下落率（イベント期間）</div><div class="v neg" data-kpi="dd">-</div></div>' +
+            '<div class="slv-kpi"><div class="k">底値（イベント期間）</div><div class="v" data-kpi="trough">-</div></div>' +
+            '<div class="slv-kpi"><div class="k">表示期間（回復まで）</div><div class="v" data-kpi="weeks">-</div></div>' +
           '</div>' +
         '</section>' +
         '<section class="slv-card">' +
@@ -51,46 +51,91 @@
 
     if (series.kpi) {
       root.querySelector('[data-kpi="dd"]').textContent = pct(series.kpi.max_drawdown);
-      root.querySelector('[data-kpi="trough"]').textContent = jpNum(series.kpi.trough_close) + " 円";
+      root.querySelector('[data-kpi="trough"]').textContent = jpNum(Math.round(series.kpi.trough_close)) + " 円";
       root.querySelector('[data-kpi="weeks"]').textContent = pts.length + " 週";
     }
 
-    drawChart(root, cfg, pts, newsByWeek);
+    drawChart(root, cfg, pts, newsByWeek, series);
     renderNews(root, cfg, series, weekIndex, newsByWeek);
   };
 
-  function drawChart(root, cfg, pts, newsByWeek) {
+  function drawChart(root, cfg, pts, newsByWeek, series) {
     var wrap = root.querySelector(".slv-chartwrap");
-    var W = 720, H = 340, ML = 56, MR = 14, MT = 16, MB = 40, iw = W - ML - MR, ih = H - MT - MB, n = pts.length;
+    var n = pts.length;
     if (!n) return;
+    var H = 340, ML = 54, MR = 54, MT = 20, MB = 40, ih = H - MT - MB;
+    // 週あたりの最小ピクセル幅を確保。データが多いと横幅が伸び、コンテナを超えると横スクロールになる
+    var PX_PER_WEEK = 16;
+    var host = wrap.clientWidth || 700;
+    var iw = Math.max(host - ML - MR, n * PX_PER_WEEK);
+    var W = ML + iw + MR;
+
+    var conc = series && series.conclusion ? series.conclusion : null;
     var closes = pts.map(function (p) { return p.close; });
     var lo = Math.min.apply(null, closes), hi = Math.max.apply(null, closes);
+    if (conc) { lo = Math.min(lo, conc.trough.close, conc.peak.close); hi = Math.max(hi, conc.peak.close); }
     var pad = (hi - lo) * 0.08 || 1; lo -= pad; hi += pad;
     var x = function (i) { return ML + (n <= 1 ? 0 : i / (n - 1)) * iw; };
     var y = function (v) { return MT + (1 - (v - lo) / (hi - lo)) * ih; };
+
+    // イベント本体の底(結論の底)の週インデックス。無ければ表示区間の最安値
+    function weekIdxOf(dateStr) {
+      if (!dateStr) return -1;
+      var wk = mondayOf(dateStr);
+      for (var j = 0; j < n; j++) if (pts[j].week === wk) return j;
+      return -1;
+    }
+    var tIdx = conc ? weekIdxOf(conc.trough.date) : -1;
+    if (tIdx < 0) { tIdx = 0; for (var k = 1; k < n; k++) if (pts[k].close < pts[tIdx].close) tIdx = k; }
+    var recIdx = conc && conc.recovered ? weekIdxOf(conc.recovery_date) : -1;
+
     var s = '<defs><linearGradient id="slvarea" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--area-top)"/><stop offset="1" stop-color="var(--area-bot)"/></linearGradient></defs>';
     for (var t = 0; t <= 4; t++) {
-      var v = lo + (hi - lo) * t / 4, yy = y(v);
+      var v = lo + (hi - lo) * t / 4, yy = y(v), lbl = Math.round(v).toLocaleString("ja-JP");
       s += '<line x1="' + ML + '" x2="' + (W - MR) + '" y1="' + yy.toFixed(1) + '" y2="' + yy.toFixed(1) + '" stroke="var(--line)" stroke-width="1"/>';
-      s += '<text x="' + (ML - 8) + '" y="' + (yy + 4).toFixed(1) + '" text-anchor="end" font-size="11" fill="var(--muted)" style="font-variant-numeric:tabular-nums">' + Math.round(v).toLocaleString("ja-JP") + '</text>';
+      // 横スクロール時に軸が流れても読めるよう左右両端に値ラベル
+      s += '<text x="' + (ML - 8) + '" y="' + (yy + 4).toFixed(1) + '" text-anchor="end" font-size="11" fill="var(--muted)" style="font-variant-numeric:tabular-nums">' + lbl + '</text>';
+      s += '<text x="' + (W - MR + 8) + '" y="' + (yy + 4).toFixed(1) + '" text-anchor="start" font-size="11" fill="var(--muted)" style="font-variant-numeric:tabular-nums">' + lbl + '</text>';
     }
-    var step = Math.max(1, Math.round(n / 6));
+    var numTicks = Math.max(4, Math.round(iw / 96));
+    var step = Math.max(1, Math.round(n / numTicks));
     for (var i = 0; i < n; i += step) {
       var xx = x(i);
       s += '<line x1="' + xx.toFixed(1) + '" x2="' + xx.toFixed(1) + '" y1="' + (MT + ih) + '" y2="' + (MT + ih + 4) + '" stroke="var(--muted)" stroke-width="1"/>';
       s += '<text x="' + xx.toFixed(1) + '" y="' + (MT + ih + 18) + '" text-anchor="middle" font-size="10.5" fill="var(--muted)" style="font-variant-numeric:tabular-nums">' + pts[i].week.slice(2).replace(/-/g, "/") + '</text>';
     }
+
+    // 下落前の水準(=高値)の基準線。ここに戻れば「回復」
+    if (conc) {
+      var py = y(conc.peak.close);
+      s += '<line x1="' + ML + '" x2="' + (W - MR) + '" y1="' + py.toFixed(1) + '" y2="' + py.toFixed(1) + '" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="5 4" opacity="0.85"/>';
+      s += '<text x="' + (ML + 6) + '" y="' + (py - 6).toFixed(1) + '" font-size="11" font-weight="700" fill="var(--accent)">下落前の水準</text>';
+    }
+
     var line = pts.map(function (p, i) { return x(i).toFixed(1) + "," + y(p.close).toFixed(1); }).join(" ");
     s += '<polygon points="' + ML + ',' + (MT + ih) + ' ' + line + ' ' + (W - MR) + ',' + (MT + ih) + '" fill="url(#slvarea)"/>';
     s += '<polyline points="' + line + '" fill="none" stroke="var(--red)" stroke-width="2" stroke-linejoin="round"/>';
-    var tIdx = 0; for (var k = 1; k < n; k++) if (pts[k].close < pts[tIdx].close) tIdx = k;
-    s += '<circle cx="' + x(tIdx).toFixed(1) + '" cy="' + y(pts[tIdx].close).toFixed(1) + '" r="3.5" fill="none" stroke="var(--red)" stroke-width="1.5"/>';
+
+    // 回復地点(下落前の水準を回復した週)のマーカー
+    if (recIdx >= 0) {
+      var rx = x(recIdx), ry = y(pts[recIdx].close);
+      s += '<line x1="' + rx.toFixed(1) + '" x2="' + rx.toFixed(1) + '" y1="' + MT + '" y2="' + (MT + ih) + '" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>';
+      s += '<circle cx="' + rx.toFixed(1) + '" cy="' + ry.toFixed(1) + '" r="4.5" fill="var(--accent)" stroke="var(--surface)" stroke-width="1.6"/>';
+      s += '<text x="' + rx.toFixed(1) + '" y="' + (MT - 6).toFixed(1) + '" text-anchor="middle" font-size="11" font-weight="700" fill="var(--accent)">回復</text>';
+    }
+    // イベント本体の底マーカー(回復途中の別局面の安値と区別するためラベル付き)
+    var tx = x(tIdx), ty = y(pts[tIdx].close);
+    s += '<circle cx="' + tx.toFixed(1) + '" cy="' + ty.toFixed(1) + '" r="3.8" fill="none" stroke="var(--red)" stroke-width="1.8"/>';
+    s += '<text x="' + tx.toFixed(1) + '" y="' + (ty + 17).toFixed(1) + '" text-anchor="middle" font-size="11" font-weight="700" fill="var(--red)">底</text>';
+
     pts.forEach(function (p, i) { if (newsByWeek[p.week]) s += '<circle cx="' + x(i).toFixed(1) + '" cy="' + y(p.close).toFixed(1) + '" r="4.5" fill="var(--red)" stroke="var(--surface)" stroke-width="1.6"/>'; });
     s += '<circle class="slv-hoverdot" r="4.5" fill="var(--navy)" stroke="var(--surface)" stroke-width="1.6" style="display:none"/>';
     s += '<circle class="slv-pulse" r="7" fill="none" stroke="var(--red)" stroke-width="2" style="display:none"/>';
 
     var old = wrap.querySelector("svg"); if (old) old.remove();
-    wrap.insertAdjacentHTML("afterbegin", '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(cfg.title) + 'の週次日経平均">' + s + '</svg>');
+    // width/height をpx実寸で与え、コンテナ超過分は wrap の横スクロールで見る(高さは一定)
+    wrap.insertAdjacentHTML("afterbegin",
+      '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(cfg.title) + 'の週次日経平均">' + s + '</svg>');
 
     var svg = wrap.querySelector("svg"), tip = wrap.querySelector(".slv-tip"), hoverdot = svg.querySelector(".slv-hoverdot");
     NS._geom = { x: x, y: y, W: W, H: H, ML: ML, MR: MR, iw: iw, n: n, pts: pts, svg: svg };
@@ -104,10 +149,11 @@
       var nw = newsByWeek[p.week];
       tip.innerHTML = '<span class="d">' + fmtWeek(p) + ' (' + p.weekEnd + ')</span><br><b>' + jpNum(p.close) + '</b> 円' + (nw ? '<div class="nw">📰 ' + esc(nw[0].title) + (nw.length > 1 ? ' ほか' + (nw.length - 1) + '件' : '') + '</div>' : '');
       tip.style.display = "block";
-      var bw = wrap.clientWidth, tw = tip.offsetWidth;
-      var left = (x(i) / W) * bw + 12; if (left + tw > bw - 4) left = (x(i) / W) * bw - tw - 12;
-      tip.style.left = Math.max(2, left) + "px";
-      tip.style.top = Math.max(0, (y(p.close) / H) * svg.getBoundingClientRect().height - 60) + "px";
+      // svgはpx実寸(1:1)なので x(i)/y() をそのまま座標に使える。スクロール位置を考慮して右端で反転
+      var tw = tip.offsetWidth, view = wrap.scrollLeft + wrap.clientWidth;
+      var left = x(i) + 12; if (left + tw > view - 4) left = x(i) - tw - 12;
+      tip.style.left = Math.max(wrap.scrollLeft + 2, left) + "px";
+      tip.style.top = Math.max(0, y(p.close) - 60) + "px";
     });
     svg.addEventListener("pointerleave", function () { tip.style.display = "none"; hoverdot.style.display = "none"; });
   }
@@ -139,6 +185,12 @@
     var g = NS._geom; if (!g || !(wk in weekIndex)) return;
     var i = weekIndex[wk], pulse = g.svg.querySelector(".slv-pulse");
     pulse.setAttribute("cx", g.x(i).toFixed(1)); pulse.setAttribute("cy", g.y(g.pts[i].close).toFixed(1)); pulse.style.display = "";
+    // 横スクロールしている場合は該当週を表示領域の中央へスクロール
+    var wrap = root.querySelector(".slv-chartwrap");
+    if (wrap && wrap.scrollWidth > wrap.clientWidth + 1) {
+      var target = g.x(i) - wrap.clientWidth / 2;
+      wrap.scrollTo({ left: Math.max(0, Math.min(target, wrap.scrollWidth - wrap.clientWidth)), behavior: "smooth" });
+    }
   }
 
   window.StockListViewer = NS;
