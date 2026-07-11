@@ -17,7 +17,7 @@ window.SL_AFFILIATE = {
     sbi:     { url: "", asp: "" },
     rakuten: { url: "", asp: "" },
     monex:   { url: "", asp: "" },
-    matsui:  { url: "", asp: "" },
+    matsui:  { url: "https://px.a8.net/svt/ejp?a8mat=4B7WD5+1WGVCI+3XCC+6DRLT", asp: "a8" },
     moomoo:  { url: "", asp: "" },
   },
 };
