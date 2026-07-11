@@ -135,6 +135,16 @@
         </div>
         <button type="button" class="diag-reset">← もう一度診断する</button>
       </div>
+      <div class="diag-result" data-broker="esmart">
+        <span class="badge">あなたへのご提案</span>
+        <h3>三菱UFJ eスマート証券</h3>
+        <p class="why" data-why></p>
+        <div class="diag-cta-row">
+          <a class="broker-cta" data-aff="esmart">口座開設(無料)</a>
+          <a class="more" href="#broker-cards">くわしい特徴を見る ↓</a>
+        </div>
+        <button type="button" class="diag-reset">← もう一度診断する</button>
+      </div>
       <div class="diag-result" data-broker="moomoo">
         <span class="badge">あなたへのご提案</span>
         <h3>moomoo証券</h3>
@@ -214,6 +224,22 @@
 
       <div class="card">
         <div>
+          <h3>三菱UFJ eスマート証券 <span class="tag">Pontaとau経済圏</span></h3>
+          <ul>
+            <li>三菱UFJフィナンシャル・グループのネット証券(旧auカブコム証券)</li>
+            <li>Pontaポイントが貯まる・使える</li>
+            <li>NISA対応・単元未満株「プチ株」で少額から</li>
+            <li>au/UQ mobile・Pontaをよく使う人と好相性</li>
+          </ul>
+        </div>
+        <div class="cta-col">
+          <a class="broker-cta" data-aff="esmart">口座開設(無料)</a>
+          <span class="official">公式サイトへ移動します</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div>
           <h3>moomoo証券 <span class="tag">情報量が豊富なアプリ</span></h3>
           <ul>
             <li>高機能な分析アプリで相場情報が見やすい</li>
@@ -270,6 +296,8 @@
               why: "楽天ポイントが貯まる・使えるので、いつもの買い物と投資がつながります。国内株手数料が無料になるコースやNISAにも対応。楽天経済圏の方の定番です。" },
             { label: "Vポイント(三井住友カードを使っている)", result: "sbi",
               why: "三井住友カードとの組み合わせでポイントを貯めながら積立ができます。口座開設数トップクラスの総合力で、NISA・投資信託の品ぞろえも豊富です。" },
+            { label: "Pontaポイント(au/UQ mobile・ローソンをよく使う)", result: "esmart",
+              why: "Pontaポイントが貯まる・使えるMUFGグループのネット証券(旧auカブコム証券)。単元未満株「プチ株」で少額から始められ、NISAにも対応。au/UQ mobileやPontaをよく使う方と相性が良いです。" },
             { label: "特にない・わからない", next: "style" },
           ],
         },

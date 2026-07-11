@@ -12,12 +12,13 @@
  */
 window.SL_AFFILIATE = {
   // 表示順(比較ページのカードの並び)
-  order: ["sbi", "rakuten", "monex", "matsui", "moomoo"],
+  order: ["sbi", "rakuten", "monex", "matsui", "esmart", "moomoo"],
   brokers: {
     sbi:     { url: "", asp: "" },
     rakuten: { url: "", asp: "" },
     monex:   { url: "", asp: "" },
     matsui:  { url: "https://px.a8.net/svt/ejp?a8mat=4B7WD5+1WGVCI+3XCC+6DRLT", asp: "a8" },
+    esmart:  { url: "", asp: "" },
     moomoo:  { url: "", asp: "" },
   },
 };
