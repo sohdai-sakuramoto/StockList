@@ -16,7 +16,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const SITE_URL = "https://stock-list-kem9.vercel.app"; // ← 独自ドメイン導入時に変更
+const SITE_URL = "https://www.stocklist.jp"; // ← 独自ドメイン導入時に変更
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(SCRIPT_DIR, "..", "..");
 const EVENTS_DIR = path.join(REPO_ROOT, "History", "events");

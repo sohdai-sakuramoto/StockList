@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://stock-list-kem9.vercel.app/sitemap.xml
+Sitemap: https://www.stocklist.jp/sitemap.xml
