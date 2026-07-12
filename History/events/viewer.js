@@ -29,7 +29,7 @@
       '<div class="slv-grid">' +
         '<section class="slv-card">' +
           '<h2>日経平均（週次）</h2>' +
-          '<p class="slv-cap">1点=1週(週末終値)。<b>下落前の水準</b>に戻るまでを表示（横スクロールで全期間、途中の別局面の変動も含む）。<b>●</b>はニュース週、ホバーで詳細。</p>' +
+          '<p class="slv-cap">1点=1週(週末終値)。<b>下落前の水準</b>に戻るまでを表示（横スクロールで全期間、途中の別局面の変動も含む）。<b>●</b>はニュース週。ホバー/タップで価格を表示。</p>' +
           '<div class="slv-chartwrap"><div class="slv-tip"></div></div>' +
           '<div class="slv-kpis">' +
             '<div class="slv-kpi"><div class="k">最大下落率（イベント期間）</div><div class="v neg" data-kpi="dd">-</div></div>' +
@@ -139,11 +139,12 @@
 
     var svg = wrap.querySelector("svg"), tip = wrap.querySelector(".slv-tip"), hoverdot = svg.querySelector(".slv-hoverdot");
     NS._geom = { x: x, y: y, W: W, H: H, ML: ML, MR: MR, iw: iw, n: n, pts: pts, svg: svg };
-    svg.addEventListener("pointermove", function (e) {
+    // 指定したクライアントX座標に最も近い週の価格・ニュースをツールチップ表示する
+    function showAt(clientX) {
       var r = svg.getBoundingClientRect();
-      var px = ((e.clientX - r.left) / r.width) * W;
+      var px = ((clientX - r.left) / r.width) * W;
       var i = Math.round((px - ML) / iw * (n - 1));
-      if (i < 0 || i >= n) { tip.style.display = "none"; hoverdot.style.display = "none"; return; }
+      if (i < 0) i = 0; else if (i >= n) i = n - 1; // 端は最寄りの点にスナップ(タップしやすく)
       var p = pts[i];
       hoverdot.setAttribute("cx", x(i)); hoverdot.setAttribute("cy", y(p.close)); hoverdot.style.display = "";
       var nw = newsByWeek[p.week];
@@ -154,8 +155,19 @@
       var left = x(i) + 12; if (left + tw > view - 4) left = x(i) - tw - 12;
       tip.style.left = Math.max(wrap.scrollLeft + 2, left) + "px";
       tip.style.top = Math.max(0, y(p.close) - 60) + "px";
+    }
+    function hideTip() { tip.style.display = "none"; hoverdot.style.display = "none"; }
+
+    // マウス/ペンのみ: ホバーで価格に追従、離れたら消す(タッチは追従・自動非表示しない)
+    svg.addEventListener("pointermove", function (e) {
+      if (e.pointerType === "mouse" || e.pointerType === "pen") showAt(e.clientX);
     });
-    svg.addEventListener("pointerleave", function () { tip.style.display = "none"; hoverdot.style.display = "none"; });
+    svg.addEventListener("pointerleave", function (e) {
+      if (e.pointerType === "mouse" || e.pointerType === "pen") hideTip();
+    });
+    // クリック/タップ: その点の価格を表示して残す(タッチ端末の主操作)。
+    // 横スクロール(ドラッグ)中は click が発火しないので、タップと横スクロールが両立する。
+    svg.addEventListener("click", function (e) { showAt(e.clientX); });
   }
 
   function renderNews(root, cfg, series, weekIndex, newsByWeek) {
