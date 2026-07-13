@@ -1,0 +1,44 @@
+name: Update quotes snapshot
+
+# 市場時間中(平日 9:00-15:30 JST)に約15分毎、株価スナップショット(quotes.json)を
+# 生成して market-data ブランチへ強制プッシュする。main には触れないため
+# Vercel の再デプロイは発生しない。バナー(crash-mode.js)は
+# raw.githubusercontent.com/<owner>/<repo>/market-data/quotes.json を読む。
+# ※ cron は混雑しにくいオフセット分(7,22,37,52)を指定。実行は数分遅れることがある。
+
+on:
+  schedule:
+    - cron: "7,22,37,52 0-6 * * 1-5" # 9:07-15:52 JST
+    - cron: "7 7 * * 1-5"            # 16:07 JST(大引け後の確定値)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-quotes
+  cancel-in-progress: true
+
+jobs:
+  quotes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 株価スナップショットを生成
+        run: node backtest/scripts/update_quotes.mjs --out /tmp/quotes.json
+
+      - name: market-data ブランチへ単一コミットで強制プッシュ
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan market-data
+          git rm -rf --quiet . || true
+          cp /tmp/quotes.json quotes.json
+          git add quotes.json
+          git commit -m "chore: 株価スナップショット $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -f origin market-data
