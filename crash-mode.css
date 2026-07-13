@@ -11,8 +11,9 @@
   box-sizing: border-box;
   width: 100%;
   display: flex;
+  flex-wrap: wrap; /* 株価ストリップ(.cm-quotes)を2段目に折り返すため */
   align-items: center;
-  gap: 14px;
+  gap: 6px 14px;
   padding: 10px 20px;
   background: var(--cm-bg);
   color: var(--cm-fg);
@@ -66,8 +67,32 @@
 .cm-metrics b { color: var(--cm-fg); font-weight: 700; }
 .cm-asof { flex: none; font-size: 12px; opacity: 0.7; }
 
+/* 株価ストリップ(2段目): 日経平均+主要銘柄の遅延価格 */
+.cm-quotes {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 2px;
+  padding-top: 6px;
+  border-top: 1px solid color-mix(in srgb, var(--cm-fg) 14%, transparent);
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+.cm-quotes-scroll { display: flex; align-items: center; gap: 10px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; min-width: 0; }
+.cm-quotes-scroll::-webkit-scrollbar { display: none; }
+.cm-q { color: var(--cm-accent); flex: none; }
+.cm-q b { color: var(--cm-fg); font-weight: 700; }
+.cm-q .cm-chg { font-style: normal; margin-left: 2px; }
+.cm-q .cm-chg.up { color: #7fd6a2; }
+.cm-q .cm-chg.down { color: #ff9b9e; }
+.cm-sep { opacity: 0.4; flex: none; }
+.cm-delay { flex: none; margin-left: auto; font-size: 11px; opacity: 0.65; }
+
 @media (max-width: 720px) {
   .cm-banner { flex-wrap: wrap; gap: 8px 12px; font-size: 13px; padding: 9px 14px; }
   .cm-metrics { order: 3; width: 100%; }
   .cm-asof { display: none; }
+  /* 遅延表記は誠実さのため隠さず、狭い画面では折り返す */
+  .cm-quotes { order: 4; flex-wrap: wrap; }
 }
