@@ -17,7 +17,7 @@ window.SL_AFFILIATE = {
     sbi:     { url: "", asp: "" },
     rakuten: { url: "", asp: "" },
     monex:   { url: "https://h.accesstrade.net/sp/cc?rk=0100pe6z00ovhd", asp: "accesstrade" },
-    matsui:  { url: "https://px.a8.net/svt/ejp?a8mat=4B7WD5+1WGVCI+3XCC+6DRLT", asp: "a8" },
+    matsui:  { url: "https://h.accesstrade.net/sp/cc?rk=01000t2900ovhd", asp: "accesstrade" },
     esmart:  { url: "", asp: "" },
     moomoo:  { url: "", asp: "" },
     dmm:     { url: "https://h.accesstrade.net/sp/cc?rk=0100mjw300ovhd", asp: "accesstrade" },
