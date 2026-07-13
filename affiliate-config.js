@@ -27,6 +27,27 @@ window.SL_AFFILIATE = {
 (function () {
   "use strict";
   var CFG = window.SL_AFFILIATE || { brokers: {} };
+
+  // 提携が有効(遷移先URLが設定済み)か
+  function isActive(id) {
+    var b = (CFG.brokers || {})[id];
+    return !!(b && b.url && String(b.url).trim());
+  }
+
+  // 比較カードを「有効(申込可能)なものが上」に並べ替える。
+  // 各グループ内は元のHTML順を維持(stable)。承認が増えれば自動で上がる。
+  function reorderCards() {
+    var grid = document.getElementById("broker-cards");
+    if (!grid) return;
+    var cards = Array.prototype.slice.call(grid.querySelectorAll(".card"));
+    var active = [], pending = [];
+    cards.forEach(function (c) {
+      var a = c.querySelector("a[data-aff]");
+      (a && isActive(a.getAttribute("data-aff")) ? active : pending).push(c);
+    });
+    active.concat(pending).forEach(function (c) { grid.appendChild(c); });
+  }
+
   function wire() {
     var links = document.querySelectorAll("a[data-aff]");
     Array.prototype.forEach.call(links, function (a) {
@@ -52,6 +73,7 @@ window.SL_AFFILIATE = {
         a.addEventListener("click", function (e) { e.preventDefault(); });
       }
     });
+    reorderCards();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", wire);
   else wire();
