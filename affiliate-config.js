@@ -4,22 +4,27 @@
  * ASP(A8.net / アクセストレード)の審査が通ったら、下の各 url に
  * 発行された「アフィリエイトリンク(遷移先URL)」を貼るだけで全ページに反映されます。
  *
- *   url : ASPが発行するリンク先URL(例: "https://px.a8.net/svt/ejp?a8mat=...")
- *   asp : 参考メモ("a8" / "accesstrade" 等)
+ *   url      : ASPが発行するリンク先URL(例: "https://px.a8.net/svt/ejp?a8mat=...")
+ *   official : 未提携の間だけ使う公式サイトURL(アフィリではない通常リンク)
+ *   hidden   : true でカード・診断結果を非表示(却下・保留の会社。承認が取れたら外すだけで復活)
+ *   asp      : 参考メモ("a8" / "accesstrade" 等)
  *
- * url が空文字の間は、ボタンは自動的に「準備中」表示(クリック無効)になります。
- * 実リンクを入れると自動でクリック可能 + rel="sponsored nofollow" + GA計測が付きます。
+ * 表示ロジック:
+ *   url あり           → アフィリエイトリンク(rel="sponsored nofollow" + GA affiliate_click)
+ *   url無し・official有 → 公式サイトへの通常リンク(rel="nofollow" + GA official_click)
+ *   url も official も無 → 「準備中」(クリック無効)
+ *   hidden:true        → そのカード自体を非表示
  */
 window.SL_AFFILIATE = {
   // 表示順(比較ページのカードの並び)
   order: ["sbi", "rakuten", "monex", "matsui", "esmart", "moomoo", "dmm"],
   brokers: {
-    sbi:     { url: "", asp: "" },
-    rakuten: { url: "", asp: "" },
+    sbi:     { url: "", official: "https://www.sbisec.co.jp/", asp: "" },
+    rakuten: { url: "", official: "https://www.rakuten-sec.co.jp/", asp: "" },
     monex:   { url: "https://h.accesstrade.net/sp/cc?rk=0100pe6z00ovhd", asp: "accesstrade" },
     matsui:  { url: "https://h.accesstrade.net/sp/cc?rk=01000t2900ovhd", asp: "accesstrade" },
-    esmart:  { url: "", asp: "" },
-    moomoo:  { url: "", asp: "" },
+    esmart:  { url: "", hidden: true, asp: "" }, // アクセストレード却下のため一旦非表示。承認が取れたら hidden を外す
+    moomoo:  { url: "", official: "https://www.moomoo.com/jp", asp: "" },
     dmm:     { url: "https://h.accesstrade.net/sp/cc?rk=0100mjw300ovhd", asp: "accesstrade" },
   },
 };
@@ -48,24 +53,41 @@ window.SL_AFFILIATE = {
     active.concat(pending).forEach(function (c) { grid.appendChild(c); });
   }
 
+  function gaEvent(name, id) {
+    if (typeof window.gtag === "function") window.gtag("event", name, { broker: id, page: location.pathname });
+  }
+
   function wire() {
     var links = document.querySelectorAll("a[data-aff]");
     Array.prototype.forEach.call(links, function (a) {
       var id = a.getAttribute("data-aff");
-      var b = (CFG.brokers || {})[id];
-      var url = b && b.url ? String(b.url).trim() : "";
+      var b = (CFG.brokers || {})[id] || {};
+
+      // 非表示指定: カード/診断結果ごと隠す(hidden を外すだけで復活)
+      if (b.hidden) {
+        var box = a.closest(".card, .diag-result");
+        if (box) box.style.display = "none";
+        return;
+      }
+
+      var url = b.url ? String(b.url).trim() : "";
+      var official = b.official ? String(b.official).trim() : "";
       if (url) {
+        // アフィリエイト提携済み
         a.setAttribute("href", url);
         a.setAttribute("target", "_blank");
         a.setAttribute("rel", "sponsored noopener nofollow");
         a.classList.remove("is-pending");
-        a.addEventListener("click", function () {
-          if (typeof window.gtag === "function") {
-            window.gtag("event", "affiliate_click", { broker: id, page: location.pathname });
-          }
-        });
+        a.addEventListener("click", function () { gaEvent("affiliate_click", id); });
+      } else if (official) {
+        // 未提携: 公式サイトへの通常リンク(アフィリではないので sponsored は付けない)
+        a.setAttribute("href", official);
+        a.setAttribute("target", "_blank");
+        a.setAttribute("rel", "noopener nofollow");
+        a.classList.remove("is-pending");
+        a.addEventListener("click", function () { gaEvent("official_click", id); });
       } else {
-        // 未設定: 準備中表示・クリック無効
+        // url も official も無い: 準備中(クリック無効)
         a.classList.add("is-pending");
         a.setAttribute("aria-disabled", "true");
         if (!a.dataset.label) a.dataset.label = a.textContent;
