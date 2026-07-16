@@ -125,6 +125,12 @@ a { color: var(--accent); }
   .slv-vc .v .slv-u { font-size: 0.6em; font-weight: 700; }     /* 「円」「年」「%」を数字より小さく */
   .slv-vc .note { font-size: 9.5px; line-height: 1.35; }
 
+  /* チャート下のKPI: nowrap値で列幅が不揃いになる不具合を修正(min-width:0で3等分を維持) */
+  .slv-kpis { gap: 8px; }
+  .slv-kpi { min-width: 0; padding: 10px 8px; }
+  .slv-kpi .k { font-size: 10.5px; line-height: 1.3; }
+  .slv-kpi .v { font-size: 17px; }
+
   /* 改修2: ニュースを1件=1かたまりに(項目間は広く・項目内は詰める) */
   .slv-news { max-height: none; overflow: visible; }            /* スマホでは入れ子スクロールを解除 */
   .slv-item { padding-top: 18px; padding-bottom: 18px; }

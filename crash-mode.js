@@ -86,16 +86,24 @@
     return '<span class="cm-q">' + esc(name) + ' <b>' + Number(price).toLocaleString("ja-JP") + "</b>" +
       (changePct == null ? "" : ' <i class="cm-chg' + cls + '">' + signPct(changePct) + "</i>") + "</span>";
   }
+  // スマホ幅では銘柄を絞る(時価総額1位の1社のみ)。SYMBOLS は時価総額順で並ぶ前提。
+  function isMobileBar() {
+    return !!(window.matchMedia && window.matchMedia("(max-width: 720px)").matches);
+  }
   function renderQuotes(banner, q) {
     if (!q || !q.nikkei || q.nikkei.price == null) return;
+    banner._quotes = q; // 最新値を保持(画面幅がPC↔スマホをまたいだ時の再描画用)
     var row = banner.querySelector(".cm-quotes");
     if (!row) {
       row = document.createElement("div");
       row.className = "cm-quotes";
       banner.appendChild(row);
     }
+    // スマホは日経平均+1位の1社、PCは全社
+    var stocks = q.stocks || [];
+    if (isMobileBar()) stocks = stocks.slice(0, 1);
     var parts = [quoteHtml(q.nikkei.name || "日経平均", q.nikkei.price, q.nikkei.change_pct)];
-    (q.stocks || []).forEach(function (s) { parts.push(quoteHtml(s.name, s.price, s.change_pct)); });
+    stocks.forEach(function (s) { parts.push(quoteHtml(s.name, s.price, s.change_pct)); });
     row.innerHTML =
       '<div class="cm-quotes-scroll">' + parts.join('<span class="cm-sep" aria-hidden="true">·</span>') + "</div>" +
       '<span class="cm-delay">約20分遅延' + (q.nikkei.market_time ? " · " + jstTime(q.nikkei.market_time) + "時点" : "") + "</span>";
@@ -112,6 +120,13 @@
     }
     tick();
     setInterval(tick, QUOTES_REFRESH_MS);
+    // 画面幅がPC↔スマホをまたいだら銘柄数を切り替えて即再描画
+    if (window.matchMedia) {
+      var mq = window.matchMedia("(max-width: 720px)");
+      var onChange = function () { if (banner._quotes) renderQuotes(banner, banner._quotes); };
+      if (mq.addEventListener) mq.addEventListener("change", onChange);
+      else if (mq.addListener) mq.addListener(onChange);
+    }
   }
 
   function boot() {
