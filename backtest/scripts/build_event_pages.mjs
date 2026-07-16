@@ -34,6 +34,11 @@ function recoverStr(c) {
   if (!c.recovered) return "未回復";
   return c.months_to_recover >= 24 ? `約${Math.round(c.months_to_recover / 12)}年` : `約${c.months_to_recover}ヶ月`;
 }
+// 数値を主役に: 先頭「約」と末尾の単位(%/円/年/ヶ月)を <span class="slv-u"> で包む。
+// PCでは .slv-u は無装飾(=従来どおり)。スマホのみCSSで単位を小さくする。
+const unitize = (s) => String(s)
+  .replace(/^約/, '<span class="slv-u">約</span>')
+  .replace(/(%|円|年|ヶ月)$/, '<span class="slv-u">$1</span>');
 
 function pageHtml(cfg, series) {
   const url = `${SITE_URL}/History/events/${cfg.id}.html`;
@@ -87,9 +92,9 @@ function pageHtml(cfg, series) {
     <section class="slv-verdict" aria-label="30秒でわかる結論">
       <h2 class="slv-verdict-h">30秒でわかる結論</h2>
       <div class="slv-verdict-grid">
-        <div class="slv-vc"><div class="k">最大下落率</div><div class="v neg">${ddPct(c.drawdown)}</div><div class="note">高値からの下落</div></div>
-        <div class="slv-vc"><div class="k">下落前の水準に戻るまで</div><div class="v">${recoverStr(c)}</div><div class="note">${c.recovered ? esc(cfg.recoveryNote || "下落前の高値を回復") : yearMonth(c.as_of) + "時点で未回復"}</div></div>
-        <div class="slv-vc"><div class="k">底値</div><div class="v">${troughPriceStr(c)}</div><div class="note">${yearMonth(c.trough.date)}に大底</div></div>
+        <div class="slv-vc"><div class="k">最大下落率</div><div class="v neg">${unitize(ddPct(c.drawdown))}</div><div class="note">高値からの下落</div></div>
+        <div class="slv-vc"><div class="k">下落前の水準に戻るまで</div><div class="v">${unitize(recoverStr(c))}</div><div class="note">${c.recovered ? esc(cfg.recoveryNote || "下落前の高値を回復") : yearMonth(c.as_of) + "時点で未回復"}</div></div>
+        <div class="slv-vc"><div class="k">底値</div><div class="v">${unitize(troughPriceStr(c))}</div><div class="note">${yearMonth(c.trough.date)}に大底</div></div>
       </div>
     </section>` : "";
 
