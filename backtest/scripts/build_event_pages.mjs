@@ -19,8 +19,9 @@ import { fileURLToPath } from "node:url";
 const SITE_URL = "https://www.stocklist.jp"; // ← 独自ドメイン導入時に変更
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(SCRIPT_DIR, "..", "..");
-const EVENTS_DIR = path.join(REPO_ROOT, "History", "events");
-const EVENTS_JSON = path.join(EVENTS_DIR, "events.json");
+const DATA_DIR = path.join(REPO_ROOT, "History", "events"); // 入力データ(events.json / <id>.json)の置き場
+const OUT_DIR = path.join(REPO_ROOT, "events");             // 出力: /events/<slug>.html (クリーンURL /events/<slug>)
+const EVENTS_JSON = path.join(DATA_DIR, "events.json");
 
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const jsonForScript = (o) => JSON.stringify(o).replace(/</g, "\\u003c");
@@ -41,7 +42,7 @@ const unitize = (s) => String(s)
   .replace(/(%|円|年|ヶ月)$/, '<span class="slv-u">$1</span>');
 
 function pageHtml(cfg, series) {
-  const url = `${SITE_URL}/History/events/${cfg.id}.html`;
+  const url = `${SITE_URL}/events/${cfg.slug}`;
   const c = series && series.conclusion ? series.conclusion : null;
 
   // title/meta は検索クエリ対応の形式に統一
@@ -71,7 +72,7 @@ function pageHtml(cfg, series) {
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "ホーム", item: `${SITE_URL}/` },
-      { "@type": "ListItem", position: 2, name: "暴落アーカイブ", item: `${SITE_URL}/History/History.html` },
+      { "@type": "ListItem", position: 2, name: "相場の歴史", item: `${SITE_URL}/history` },
       { "@type": "ListItem", position: 3, name: cfg.title, item: url },
     ],
   };
@@ -106,7 +107,7 @@ function pageHtml(cfg, series) {
     </section>` : "";
 
   const nav = ALL.map((e) =>
-    `<a href="${e.id}.html"${e.id === cfg.id ? ' aria-current="true"' : ""}>${esc(e.title)}</a>`).join("");
+    `<a href="/events/${e.slug}"${e.id === cfg.id ? ' aria-current="true"' : ""}>${esc(e.title)}</a>`).join("");
 
   // クロール可能なニュース(noscript フォールバック兼、初期HTMLの本文)
   const newsHtml = (cfg.news || []).map((n) =>
@@ -130,9 +131,9 @@ function pageHtml(cfg, series) {
   <meta name="twitter:title" content="${esc(title)}" />
   <meta name="twitter:description" content="${esc(desc)}" />
   <meta name="twitter:image" content="${ogImg}" />
-  <link rel="stylesheet" href="../../crash-mode.css" />
-  <link rel="stylesheet" href="viewer.css" />
-  <script src="../../crash-mode.js" data-state="../../state.json" defer></script>
+  <link rel="stylesheet" href="/crash-mode.css" />
+  <link rel="stylesheet" href="/events/viewer.css" />
+  <script src="/crash-mode.js" data-state="/state.json" defer></script>
   <script type="application/ld+json">${JSON.stringify(jsonld)}</script>
   <script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>
   ${faqLd ? `<script type="application/ld+json">${JSON.stringify(faqLd)}</script>` : ""}
@@ -142,7 +143,7 @@ function pageHtml(cfg, series) {
 </head>
 <body>
   <div class="slv-topbar">
-    <a class="back" href="../History.html">← 年表へ戻る</a>
+    <a class="back" href="/history">← 年表へ戻る</a>
     <span class="brand">日経平均と大きな出来事</span>
   </div>
   <div class="slv-wrap">
@@ -173,7 +174,7 @@ ${faqHtml}
   </div>
 
   <script type="application/json" id="slv-data">${jsonForScript({ cfg, series })}</script>
-  <script src="viewer.js"></script>
+  <script src="/events/viewer.js"></script>
   <script>
     (function () {
       var D = JSON.parse(document.getElementById("slv-data").textContent);
@@ -191,19 +192,20 @@ function main() {
   const urls = [
     { loc: `${SITE_URL}/`, pri: "1.0" },
     { loc: `${SITE_URL}/start/`, pri: "0.9" },
-    { loc: `${SITE_URL}/History/History.html`, pri: "0.8" },
+    { loc: `${SITE_URL}/history`, pri: "0.8" },
     { loc: `${SITE_URL}/disclosure/`, pri: "0.3" },
     { loc: `${SITE_URL}/privacy/`, pri: "0.3" },
   ];
+  fs.mkdirSync(OUT_DIR, { recursive: true });
   for (const cfg of ALL) {
-    const dataPath = path.join(EVENTS_DIR, `${cfg.id}.json`);
+    const dataPath = path.join(DATA_DIR, `${cfg.id}.json`);
     let series = { points: [], kpi: null, source: "real" };
     if (fs.existsSync(dataPath)) series = JSON.parse(fs.readFileSync(dataPath, "utf8"));
     else console.warn(`[warn] ${cfg.id}.json が無いためチャート無しで生成`);
-    const out = path.join(EVENTS_DIR, `${cfg.id}.html`);
+    const out = path.join(OUT_DIR, `${cfg.slug}.html`);
     fs.writeFileSync(out, pageHtml(cfg, series), "utf8");
-    urls.push({ loc: `${SITE_URL}/History/events/${cfg.id}.html`, pri: "0.9" });
-    console.log(`[out] History/events/${cfg.id}.html`);
+    urls.push({ loc: `${SITE_URL}/events/${cfg.slug}`, pri: "0.9" });
+    console.log(`[out] events/${cfg.slug}.html`);
   }
 
   const today = new Date().toISOString().slice(0, 10);

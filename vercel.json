@@ -2,13 +2,25 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/History/History.html", "destination": "/history", "permanent": true },
+    { "source": "/History/History", "destination": "/history", "permanent": true },
+    { "source": "/History/events/lehman.html", "destination": "/events/lehman-shock", "permanent": true },
+    { "source": "/History/events/lehman", "destination": "/events/lehman-shock", "permanent": true },
+    { "source": "/History/events/great-east-japan.html", "destination": "/events/great-east-japan-earthquake", "permanent": true },
+    { "source": "/History/events/great-east-japan", "destination": "/events/great-east-japan-earthquake", "permanent": true },
+    { "source": "/History/events/covid.html", "destination": "/events/covid-shock", "permanent": true },
+    { "source": "/History/events/covid", "destination": "/events/covid-shock", "permanent": true },
+    { "source": "/History/events/ishiba.html", "destination": "/events/ishiba-shock", "permanent": true },
+    { "source": "/History/events/ishiba", "destination": "/events/ishiba-shock", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/state.json",
       "headers": [{ "key": "Cache-Control", "value": "no-cache, max-age=0, must-revalidate" }]
     },
     {
-      "source": "/History/events/(.*)",
+      "source": "/events/(.*)",
       "headers": [{ "key": "Cache-Control", "value": "no-cache, max-age=0, must-revalidate" }]
     },
 

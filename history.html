@@ -5,15 +5,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>株価が大きく動いた出来事の年表｜StockList</title>
         <meta name="description" content="日経平均が大きく動いた歴史的な出来事（リーマンショック・東日本大震災・コロナショック・石破ショック）の年表。各イベントの週次チャートと当時のニュースへ。">
-        <link rel="canonical" href="https://www.stocklist.jp/History/History.html">
+        <link rel="canonical" href="https://www.stocklist.jp/history">
         <meta property="og:type" content="website">
         <meta property="og:site_name" content="StockList">
         <meta property="og:title" content="株価が大きく動いた出来事の年表｜StockList">
         <meta property="og:description" content="日経平均が大きく動いた歴史的な出来事の年表。週次チャートと当時のニュースで振り返る。">
-        <meta property="og:url" content="https://www.stocklist.jp/History/History.html">
+        <meta property="og:url" content="https://www.stocklist.jp/history">
         <meta property="og:image" content="https://www.stocklist.jp/IMG_3857.jpg">
-        <link rel="stylesheet" href="../crash-mode.css">
-        <script src="../crash-mode.js" data-state="../state.json" defer></script>
+        <link rel="stylesheet" href="/crash-mode.css">
+        <script src="/crash-mode.js" data-state="/state.json" defer></script>
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-06EHKG0SQ2"></script>
         <script>
@@ -77,7 +77,7 @@
 
         <main class="wrap">
             <div class="grid">
-                <a class="card" href="events/lehman.html">
+                <a class="card" href="/events/lehman-shock">
                     <span class="cat">金融危機</span>
                     <div class="date">2008年9月</div>
                     <h2>リーマンショック</h2>
@@ -88,7 +88,7 @@
                     </div>
                 </a>
 
-                <a class="card" href="events/great-east-japan.html">
+                <a class="card" href="/events/great-east-japan-earthquake">
                     <span class="cat">災害</span>
                     <div class="date">2011年3月</div>
                     <h2>東日本大震災</h2>
@@ -99,7 +99,7 @@
                     </div>
                 </a>
 
-                <a class="card" href="events/covid.html">
+                <a class="card" href="/events/covid-shock">
                     <span class="cat">パンデミック</span>
                     <div class="date">2020年2月</div>
                     <h2>コロナショック</h2>
@@ -110,7 +110,7 @@
                     </div>
                 </a>
 
-                <a class="card" href="events/ishiba.html">
+                <a class="card" href="/events/ishiba-shock">
                     <span class="cat">政治</span>
                     <div class="date">2024年9月</div>
                     <h2>石破ショック</h2>
@@ -132,7 +132,7 @@
             // 各カードに実データの最大下落率を差し込む(取得できなければ「—」のまま)
             document.querySelectorAll(".dd[data-event]").forEach(function (el) {
                 var id = el.getAttribute("data-event");
-                fetch("events/" + id + ".json", { cache: "no-store" })
+                fetch("/History/events/" + id + ".json", { cache: "no-store" })
                     .then(function (r) { return r.ok ? r.json() : null; })
                     .then(function (j) {
                         if (j && j.kpi && typeof j.kpi.max_drawdown === "number") {
