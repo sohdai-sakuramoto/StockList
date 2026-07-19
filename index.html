@@ -16,6 +16,24 @@
         <link rel="icon" type="image/png" href="favicon2.png">
         <link rel="stylesheet" href="crash-mode.css">
         <script src="crash-mode.js" data-state="state.json" defer></script>
+        <!-- 構造化データ: サイト全体を表す WebSite スキーマ -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "StockList",
+          "alternateName": "ストックリスト",
+          "url": "https://www.stocklist.jp/",
+          "description": "日経平均が大きく動いた歴史的な暴落・急騰を、週次チャートと当時のニュースで振り返るアーカイブ。市場が急落すると自動で急落モードに切り替わります。",
+          "inLanguage": "ja",
+          "publisher": {
+            "@type": "Organization",
+            "name": "StockList",
+            "url": "https://www.stocklist.jp/",
+            "logo": "https://www.stocklist.jp/favicon2.png"
+          }
+        }
+        </script>
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-06EHKG0SQ2"></script>
         <script>
