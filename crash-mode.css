@@ -66,6 +66,12 @@
 }
 .cm-metrics b { color: var(--cm-fg); font-weight: 700; }
 .cm-asof { flex: none; font-size: 12px; opacity: 0.7; }
+/* 「今の下落 vs 過去の暴落」への誘導リンク */
+.cm-more {
+  flex: none; font-size: 13px; font-weight: 700; color: var(--cm-fg); text-decoration: none;
+  border: 1px solid color-mix(in srgb, var(--cm-fg) 45%, transparent); border-radius: 999px; padding: 3px 12px; white-space: nowrap;
+}
+.cm-more:hover { background: color-mix(in srgb, var(--cm-fg) 14%, transparent); }
 
 /* 株価ストリップ(2段目): 日経平均+主要銘柄の遅延価格 */
 .cm-quotes {

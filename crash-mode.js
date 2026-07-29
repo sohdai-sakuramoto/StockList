@@ -61,7 +61,11 @@
         '<span class="cm-tone">' + esc(state.message || "") + "</span>" +
       "</span>" +
       metricsHtml +
-      '<span class="cm-asof">' + esc(state.as_of || "") + " 時点</span>";
+      '<span class="cm-asof">' + esc(state.as_of || "") + " 時点</span>" +
+      // 「今の下落 vs 過去の暴落」ページへ誘導(そのページ自身では出さない)
+      (location.pathname.replace(/\/+$/, "") === "/now"
+        ? ""
+        : '<a class="cm-more" href="/now">過去の暴落と比べる →</a>');
 
     var body = document.body;
     if (body) body.insertBefore(banner, body.firstChild);

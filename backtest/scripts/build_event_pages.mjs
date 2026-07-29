@@ -193,10 +193,12 @@ function main() {
     { loc: `${SITE_URL}/`, pri: "1.0" },
     { loc: `${SITE_URL}/start/`, pri: "0.9" },
     { loc: `${SITE_URL}/history`, pri: "0.8" },
+    { loc: `${SITE_URL}/now`, pri: "0.7" },
     { loc: `${SITE_URL}/disclosure/`, pri: "0.3" },
     { loc: `${SITE_URL}/privacy/`, pri: "0.3" },
   ];
   fs.mkdirSync(OUT_DIR, { recursive: true });
+  const summary = []; // /now(今の下落 vs 過去の暴落)ページ用の比較データ
   for (const cfg of ALL) {
     const dataPath = path.join(DATA_DIR, `${cfg.id}.json`);
     let series = { points: [], kpi: null, source: "real" };
@@ -206,7 +208,18 @@ function main() {
     fs.writeFileSync(out, pageHtml(cfg, series), "utf8");
     urls.push({ loc: `${SITE_URL}/events/${cfg.slug}`, pri: "0.9" });
     console.log(`[out] events/${cfg.slug}.html`);
+    const c = series.conclusion;
+    if (c) summary.push({
+      slug: cfg.slug, url: `/events/${cfg.slug}`, title: cfg.title, date: cfg.date, category: cfg.category || "",
+      drawdown: c.drawdown, drawdown_label: ddPct(c.drawdown),
+      recovered: !!c.recovered, months_to_recover: c.months_to_recover, recover_label: recoverStr(c),
+      trough_date: c.trough.date, trough_close: c.trough.close,
+    });
   }
+  // 履歴イベントの要点サマリー(/now ページが state.json と併せて読む・機械算出)
+  summary.sort((a, b) => a.drawdown - b.drawdown); // 深い順
+  fs.writeFileSync(path.join(OUT_DIR, "summary.json"), JSON.stringify(summary, null, 2) + "\n", "utf8");
+  console.log("[out] events/summary.json");
 
   const today = new Date().toISOString().slice(0, 10);
   const sitemap =
