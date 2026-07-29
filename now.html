@@ -17,7 +17,9 @@
   <meta name="twitter:description" content="現在の下落率を過去の暴落と比較。過去の暴落は歴史的にいつか回復してきました。" />
   <meta name="twitter:image" content="https://www.stocklist.jp/IMG_3857.jpg" />
   <link rel="stylesheet" href="/crash-mode.css" />
+  <link rel="stylesheet" href="/newsletter.css" />
   <script src="/crash-mode.js" data-state="/state.json" defer></script>
+  <script src="/newsletter-config.js" defer></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-06EHKG0SQ2"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-06EHKG0SQ2');</script>
   <style>
@@ -110,6 +112,17 @@
       <p>暴落は歴史的にはいつか戻ってきました。長期・積立の第一歩は、口座づくりから。</p>
       <a class="btn" href="/start/">はじめての証券口座を見る →</a>
     </aside>
+
+    <section class="nl" data-newsletter-block hidden>
+      <h2>急落モードの日に、一通だけ。</h2>
+      <p class="nl-sub">相場が大きく動いた日に、過去の暴落との比較を1通だけお届けします。しつこい配信はしません。いつでも解除できます。</p>
+      <form class="nl-form" data-newsletter novalidate>
+        <input type="email" required placeholder="メールアドレス" autocomplete="email" aria-label="メールアドレス" />
+        <button type="submit">登録する</button>
+        <p class="nl-msg" data-nl-msg style="display:none"></p>
+      </form>
+      <p class="nl-fine">登録は無料・配信は必要なときだけ。<a href="/privacy/">プライバシーポリシー</a></p>
+    </section>
 
     <div class="share">
       <a id="share-x" href="#" target="_blank" rel="noopener" aria-label="Xでシェア">𝕏 でシェア</a>

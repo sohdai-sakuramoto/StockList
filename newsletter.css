@@ -1,0 +1,24 @@
+/*
+ * メルマガ登録フォーム 共通スタイル
+ * 各ページの :root で定義された色変数(--surface / --line / --accent 等)を利用するため、
+ * ライト/ダーク・ページ配色に自動追従する。newsletter-config.js と対で使う。
+ */
+.nl { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px; margin: 26px 0 0; }
+.nl h2 { font-size: 18px; margin: 0 0 6px; display: flex; align-items: center; gap: 8px; }
+.nl h2::before { content: "✉️"; }
+.nl .nl-sub { color: var(--ink-2); font-size: 14px; margin: 0 0 14px; }
+.nl-form { display: flex; gap: 10px; flex-wrap: wrap; }
+.nl-form input[type="email"] {
+  flex: 1 1 220px; min-width: 0; font: inherit; font-size: 15px; padding: 11px 14px;
+  border-radius: 10px; border: 1px solid var(--line); background: var(--plane); color: var(--ink);
+}
+.nl-form input[type="email"]:focus { outline: none; border-color: var(--accent); }
+.nl-form button {
+  font: inherit; font-weight: 700; font-size: 15px; padding: 11px 22px; border-radius: 10px;
+  border: none; background: var(--accent); color: #fff; cursor: pointer; white-space: nowrap;
+}
+.nl-form button:hover { filter: brightness(1.06); }
+.nl-form button:disabled, .nl-form input:disabled { opacity: .6; cursor: default; }
+.nl-msg { flex-basis: 100%; color: var(--good, #1a7f4b); font-size: 13.5px; font-weight: 700; margin: 4px 0 0; }
+.nl-fine { color: var(--muted); font-size: 11.5px; margin: 10px 0 0; }
+.nl-fine a { color: var(--accent); }
