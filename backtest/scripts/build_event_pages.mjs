@@ -133,7 +133,9 @@ function pageHtml(cfg, series) {
   <meta name="twitter:image" content="${ogImg}" />
   <link rel="stylesheet" href="/crash-mode.css" />
   <link rel="stylesheet" href="/events/viewer.css" />
+  <link rel="stylesheet" href="/newsletter.css" />
   <script src="/crash-mode.js" data-state="/state.json" defer></script>
+  <script src="/newsletter-config.js" defer></script>
   <script type="application/ld+json">${JSON.stringify(jsonld)}</script>
   <script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>
   ${faqLd ? `<script type="application/ld+json">${JSON.stringify(faqLd)}</script>` : ""}
@@ -167,6 +169,17 @@ ${faqHtml}
       <p class="slv-cta-sub">狼狽売りより、次の下落に備えて少額から。長期・積立の第一歩は口座づくりから。</p>
       <a class="slv-cta-btn" href="/start/">はじめての証券口座を見る →</a>
     </aside>
+
+    <section class="nl" data-newsletter-block hidden>
+      <h2>急落モードの日に、一通だけ。</h2>
+      <p class="nl-sub">相場が大きく動いた日に、過去の暴落との比較を1通だけお届けします。しつこい配信はしません。いつでも解除できます。</p>
+      <form class="nl-form" data-newsletter novalidate>
+        <input type="email" required placeholder="メールアドレス" autocomplete="email" aria-label="メールアドレス" />
+        <button type="submit">登録する</button>
+        <p class="nl-msg" data-nl-msg style="display:none"></p>
+      </form>
+      <p class="nl-fine">登録は無料・配信は必要なときだけ。<a href="/privacy/">プライバシーポリシー</a></p>
+    </section>
 
     <p class="slv-foot">
       ※ 教育・情報提供目的のページです。投資助言ではありません。株価データは検証用（Stooq/FRED）、ニュースは見出し・要約とリンクに留めています。
