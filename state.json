@@ -1,26 +1,26 @@
 {
   "schema": "stocklist-crash-mode/1",
-  "generated_at": "2026-07-28T11:24:02.445Z",
-  "as_of": "2026-07-27",
-  "mode": "caution",
-  "label": "警戒モード",
-  "headline": "少し下げています。まずは深呼吸を。",
-  "message": "警戒はしても、焦らないこと。",
+  "generated_at": "2026-07-29T11:29:55.867Z",
+  "as_of": "2026-07-28",
+  "mode": "crash",
+  "label": "急落モード",
+  "headline": "大きく下げています。",
+  "message": "暴落しても、焦らないこと。",
   "metrics": {
-    "close": 64931.19,
-    "drawdown": -0.1027,
-    "daily_return": 0.005,
+    "close": 62364.92,
+    "drawdown": -0.1382,
+    "daily_return": -0.0395,
     "peak_date": "2026-06-25",
     "peak_close": 72366.34
   },
   "last_crash_notified": {
-    "date": "2026-03-23",
-    "drawdown": -0.1246
+    "date": "2026-07-28",
+    "drawdown": -0.1382
   },
   "config_source": "default",
   "data_range": [
     "2000-01-04",
-    "2026-07-27"
+    "2026-07-28"
   ],
   "disclaimer": "検証用データ(Stooq/FRED)に基づく参考値。投資判断は自己責任で。"
 }
