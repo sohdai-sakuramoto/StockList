@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>いまの日経平均の下落は、過去の暴落と比べてどれくらい？｜StockList</title>
+  <meta name="description" content="日経平均の現在の下落率を、リーマンショック・コロナショック・東日本大震災・石破ショックなど過去の暴落と並べて比較。過去の暴落が回復までにかかった期間もひと目で分かります。" />
+  <link rel="canonical" href="https://www.stocklist.jp/now" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="StockList" />
+  <meta property="og:title" content="いまの日経平均の下落は、過去の暴落と比べてどれくらい？" />
+  <meta property="og:description" content="現在の下落率を過去の暴落（リーマン・コロナ・震災・石破ショック）と比較。過去の暴落は歴史的にいつか回復してきました。" />
+  <meta property="og:url" content="https://www.stocklist.jp/now" />
+  <meta property="og:image" content="https://www.stocklist.jp/IMG_3857.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="いまの日経平均の下落は、過去の暴落と比べてどれくらい？" />
+  <meta name="twitter:description" content="現在の下落率を過去の暴落と比較。過去の暴落は歴史的にいつか回復してきました。" />
+  <meta name="twitter:image" content="https://www.stocklist.jp/IMG_3857.jpg" />
+  <link rel="stylesheet" href="/crash-mode.css" />
+  <script src="/crash-mode.js" data-state="/state.json" defer></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-06EHKG0SQ2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-06EHKG0SQ2');</script>
+  <style>
+    :root{ --navy:#1b2538; --navy-2:#243149; --red:#da3c41; --ink:#16202e; --ink-2:#56606e;
+      --muted:#8a929e; --line:#e7e9ee; --surface:#fff; --plane:#f4f6f9; --accent:#2f6fd0; --good:#1a7f4b;
+      --shadow:0 1px 2px rgba(16,32,46,.06), 0 10px 28px rgba(16,32,46,.09); }
+    @media (prefers-color-scheme: dark){ :root{ --navy:#0f1626; --navy-2:#16203a; --red:#e0575c; --ink:#e9edf4; --ink-2:#aab3c2;
+      --muted:#7d8695; --line:#263042; --surface:#161d2b; --plane:#0e131d; --accent:#6ea3f0; --good:#35c07d;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 12px 32px rgba(0,0,0,.4); } }
+    *{box-sizing:border-box;}
+    body{margin:0;background:var(--plane);color:var(--ink);line-height:1.75;
+      font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI",system-ui,-apple-system,sans-serif;}
+    a{color:var(--accent);text-decoration:none;}
+    .topbar{background:var(--navy);color:#fff;padding:12px 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;}
+    .topbar a{color:#cdd7ea;font-weight:600;font-size:14px;} .topbar a:hover{color:#fff;}
+    .wrap{max-width:820px;margin:0 auto;padding:26px 20px 72px;}
+    h1{font-size:clamp(22px,4.6vw,30px);line-height:1.35;margin:6px 0 6px;letter-spacing:-.01em;}
+    .lead{color:var(--ink-2);font-size:15px;margin:0 0 22px;}
+    /* 現在カード */
+    .now-card{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--red);border-radius:14px;
+      padding:20px 22px;box-shadow:var(--shadow);margin:0 0 26px;}
+    .now-card .k{font-size:12.5px;color:var(--muted);}
+    .now-chip{display:inline-block;font-size:12px;font-weight:700;color:#fff;background:var(--muted);border-radius:999px;padding:2px 12px;margin-bottom:8px;}
+    .now-big{font-size:clamp(40px,11vw,62px);font-weight:800;line-height:1;letter-spacing:-.02em;color:var(--red);font-variant-numeric:tabular-nums;margin:2px 0 4px;}
+    .now-meta{color:var(--ink-2);font-size:14px;font-variant-numeric:tabular-nums;}
+    .now-meta b{color:var(--ink);font-weight:700;}
+    /* 比較バー */
+    h2{font-size:18px;margin:30px 0 4px;}
+    .sub{color:var(--muted);font-size:13px;margin:0 0 16px;}
+    .cmp{display:flex;flex-direction:column;gap:14px;}
+    .row{display:grid;grid-template-columns:130px 1fr;gap:12px;align-items:center;}
+    .row .name{font-size:13.5px;font-weight:700;}
+    .row .name small{display:block;font-weight:400;color:var(--muted);font-size:11.5px;}
+    .barwrap{position:relative;}
+    .bar{display:inline-block;vertical-align:middle;height:28px;border-radius:8px;min-width:6px;
+      background:linear-gradient(90deg,var(--red),#b52a2f);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
+      transition:width .5s cubic-bezier(.2,.7,.2,1);}
+    .row.cur .bar{background:linear-gradient(90deg,var(--accent),#2456a8);}
+    .val{display:inline-block;vertical-align:middle;margin-left:8px;font-weight:800;font-size:15px;color:var(--red);font-variant-numeric:tabular-nums;}
+    .row.cur .val{color:var(--accent);}
+    .row.cur .name{color:var(--accent);}
+    .row .rec{font-size:11.5px;color:var(--ink-2);margin-top:3px;}
+    .row .rec b{color:var(--good);}
+    /* 安心メッセージ */
+    .reassure{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:26px 0 0;}
+    .reassure p{margin:0 0 8px;font-size:15px;}
+    .reassure .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+    .chip{font-size:12.5px;background:var(--plane);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-variant-numeric:tabular-nums;}
+    .disc{color:var(--muted);font-size:11.5px;margin-top:12px;}
+    /* CTA / share */
+    .cta{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--red);border-radius:12px;padding:18px 20px;margin:26px 0 0;}
+    .cta b{font-size:15px;} .cta p{color:var(--ink-2);font-size:14px;margin:4px 0 12px;}
+    .btn{display:inline-block;background:var(--red);color:#fff;font-weight:700;padding:11px 20px;border-radius:10px;}
+    .share{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0 0;}
+    .share a{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:#fff;font-weight:700;font-size:14px;padding:10px 18px;border-radius:10px;}
+    .foot{color:var(--muted);font-size:12px;margin-top:30px;border-top:1px solid var(--line);padding-top:14px;}
+    .foot a{color:var(--accent);}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a href="/">← StockList トップ</a>
+    <a href="/history">相場の歴史</a>
+  </div>
+
+  <div class="wrap">
+    <h1>いまの日経平均の下落は、<br>過去の暴落と比べてどれくらい？</h1>
+    <p class="lead">現在の下落率を、歴史的な暴落と同じ物差しで並べました。数字は検証用データ（Stooq/FRED）に基づく参考値です。</p>
+
+    <div class="now-card" id="now-card">
+      <span class="now-chip" id="now-mode">読み込み中…</span>
+      <div class="k">日経平均・直近高値からの下落率</div>
+      <div class="now-big" id="now-dd">—</div>
+      <div class="now-meta" id="now-meta"></div>
+    </div>
+
+    <h2>過去の暴落と並べると</h2>
+    <p class="sub">バーの長さ＝高値からの最大下落率。<span style="color:var(--accent);font-weight:700">青が現在</span>、赤が過去の暴落です。</p>
+    <div class="cmp" id="cmp"><p style="color:var(--muted)">読み込み中…</p></div>
+
+    <div class="reassure">
+      <p><b>過去の大きな下落は、歴史的にはすべて「下落前の水準」に戻ってきました。</b></p>
+      <p style="color:var(--ink-2);font-size:14px;margin:0">回復までにかかった期間の目安：</p>
+      <div class="chips" id="rec-chips"></div>
+      <p class="disc">※ 過去の実績であり、将来を保証するものではありません。本ページは教育・情報提供が目的で、投資助言ではありません。最終的な判断はご自身で。</p>
+    </div>
+
+    <aside class="cta">
+      <b>焦って売るより、次の下落に備える。</b>
+      <p>暴落は歴史的にはいつか戻ってきました。長期・積立の第一歩は、口座づくりから。</p>
+      <a class="btn" href="/start/">はじめての証券口座を見る →</a>
+    </aside>
+
+    <div class="share">
+      <a id="share-x" href="#" target="_blank" rel="noopener" aria-label="Xでシェア">𝕏 でシェア</a>
+    </div>
+
+    <p class="foot">
+      各暴落の詳細は <a href="/history">相場の歴史</a> から。株価は検証用データ（Stooq/FRED）に基づく参考値です。
+    </p>
+  </div>
+
+  <script>
+  (function () {
+    "use strict";
+    var fmt = function (n) { return Number(n).toLocaleString("ja-JP"); };
+    var pctTxt = function (dd) { return (dd < 0 ? "−" : "+") + Math.abs(dd * 100).toFixed(1) + "%"; };
+    var ym = function (d) { if (!d) return ""; var p = d.split("-"); return p[0] + "年" + Number(p[1]) + "月"; };
+
+    Promise.all([
+      fetch("/state.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }),
+      fetch("/events/summary.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
+    ]).then(function (res) {
+      var state = res[0], hist = res[1] || [];
+      render(state, hist);
+    });
+
+    function render(state, hist) {
+      var m = state && state.metrics ? state.metrics : null;
+      var curDd = m && typeof m.drawdown === "number" ? m.drawdown : null;
+
+      // 現在カード
+      var chip = document.getElementById("now-mode");
+      var modeColor = { normal: "var(--good)", caution: "#c99a1e", crash: "var(--red)", recovery: "var(--good)" };
+      if (state && state.label) { chip.textContent = state.label; chip.style.background = modeColor[state.mode] || "var(--muted)"; }
+      else { chip.textContent = "参考値"; }
+      if (curDd != null) {
+        document.getElementById("now-dd").textContent = pctTxt(curDd);
+        var meta = "終値 <b>" + fmt(Math.round(m.close)) + "円</b>";
+        if (m.peak_close) meta += "（<b>" + ym(m.peak_date) + "</b>の高値 " + fmt(Math.round(m.peak_close)) + "円 比）";
+        if (state.as_of) meta += " ／ " + state.as_of + " 時点";
+        document.getElementById("now-meta").innerHTML = meta;
+      } else {
+        document.getElementById("now-dd").textContent = "取得できませんでした";
+        document.getElementById("now-dd").style.fontSize = "22px";
+      }
+
+      // 比較バー（現在＋過去、深い順）
+      var rows = hist.map(function (h) {
+        return { name: h.title, sub: ym(h.date), dd: h.drawdown, label: h.drawdown_label, rec: h.recover_label, url: h.url, cur: false };
+      });
+      if (curDd != null) rows.push({ name: "現在", sub: (state && state.as_of) || "", dd: curDd, label: pctTxt(curDd), rec: null, cur: true });
+      rows.sort(function (a, b) { return a.dd - b.dd; }); // 深い順
+      var maxMag = Math.max.apply(null, rows.map(function (r) { return Math.abs(r.dd); }).concat([0.01]));
+
+      var box = document.getElementById("cmp");
+      box.innerHTML = "";
+      rows.forEach(function (r) {
+        // 最深(リーマン)を70%に割り付け、ラベル(%)はバーの右外に置く(短いバーでも崩れない)
+        var w = Math.max(3, Math.abs(r.dd) / maxMag * 70);
+        var el = document.createElement("div");
+        el.className = "row" + (r.cur ? " cur" : "");
+        var nameHtml = r.url ? '<a href="' + r.url + '">' + r.name + "</a>" : r.name;
+        el.innerHTML =
+          '<div class="name">' + (r.cur ? "▶ " : "") + nameHtml + "<small>" + (r.sub || "") + "</small></div>" +
+          '<div class="barwrap"><span class="bar" style="width:0%"></span><span class="val">' + r.label + "</span>" +
+          (r.rec ? '<div class="rec">回復まで <b>' + r.rec + "</b></div>" : (r.cur ? '<div class="rec">現在進行中</div>' : "")) +
+          "</div>";
+        box.appendChild(el);
+        // アニメーション
+        var bar = el.querySelector(".bar");
+        requestAnimationFrame(function () { requestAnimationFrame(function () { bar.style.width = w + "%"; }); });
+      });
+
+      // 回復チップ
+      var chips = document.getElementById("rec-chips");
+      chips.innerHTML = hist.filter(function (h) { return h.recovered; })
+        .map(function (h) { return '<span class="chip">' + h.title + "：<b>" + h.recover_label + "</b></span>"; }).join("");
+
+      // Xシェア
+      var recTxt = hist.filter(function (h) { return h.recovered; }).slice(0, 3)
+        .map(function (h) { return h.title + "→" + h.recover_label; }).join("、");
+      var text = "日経平均の今の下落を、過去の暴落と同じ物差しで並べてみた📉 過去の暴落は歴史的にすべていつか戻ってきた（" + recTxt + "）。焦らず、歴史に学ぶ。";
+      document.getElementById("share-x").href =
+        "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent("https://www.stocklist.jp/now") + "&hashtags=" + encodeURIComponent("日経平均,投資");
+    }
+  })();
+  </script>
+</body>
+</html>
