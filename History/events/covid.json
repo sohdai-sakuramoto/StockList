@@ -2,7 +2,7 @@
   "id": "covid",
   "title": "コロナショック",
   "source": "real",
-  "generated_at": "2026-08-07T10:05:17.903Z",
+  "generated_at": "2026-08-10T10:22:35.813Z",
   "window": [
     "2020-01-20",
     "2020-07-22"
@@ -35,7 +35,7 @@
     "recovered": true,
     "recovery_date": "2020-11-05",
     "months_to_recover": 10,
-    "as_of": "2026-08-06"
+    "as_of": "2026-08-07"
   },
   "points": [
     {
