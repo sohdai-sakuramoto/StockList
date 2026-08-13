@@ -20,7 +20,7 @@ window.SL_AFFILIATE = {
   order: ["sbi", "rakuten", "monex", "matsui", "esmart", "moomoo", "dmm"],
   brokers: {
     sbi:     { url: "", official: "https://www.sbisec.co.jp/", asp: "" },
-    rakuten: { url: "", official: "https://www.rakuten-sec.co.jp/", asp: "" },
+    rakuten: { url: "https://ad2.trafficgate.net/t/r/1230/738/318582_398126", official: "https://www.rakuten-sec.co.jp/", asp: "valuecommerce" },
     monex:   { url: "https://h.accesstrade.net/sp/cc?rk=0100pe6z00ovhd", asp: "accesstrade" },
     matsui:  { url: "https://h.accesstrade.net/sp/cc?rk=01000t2900ovhd", asp: "accesstrade" },
     esmart:  { url: "", hidden: true, asp: "" }, // アクセストレード却下のため一旦非表示。承認が取れたら hidden を外す
