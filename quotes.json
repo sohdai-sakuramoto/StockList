@@ -1,0 +1,33 @@
+{
+  "schema": "stocklist-quotes/1",
+  "updated_at": "2026-09-04T12:05:36.281Z",
+  "source": "Yahoo Finance(約20分遅延の参考値)",
+  "delayed": true,
+  "nikkei": {
+    "name": "日経平均",
+    "price": 65020.94,
+    "prev_close": 64214.48,
+    "change_pct": 0.0126,
+    "market_time": 1788504302
+  },
+  "stocks": [
+    {
+      "code": "7203.T",
+      "name": "トヨタ",
+      "price": 3081,
+      "change_pct": -0.0115
+    },
+    {
+      "code": "6758.T",
+      "name": "ソニーG",
+      "price": 3885,
+      "change_pct": -0.0026
+    },
+    {
+      "code": "8306.T",
+      "name": "三菱UFJ",
+      "price": 3785,
+      "change_pct": 0.0083
+    }
+  ]
+}
