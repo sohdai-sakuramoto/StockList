@@ -2,7 +2,7 @@
   "id": "great-east-japan",
   "title": "東日本大震災",
   "source": "real",
-  "generated_at": "2026-09-23T14:09:55.376Z",
+  "generated_at": "2026-09-24T14:07:59.281Z",
   "window": [
     "2011-02-14",
     "2011-08-19"
@@ -35,7 +35,7 @@
     "recovered": true,
     "recovery_date": "2013-02-06",
     "months_to_recover": 34,
-    "as_of": "2026-09-18"
+    "as_of": "2026-09-24"
   },
   "points": [
     {
