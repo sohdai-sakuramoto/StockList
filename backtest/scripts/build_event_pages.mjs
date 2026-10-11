@@ -15,6 +15,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { warFeatureHtml } from "./feature_war.mjs";
 
 const SITE_URL = "https://www.stocklist.jp"; // ← 独自ドメイン導入時に変更
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
@@ -78,7 +79,7 @@ function companiesTableHtml(spec) {
         <thead><tr><th scope="col">企業（当時の社名）</th>${years.map((y) => `<th scope="col">${y}年<small>高値〜安値</small></th>`).join("")}<th scope="col">期間中の増資</th></tr></thead>
         <tbody>${rows.join("")}</tbody>
       </table></div>
-      <p class="slv-co-note">出典：『${esc(book.source.title)}』（運営者による転記）。単位は円。年間の最高値〜最安値で、増資による株価の切り下がり（権利落ち）は調整していません。増資のあった年の下落には、その影響が含まれます。当時の株価は額面や株式分割の違いから、現在の株価とは比べられません。</p>
+      <p class="slv-co-note">出典：『${esc(book.source.title)}』${book.source.publisher ? esc(book.source.publisher) : ""}（運営者による転記）。単位は円。年間の最高値〜最安値で、増資による株価の切り下がり（権利落ち）は調整していません。増資のあった年の下落には、その影響が含まれます。当時の株価は額面や株式分割の違いから、現在の株価とは比べられません。</p>
     </section>`;
 }
 
@@ -251,7 +252,7 @@ ${faqHtml}
 const TL_TYPE = { crash: "暴落", boom: "暴騰", turn: "転換点", note: "出来事" };
 function timelineHtml(items, info) {
   const url = `${SITE_URL}/timeline`;
-  const title = "日本株 暴落・暴騰の年表（1945〜2024）｜StockList";
+  const title = "日本株 暴落・暴騰の年表（1945〜2026）｜StockList";
   const desc = "終戦後のドッジ不況、スターリン暴落、ブラックマンデー、バブル崩壊、リーマンショック、令和のブラックマンデーまで。日経平均・日本株を大きく動かした暴落・暴騰を年表で解説。主要な出来事はチャートと当時のニュースで振り返れます。";
   const ogImg = `${SITE_URL}/IMG_3857.jpg`;
   const breadcrumb = {
@@ -278,6 +279,10 @@ function timelineHtml(items, info) {
         (c ? `<span class="tl-rec">回復まで <b>${esc(recoverStr(c))}</b></span>` : "") + `</div>`;
     } else if (rel) {
       more = `<div class="tl-foot"><a class="tl-more tl-rel" href="/events/${rel.slug}">「${esc(rel.title)}」のチャートで見る →</a></div>`;
+    }
+    if (e.link) {
+      const a = `<a class="tl-more tl-rel" href="${esc(e.link.href)}">${esc(e.link.label)} →</a>`;
+      more = more ? more.replace(/<\/div>$/, a + "</div>") : `<div class="tl-foot">${a}</div>`;
     }
     return `${head}
       <article class="tl-item" data-type="${e.type}">
@@ -381,7 +386,7 @@ function timelineHtml(items, info) {
 <body>
   <div class="topbar"><a href="/">← StockList トップ</a><a href="/history">相場の歴史</a><a href="/now">今の下落と比べる</a></div>
   <header class="hero">
-    <p class="eyebrow">Nikkei 225 · 1945–2024</p>
+    <p class="eyebrow">Nikkei 225 · 1945–2026</p>
     <h1>日本株 暴落・暴騰の年表</h1>
     <p>東証再開（1949年）以降、日本株を大きく揺らした出来事を時系列で。青い線のある${nPages}つの出来事は、週次チャートと当時のニュースで詳しく振り返れます。</p>
   </header>
@@ -451,6 +456,7 @@ function main() {
     { loc: `${SITE_URL}/start/`, pri: "0.9" },
     { loc: `${SITE_URL}/history`, pri: "0.8" },
     { loc: `${SITE_URL}/timeline`, pri: "0.8" },
+    { loc: `${SITE_URL}/war-and-stocks`, pri: "0.8" },
     { loc: `${SITE_URL}/now`, pri: "0.7" },
     { loc: `${SITE_URL}/disclosure/`, pri: "0.3" },
     { loc: `${SITE_URL}/privacy/`, pri: "0.3" },
@@ -488,6 +494,14 @@ function main() {
   }
   fs.writeFileSync(path.join(REPO_ROOT, "timeline.html"), timelineHtml(timeline, info), "utf8");
   console.log(`[out] timeline.html (${timeline.length}件)`);
+
+  // 特集「戦争と株価」: 書籍データ(株価20年) + 現代の戦争の実データ(build_feature_data.mjs)
+  const book = loadBook("kabuka20");
+  const warPath = path.join(DATA_DIR, "features", "war.json");
+  const war = fs.existsSync(warPath) ? JSON.parse(fs.readFileSync(warPath, "utf8")) : null;
+  if (!war) console.warn("[warn] features/war.json が無いため、特集の現代の戦争パートは省略");
+  fs.writeFileSync(path.join(REPO_ROOT, "war-and-stocks.html"), warFeatureHtml({ book, war, siteUrl: SITE_URL }), "utf8");
+  console.log("[out] war-and-stocks.html");
 
   const today = new Date().toISOString().slice(0, 10);
   const sitemap =
