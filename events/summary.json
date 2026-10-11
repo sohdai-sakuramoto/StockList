@@ -42,6 +42,48 @@
     "trough_close": 7162.9
   },
   {
+    "slug": "securities-recession",
+    "url": "/events/securities-recession",
+    "title": "証券不況",
+    "date": "1965-05-28",
+    "category": "金融危機",
+    "drawdown": -0.4423,
+    "drawdown_label": "−44%",
+    "recovered": true,
+    "months_to_recover": 86,
+    "recover_label": "約7年",
+    "trough_date": "1965-07-12",
+    "trough_close": 1020.49
+  },
+  {
+    "slug": "stalin-crash",
+    "url": "/events/stalin-crash",
+    "title": "スターリン暴落",
+    "date": "1953-03-05",
+    "category": "暴落",
+    "drawdown": -0.3778,
+    "drawdown_label": "−38%",
+    "recovered": true,
+    "months_to_recover": 38,
+    "recover_label": "約3年",
+    "trough_date": "1953-04-01",
+    "trough_close": 295.18
+  },
+  {
+    "slug": "oil-shock-1973",
+    "url": "/events/oil-shock-1973",
+    "title": "第一次オイルショック",
+    "date": "1973-10-16",
+    "category": "資源危機",
+    "drawdown": -0.374,
+    "drawdown_label": "−37%",
+    "recovered": true,
+    "months_to_recover": 62,
+    "recover_label": "約5年",
+    "trough_date": "1974-10-09",
+    "trough_close": 3355.13
+  },
+  {
     "slug": "covid-shock",
     "url": "/events/covid-shock",
     "title": "コロナショック",
@@ -96,6 +138,20 @@
     "recover_label": "約6ヶ月",
     "trough_date": "1987-11-11",
     "trough_close": 21036.76
+  },
+  {
+    "slug": "nixon-shock",
+    "url": "/events/nixon-shock",
+    "title": "ニクソンショック",
+    "date": "1971-08-16",
+    "category": "通貨危機",
+    "drawdown": -0.2071,
+    "drawdown_label": "−21%",
+    "recovered": true,
+    "months_to_recover": 5,
+    "recover_label": "約5ヶ月",
+    "trough_date": "1971-08-24",
+    "trough_close": 2162.82
   },
   {
     "slug": "ishiba-shock",

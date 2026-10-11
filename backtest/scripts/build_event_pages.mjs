@@ -204,7 +204,7 @@ ${faqHtml}
 //   event   : events.json の id。詳細ページ(チャート+当時のニュース)へのリンクを付け、
 //             metric 未指定なら結論の最大下落率、回復までの期間も自動表示する
 //   related : 関連する詳細ページ(同じ局面の一部)へのリンク
-const TL_TYPE = { crash: "暴落", boom: "暴騰", turn: "転換点" };
+const TL_TYPE = { crash: "暴落", boom: "暴騰", turn: "転換点", note: "出来事" };
 function timelineHtml(items, info) {
   const url = `${SITE_URL}/timeline`;
   const title = "日本株 暴落・暴騰の年表（1953〜2024）｜StockList";
@@ -280,6 +280,8 @@ function timelineHtml(items, info) {
       --ink:#e9edf4; --ink-2:#aab3c2; --muted:#7d8695; --line:#263042; --surface:#161d2b; --plane:#0e131d; --accent:#6ea3f0;
       --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35); } }
     *{box-sizing:border-box;}
+    /* display:grid 等の指定より優先して hidden を効かせる(絞り込みフィルタ用) */
+    [hidden]{display:none !important;}
     body{margin:0;background:var(--plane);color:var(--ink);line-height:1.7;
       font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI",system-ui,-apple-system,sans-serif;}
     a{color:var(--accent);text-decoration:none;}
@@ -302,6 +304,7 @@ function timelineHtml(items, info) {
     .dot.crash,.tl-node.crash,.badge.crash{background:var(--red);}
     .dot.boom,.tl-node.boom,.badge.boom{background:var(--up);}
     .dot.turn,.tl-node.turn,.badge.turn{background:var(--amber);}
+    .dot.note,.tl-node.note,.badge.note{background:var(--muted);}
     .decade{font-size:13px;font-weight:800;letter-spacing:.04em;color:var(--muted);margin:26px 0 12px;padding-bottom:6px;border-bottom:1px dashed var(--line);}
     .tl-item{display:grid;grid-template-columns:62px 22px 1fr;gap:0 14px;}
     .tl-year{text-align:right;font-weight:800;font-size:15px;font-variant-numeric:tabular-nums;padding-top:14px;letter-spacing:-.02em;}
@@ -345,7 +348,7 @@ function timelineHtml(items, info) {
         <button type="button" data-filter="crash" aria-pressed="false">暴落だけ</button>
         <button type="button" data-filter="boom" aria-pressed="false">暴騰だけ</button>
       </div>
-      <p class="legend"><span><i class="dot crash"></i>暴落</span><span><i class="dot boom"></i>暴騰</span><span><i class="dot turn"></i>転換点</span></p>
+      <p class="legend"><span><i class="dot crash"></i>暴落</span><span><i class="dot boom"></i>暴騰</span><span><i class="dot turn"></i>転換点</span><span><i class="dot note"></i>出来事</span></p>
     </div>
     <div id="tl">${rows}
     </div>

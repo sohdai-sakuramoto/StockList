@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>株価が大きく動いた出来事の年表｜StockList</title>
-        <meta name="description" content="日経平均が大きく動いた歴史的な出来事（ブラックマンデー・バブル崩壊・ITバブル崩壊・リーマンショック・東日本大震災・コロナショック・令和のブラックマンデー・石破ショック）の年表。各イベントの週次チャートと当時のニュースへ。">
+        <meta name="description" content="日経平均が大きく動いた歴史的な出来事（スターリン暴落・オイルショック・ブラックマンデー・バブル崩壊・ITバブル崩壊・リーマンショック・東日本大震災・コロナショック・令和のブラックマンデー・石破ショック）の年表。各イベントの週次チャートと当時のニュースへ。">
         <link rel="canonical" href="https://www.stocklist.jp/history">
         <meta property="og:type" content="website">
         <meta property="og:site_name" content="StockList">
@@ -88,6 +88,50 @@
                 <span class="tl-go" aria-hidden="true">→</span>
             </a>
             <div class="grid">
+                <a class="card" href="/events/stalin-crash">
+                    <span class="cat">暴落</span>
+                    <div class="date">1953年3月</div>
+                    <h2>スターリン暴落</h2>
+                    <p class="desc">スターリン首相の死去報道で朝鮮特需の終わりを連想した売りが殺到。1日10%の下落率は34年間破られなかった。</p>
+                    <div class="foot">
+                        <span class="dd" data-event="stalin-crash">最大下落率 <b>—</b></span>
+                        <span class="go">チャートで見る →</span>
+                    </div>
+                </a>
+
+                <a class="card" href="/events/securities-recession">
+                    <span class="cat">金融危機</span>
+                    <div class="date">1965年5月</div>
+                    <h2>証券不況</h2>
+                    <p class="desc">1961年の高値から長い下落が続き、山一證券が経営危機に。日銀の戦後初の特別融資で救済された。</p>
+                    <div class="foot">
+                        <span class="dd" data-event="securities-recession">最大下落率 <b>—</b></span>
+                        <span class="go">チャートで見る →</span>
+                    </div>
+                </a>
+
+                <a class="card" href="/events/nixon-shock">
+                    <span class="cat">通貨危機</span>
+                    <div class="date">1971年8月</div>
+                    <h2>ニクソンショック</h2>
+                    <p class="desc">米国の金・ドル交換停止で固定相場制が崩壊へ。円高懸念から日経平均は4日で約550円下落した。</p>
+                    <div class="foot">
+                        <span class="dd" data-event="nixon-shock">最大下落率 <b>—</b></span>
+                        <span class="go">チャートで見る →</span>
+                    </div>
+                </a>
+
+                <a class="card" href="/events/oil-shock-1973">
+                    <span class="cat">資源危機</span>
+                    <div class="date">1973年10月</div>
+                    <h2>第一次オイルショック</h2>
+                    <p class="desc">中東戦争をきっかけに原油価格が急騰し「狂乱物価」に。日経平均は高値から約37%下落した。</p>
+                    <div class="foot">
+                        <span class="dd" data-event="oil-shock-1973">最大下落率 <b>—</b></span>
+                        <span class="go">チャートで見る →</span>
+                    </div>
+                </a>
+
                 <a class="card" href="/events/black-monday-1987">
                     <span class="cat">世界同時株安</span>
                     <div class="date">1987年10月</div>
@@ -190,9 +234,10 @@
                 fetch("/History/events/" + id + ".json", { cache: "no-store" })
                     .then(function (r) { return r.ok ? r.json() : null; })
                     .then(function (j) {
-                        if (j && j.kpi && typeof j.kpi.max_drawdown === "number") {
-                            el.querySelector("b").textContent = (j.kpi.max_drawdown * 100).toFixed(1) + "%";
-                        }
+                        // 詳細ページの「30秒でわかる結論」・年表・/now と同じ「高値からの最大下落率」を表示
+                        var dd = j && j.conclusion && typeof j.conclusion.drawdown === "number" ? j.conclusion.drawdown
+                               : (j && j.kpi && typeof j.kpi.max_drawdown === "number" ? j.kpi.max_drawdown : null);
+                        if (dd !== null) el.querySelector("b").textContent = (dd * 100).toFixed(1) + "%";
                     })
                     .catch(function () {});
             });
