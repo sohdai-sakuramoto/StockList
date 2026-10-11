@@ -33,6 +33,9 @@ jobs:
       - name: イベント週次データを更新 (History/events/*.json)
         run: node backtest/scripts/build_event_data.mjs
 
+      - name: 特集「戦争と株価」用データを更新 (History/events/features/war.json)
+        run: node backtest/scripts/build_feature_data.mjs
+
       - name: イベント個別ページ・sitemap を再生成
         run: node backtest/scripts/build_event_pages.mjs
 
@@ -40,7 +43,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add state.json History/events/*.json events/*.html events/summary.json timeline.html sitemap.xml
+          git add state.json History/events/*.json History/events/features/*.json events/*.html events/summary.json timeline.html sitemap.xml
           if git diff --cached --quiet; then
             echo "変更なし。スキップします。"
           else

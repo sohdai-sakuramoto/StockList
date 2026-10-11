@@ -78,7 +78,7 @@ function companiesTableHtml(spec) {
         <thead><tr><th scope="col">企業（当時の社名）</th>${years.map((y) => `<th scope="col">${y}年<small>高値〜安値</small></th>`).join("")}<th scope="col">期間中の増資</th></tr></thead>
         <tbody>${rows.join("")}</tbody>
       </table></div>
-      <p class="slv-co-note">出典：『${esc(book.source.title)}』（運営者による転記）。単位は円。年間の最高値〜最安値で、増資による株価の切り下がり（権利落ち）は調整していません。増資のあった年の下落には、その影響が含まれます。当時の株価は額面や株式分割の違いから、現在の株価とは比べられません。</p>
+      <p class="slv-co-note">出典：『${esc(book.source.title)}』${book.source.publisher ? esc(book.source.publisher) : ""}（運営者による転記）。単位は円。年間の最高値〜最安値で、増資による株価の切り下がり（権利落ち）は調整していません。増資のあった年の下落には、その影響が含まれます。当時の株価は額面や株式分割の違いから、現在の株価とは比べられません。</p>
     </section>`;
 }
 
