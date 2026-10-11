@@ -55,6 +55,36 @@ function toWeekly(rows) {
   return out;
 }
 
+/** 昇順の [{date, close}] を月足に集約(キーは月初 "YYYY-MM-01"。週足と同じフィールド名で出力) */
+function toMonthly(rows) {
+  const byMonth = new Map();
+  for (const r of rows) {
+    const key = r.date.slice(0, 7) + "-01";
+    if (!byMonth.has(key)) byMonth.set(key, []);
+    byMonth.get(key).push(r);
+  }
+  const out = [];
+  for (const key of [...byMonth.keys()].sort()) {
+    const arr = byMonth.get(key);
+    const closes = arr.map((a) => a.close);
+    out.push({
+      week: key,
+      weekEnd: arr[arr.length - 1].date,
+      open: round2(arr[0].close),
+      close: round2(arr[arr.length - 1].close),
+      high: round2(Math.max(...closes)),
+      low: round2(Math.min(...closes)),
+      days: arr.length,
+    });
+  }
+  return out;
+}
+
+// 回復まで約10年(520週)を超える局面(バブル崩壊=約34年 等)は週足だと横幅が長大になるため月足で配信する。
+export const MAX_WEEKLY_POINTS = 520;
+// イベントページは1987年等も扱うため、日次データは東証再開(1949年)まで遡って読む
+const EVENT_DATA_START = "1949-01-01";
+
 const round2 = (x) => Math.round(x * 100) / 100;
 const round4 = (x) => Math.round(x * 10000) / 10000;
 
@@ -124,7 +154,7 @@ function parseArgs(argv) {
 async function main() {
   const { dataPath } = parseArgs(process.argv.slice(2));
   const events = JSON.parse(fs.readFileSync(EVENTS_JSON, "utf8"));
-  const rows = await loadData({ dataPath });
+  const rows = await loadData({ dataPath, startDate: EVENT_DATA_START });
   const source = dataPath && /demo/i.test(dataPath) ? "demo" : "real";
 
   for (const ev of events) {
@@ -150,13 +180,16 @@ async function main() {
     let chartEnd = end;
     if (conclusion && conclusion.recovered && conclusion.recovery_date > end) chartEnd = conclusion.recovery_date;
     const chartRows = rows.filter((r) => r.date >= start && r.date <= chartEnd);
-    const points = toWeekly(chartRows);
+    let points = toWeekly(chartRows);
+    let granularity = "week";
+    if (points.length > MAX_WEEKLY_POINTS) { points = toMonthly(chartRows); granularity = "month"; }
 
     const out = {
       id: ev.id,
       title: ev.title,
       source,
       generated_at: new Date().toISOString(),
+      granularity,
       window: ev.window,
       chart_range: [start, chartEnd],
       data_range: [chartRows[0].date, chartRows[chartRows.length - 1].date],
@@ -171,7 +204,7 @@ async function main() {
     const outPath = path.join(EVENTS_DIR, `${ev.id}.json`);
     fs.writeFileSync(outPath, JSON.stringify(out, null, 2) + "\n", "utf8");
     const c = conclusion;
-    console.log(`[out] ${ev.id}: ${points.length}週(〜${chartEnd}), 結論 DD=${c ? (c.drawdown * 100).toFixed(0) + "%" : "-"} 底=${c ? c.trough.date : "-"} 回復=${c && c.recovered ? c.months_to_recover + "ヶ月" : "未回復"} (source=${source})`);
+    console.log(`[out] ${ev.id}: ${points.length}${granularity === "month" ? "ヶ月" : "週"}(〜${chartEnd}), 結論 DD=${c ? (c.drawdown * 100).toFixed(0) + "%" : "-"} 底=${c ? c.trough.date : "-"} 回復=${c && c.recovered ? c.months_to_recover + "ヶ月" : "未回復"} (source=${source})`);
   }
 }
 
