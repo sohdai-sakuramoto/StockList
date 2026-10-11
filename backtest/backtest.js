@@ -138,16 +138,19 @@ export function parseStooqCsv(text, { startDate = START_DATE } = {}) {
   return dedup;
 }
 
-export async function loadData({ dataPath = null } = {}) {
+// startDate: 返す日次データの開始日(既定はバックテスト用の 2000-01-01)。
+// イベントページ(1987年ブラックマンデー等)は過去まで遡るため、より古い日付を渡す。
+// キャッシュには取得したCSVを丸ごと保存し、開始日での絞り込みは読み込み時に行う。
+export async function loadData({ dataPath = null, startDate = START_DATE } = {}) {
   if (dataPath) {
     const p = path.resolve(dataPath);
     if (!fs.existsSync(p)) throw new Error(`--data で指定されたファイルがありません: ${p}`);
     console.log(`[data] 指定ファイルを使用: ${p}`);
-    return parseStooqCsv(fs.readFileSync(p, "utf8"));
+    return parseStooqCsv(fs.readFileSync(p, "utf8"), { startDate });
   }
   if (fs.existsSync(CACHE_PATH)) {
     console.log(`[data] キャッシュを使用: ${CACHE_PATH}`);
-    return parseStooqCsv(fs.readFileSync(CACHE_PATH, "utf8"));
+    return parseStooqCsv(fs.readFileSync(CACHE_PATH, "utf8"), { startDate });
   }
   const failures = [];
   for (const src of DATA_SOURCES) {
@@ -159,7 +162,7 @@ export async function loadData({ dataPath = null } = {}) {
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const text = await res.text();
-      const rows = parseStooqCsv(text);
+      const rows = parseStooqCsv(text, { startDate });
       if (rows.length < 100) throw new Error(`行数が異常 (${rows.length}行)`);
       fs.mkdirSync(path.dirname(CACHE_PATH), { recursive: true });
       fs.writeFileSync(CACHE_PATH, text, "utf8");

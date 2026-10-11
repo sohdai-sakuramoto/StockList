@@ -20,16 +20,29 @@
     d.setUTCDate(d.getUTCDate() - dow);
     return d.toISOString().slice(0, 10);
   }
-  function fmtWeek(p) { return p.week.slice(5).replace("-", "/") + "週"; }
+  // 回復まで数十年かかる局面(バブル崩壊等)は月足で配信される(series.granularity="month")。
+  // 1ページ=1系列なので、描画中の粒度はモジュール変数で持つ。
+  var MONTHLY = false;
+  // 日付 → その点(週足なら週の月曜 / 月足なら月初)のキー。points[].week と同じ形式
+  function periodOf(dateStr) { return MONTHLY ? dateStr.slice(0, 7) + "-01" : mondayOf(dateStr); }
+  function fmtWeek(p) {
+    if (MONTHLY) return p.week.slice(0, 4) + "年" + Number(p.week.slice(5, 7)) + "月";
+    return p.week.slice(5).replace("-", "/") + "週";
+  }
+  // 月足の表示期間ラベル: 24ヶ月以上は「約◯年」
+  function spanLabel(months) { return months >= 24 ? "約" + Math.round(months / 12) + "年" : months + "ヶ月"; }
 
   NS.render = function (root, cfg, series) {
+    MONTHLY = series.granularity === "month";
+    var cap = MONTHLY
+      ? '<p class="slv-cap">1点=1ヶ月(月末終値)。<b>下落前の水準</b>に戻るまでの長い道のりを表示（横スクロールで全期間、途中の別局面の変動も含む）。<b>●</b>はニュースのあった月。ホバー/タップで価格を表示。</p>'
+      : '<p class="slv-cap">1点=1週(週末終値)。<b>下落前の水準</b>に戻るまでを表示（横スクロールで全期間、途中の別局面の変動も含む）。<b>●</b>はニュース週。ホバー/タップで価格を表示。</p>';
     root.innerHTML =
       '<div class="slv-demo' + (series.source && series.source !== "real" ? " show" : "") + '">' +
         '<span aria-hidden="true">⚠</span><span>表示中の株価は<b>動作確認用のデモデータ</b>です。</span></div>' +
       '<div class="slv-grid">' +
         '<section class="slv-card">' +
-          '<h2>日経平均（週次）</h2>' +
-          '<p class="slv-cap">1点=1週(週末終値)。<b>下落前の水準</b>に戻るまでを表示（横スクロールで全期間、途中の別局面の変動も含む）。<b>●</b>はニュース週。ホバー/タップで価格を表示。</p>' +
+          '<h2>日経平均（' + (MONTHLY ? "月次" : "週次") + '）</h2>' + cap +
           '<div class="slv-chartwrap"><div class="slv-tip"></div></div>' +
           '<div class="slv-kpis">' +
             '<div class="slv-kpi"><div class="k">最大下落率（イベント期間）</div><div class="v neg" data-kpi="dd">-</div></div>' +
@@ -38,8 +51,8 @@
           '</div>' +
         '</section>' +
         '<section class="slv-card">' +
-          '<h2>大きな出来事（その週のニュース）</h2>' +
-          '<p class="slv-cap">株価に影響した当時の報道。日付とチャートの週が対応します。</p>' +
+          '<h2>大きな出来事（その' + (MONTHLY ? "月" : "週") + 'のニュース）</h2>' +
+          '<p class="slv-cap">株価に影響した当時の報道。日付とチャートの' + (MONTHLY ? "月" : "週") + 'が対応します。</p>' +
           '<div class="slv-news"></div>' +
         '</section>' +
       '</div>';
@@ -47,12 +60,12 @@
     var pts = series.points || [];
     var weekIndex = {}, newsByWeek = {};
     pts.forEach(function (p, i) { weekIndex[p.week] = i; });
-    (cfg.news || []).forEach(function (n) { var wk = mondayOf(n.date); (newsByWeek[wk] = newsByWeek[wk] || []).push(n); });
+    (cfg.news || []).forEach(function (n) { var wk = periodOf(n.date); (newsByWeek[wk] = newsByWeek[wk] || []).push(n); });
 
     if (series.kpi) {
       root.querySelector('[data-kpi="dd"]').textContent = pct(series.kpi.max_drawdown);
       root.querySelector('[data-kpi="trough"]').textContent = jpNum(Math.round(series.kpi.trough_close)) + " 円";
-      root.querySelector('[data-kpi="weeks"]').textContent = pts.length + " 週";
+      root.querySelector('[data-kpi="weeks"]').textContent = MONTHLY ? spanLabel(pts.length) : pts.length + " 週";
     }
 
     drawChart(root, cfg, pts, newsByWeek, series);
@@ -81,7 +94,7 @@
     // イベント本体の底(結論の底)の週インデックス。無ければ表示区間の最安値
     function weekIdxOf(dateStr) {
       if (!dateStr) return -1;
-      var wk = mondayOf(dateStr);
+      var wk = periodOf(dateStr);
       for (var j = 0; j < n; j++) if (pts[j].week === wk) return j;
       return -1;
     }
@@ -102,7 +115,7 @@
     for (var i = 0; i < n; i += step) {
       var xx = x(i);
       s += '<line x1="' + xx.toFixed(1) + '" x2="' + xx.toFixed(1) + '" y1="' + (MT + ih) + '" y2="' + (MT + ih + 4) + '" stroke="var(--muted)" stroke-width="1"/>';
-      s += '<text x="' + xx.toFixed(1) + '" y="' + (MT + ih + 18) + '" text-anchor="middle" font-size="10.5" fill="var(--muted)" style="font-variant-numeric:tabular-nums">' + pts[i].week.slice(2).replace(/-/g, "/") + '</text>';
+      s += '<text x="' + xx.toFixed(1) + '" y="' + (MT + ih + 18) + '" text-anchor="middle" font-size="10.5" fill="var(--muted)" style="font-variant-numeric:tabular-nums">' + (MONTHLY ? pts[i].week.slice(0, 7).replace("-", "/") : pts[i].week.slice(2).replace(/-/g, "/")) + '</text>';
     }
 
     // 下落前の水準(=高値)の基準線。ここに戻れば「回復」
@@ -175,9 +188,9 @@
     var items = (cfg.news || []).slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
     if (!items.length) { box.innerHTML = '<p style="color:var(--muted)">ニュースは準備中です。</p>'; return; }
     box.innerHTML = items.map(function (n) {
-      var wk = mondayOf(n.date), hasWeek = (wk in weekIndex);
+      var wk = periodOf(n.date), hasWeek = (wk in weekIndex);
       return '<div class="slv-item" data-week="' + wk + '">' +
-        '<div class="nd">' + esc(n.date) + (hasWeek ? '<span class="wk">この週</span>' : '') + '</div>' +
+        '<div class="nd">' + esc(n.date) + (hasWeek ? '<span class="wk">' + (MONTHLY ? "この月" : "この週") + '</span>' : '') + '</div>' +
         '<div class="nt">' + esc(n.title) + '</div>' +
         (n.body ? '<div class="nb">' + esc(n.body) + '</div>' : '') +
         (n.source ? '<div class="src">' + (n.url ? '<a href="' + esc(n.url) + '" target="_blank" rel="noopener noreferrer">' + esc(n.source) + ' ↗</a>' : esc(n.source)) + '</div>' : '') +

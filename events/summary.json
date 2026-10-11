@@ -1,5 +1,33 @@
 [
   {
+    "slug": "it-bubble-collapse",
+    "url": "/events/it-bubble-collapse",
+    "title": "ITバブル崩壊",
+    "date": "2000-04-17",
+    "category": "バブル崩壊",
+    "drawdown": -0.6348,
+    "drawdown_label": "−63%",
+    "recovered": true,
+    "months_to_recover": 182,
+    "recover_label": "約15年",
+    "trough_date": "2003-04-28",
+    "trough_close": 7607.88
+  },
+  {
+    "slug": "bubble-collapse",
+    "url": "/events/bubble-collapse",
+    "title": "バブル崩壊",
+    "date": "1990-01-04",
+    "category": "バブル崩壊",
+    "drawdown": -0.6323,
+    "drawdown_label": "−63%",
+    "recovered": true,
+    "months_to_recover": 410,
+    "recover_label": "約34年",
+    "trough_date": "1992-08-18",
+    "trough_close": 14309.41
+  },
+  {
     "slug": "lehman-shock",
     "url": "/events/lehman-shock",
     "title": "リーマンショック",
@@ -28,6 +56,20 @@
     "trough_close": 16552.83
   },
   {
+    "slug": "reiwa-black-monday",
+    "url": "/events/reiwa-black-monday",
+    "title": "令和のブラックマンデー",
+    "date": "2024-08-05",
+    "category": "世界同時株安",
+    "drawdown": -0.255,
+    "drawdown_label": "−25%",
+    "recovered": true,
+    "months_to_recover": 13,
+    "recover_label": "約13ヶ月",
+    "trough_date": "2024-08-05",
+    "trough_close": 31458.42
+  },
+  {
     "slug": "great-east-japan-earthquake",
     "url": "/events/great-east-japan-earthquake",
     "title": "東日本大震災",
@@ -40,6 +82,20 @@
     "recover_label": "約3年",
     "trough_date": "2011-03-15",
     "trough_close": 8605.15
+  },
+  {
+    "slug": "black-monday-1987",
+    "url": "/events/black-monday-1987",
+    "title": "ブラックマンデー",
+    "date": "1987-10-20",
+    "category": "世界同時株安",
+    "drawdown": -0.2105,
+    "drawdown_label": "−21%",
+    "recovered": true,
+    "months_to_recover": 6,
+    "recover_label": "約6ヶ月",
+    "trough_date": "1987-11-11",
+    "trough_close": 21036.76
   },
   {
     "slug": "ishiba-shock",

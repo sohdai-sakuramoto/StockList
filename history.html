@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>株価が大きく動いた出来事の年表｜StockList</title>
-        <meta name="description" content="日経平均が大きく動いた歴史的な出来事（リーマンショック・東日本大震災・コロナショック・石破ショック）の年表。各イベントの週次チャートと当時のニュースへ。">
+        <meta name="description" content="日経平均が大きく動いた歴史的な出来事（ブラックマンデー・バブル崩壊・ITバブル崩壊・リーマンショック・東日本大震災・コロナショック・令和のブラックマンデー・石破ショック）の年表。各イベントの週次チャートと当時のニュースへ。">
         <link rel="canonical" href="https://www.stocklist.jp/history">
         <meta property="og:type" content="website">
         <meta property="og:site_name" content="StockList">
@@ -62,6 +62,12 @@
           .card .dd b { font-size:19px; font-weight:800; color:var(--red); font-variant-numeric:tabular-nums; letter-spacing:-.01em; }
           .card .go { font-size:13.5px; font-weight:700; color:var(--accent); white-space:nowrap; }
           .card:hover .go { text-decoration:underline; }
+          .tl-link { display:flex; align-items:center; gap:14px; background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--accent);
+            border-radius:14px; padding:14px 18px; margin:0 0 22px; box-shadow:var(--shadow); color:var(--ink); }
+          .tl-link:hover { border-color:color-mix(in srgb, var(--accent) 45%, var(--line)); }
+          .tl-link .tl-ic { font-size:24px; flex:none; }
+          .tl-link small { color:var(--ink-2); font-size:13px; }
+          .tl-link .tl-go { margin-left:auto; color:var(--accent); font-weight:800; font-size:18px; flex:none; }
           .foot-note { color:var(--muted); font-size:12px; text-align:center; margin-top:34px; }
           .foot-note a { color:var(--accent); }
         </style>
@@ -76,7 +82,45 @@
         </header>
 
         <main class="wrap">
+            <a class="tl-link" href="/timeline">
+                <span class="tl-ic" aria-hidden="true">🗓️</span>
+                <span><b>1953年からの「暴落・暴騰の年表」を見る</b><br><small>スターリン暴落・オイルショック・Brexit・令和のブラックマンデーなど27の出来事を時系列で</small></span>
+                <span class="tl-go" aria-hidden="true">→</span>
+            </a>
             <div class="grid">
+                <a class="card" href="/events/black-monday-1987">
+                    <span class="cat">世界同時株安</span>
+                    <div class="date">1987年10月</div>
+                    <h2>ブラックマンデー</h2>
+                    <p class="desc">NY株の1日22.6%暴落が世界に連鎖。日経平均は1日で14.90%下落し、下落率は今も過去最大のまま。</p>
+                    <div class="foot">
+                        <span class="dd" data-event="black-monday-1987">最大下落率 <b>—</b></span>
+                        <span class="go">チャートで見る →</span>
+                    </div>
+                </a>
+
+                <a class="card" href="/events/bubble-collapse">
+                    <span class="cat">バブル崩壊</span>
+                    <div class="date">1990年1月</div>
+                    <h2>バブル崩壊</h2>
+                    <p class="desc">1989年末の史上最高値から利上げと総量規制で急落。高値の回復までに約34年を要した。</p>
+                    <div class="foot">
+                        <span class="dd" data-event="bubble-collapse">最大下落率 <b>—</b></span>
+                        <span class="go">チャートで見る →</span>
+                    </div>
+                </a>
+
+                <a class="card" href="/events/it-bubble-collapse">
+                    <span class="cat">バブル崩壊</span>
+                    <div class="date">2000年4月</div>
+                    <h2>ITバブル崩壊</h2>
+                    <p class="desc">ネット株の熱狂がはじけ、米同時多発テロや金融不安も重なって2003年まで下落が続いた。</p>
+                    <div class="foot">
+                        <span class="dd" data-event="it-bubble">最大下落率 <b>—</b></span>
+                        <span class="go">チャートで見る →</span>
+                    </div>
+                </a>
+
                 <a class="card" href="/events/lehman-shock">
                     <span class="cat">金融危機</span>
                     <div class="date">2008年9月</div>
@@ -106,6 +150,17 @@
                     <p class="desc">新型コロナウイルスの世界的拡大とロックダウン懸念でグローバル同時株安。急落と急反発が交互に出た局面。</p>
                     <div class="foot">
                         <span class="dd" data-event="covid">最大下落率 <b>—</b></span>
+                        <span class="go">チャートで見る →</span>
+                    </div>
+                </a>
+
+                <a class="card" href="/events/reiwa-black-monday">
+                    <span class="cat">世界同時株安</span>
+                    <div class="date">2024年8月</div>
+                    <h2>令和のブラックマンデー</h2>
+                    <p class="desc">利上げと円高、米景気不安が重なり1日4,451円安と過去最大の下げ幅。翌日は過去最大の上げ幅に。</p>
+                    <div class="foot">
+                        <span class="dd" data-event="reiwa-black-monday">最大下落率 <b>—</b></span>
                         <span class="go">チャートで見る →</span>
                     </div>
                 </a>
