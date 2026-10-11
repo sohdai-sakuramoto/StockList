@@ -51,8 +51,8 @@
           '</div>' +
         '</section>' +
         '<section class="slv-card">' +
-          '<h2>大きな出来事（その週のニュース）</h2>' +
-          '<p class="slv-cap">株価に影響した当時の報道。日付とチャートの週が対応します。</p>' +
+          '<h2>大きな出来事（その' + (MONTHLY ? "月" : "週") + 'のニュース）</h2>' +
+          '<p class="slv-cap">株価に影響した当時の報道。日付とチャートの' + (MONTHLY ? "月" : "週") + 'が対応します。</p>' +
           '<div class="slv-news"></div>' +
         '</section>' +
       '</div>';
