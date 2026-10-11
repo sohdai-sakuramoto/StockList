@@ -29,6 +29,8 @@
       --ink:#e9edf4; --ink-2:#aab3c2; --muted:#7d8695; --line:#263042; --surface:#161d2b; --plane:#0e131d; --accent:#6ea3f0;
       --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35); } }
     *{box-sizing:border-box;}
+    /* display:grid 等の指定より優先して hidden を効かせる(絞り込みフィルタ用) */
+    [hidden]{display:none !important;}
     body{margin:0;background:var(--plane);color:var(--ink);line-height:1.7;
       font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI",system-ui,-apple-system,sans-serif;}
     a{color:var(--accent);text-decoration:none;}
