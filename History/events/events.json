@@ -1,5 +1,75 @@
 [
   {
+    "id": "stalin-crash",
+    "slug": "stalin-crash",
+    "title": "スターリン暴落",
+    "date": "1953-03-05",
+    "category": "暴落",
+    "window": [
+      "1953-02-05",
+      "1953-12-28"
+    ],
+    "summary": "(調査中)",
+    "news": [],
+    "faq": []
+  },
+  {
+    "id": "securities-recession",
+    "slug": "securities-recession",
+    "title": "証券不況",
+    "date": "1965-05-28",
+    "category": "金融危機",
+    "window": [
+      "1961-07-19",
+      "1965-07-31"
+    ],
+    "summary": "(調査中)",
+    "news": [],
+    "faq": []
+  },
+  {
+    "id": "nixon-shock",
+    "slug": "nixon-shock",
+    "title": "ニクソンショック",
+    "date": "1971-08-16",
+    "category": "通貨危機",
+    "window": [
+      "1971-08-15",
+      "1971-12-30"
+    ],
+    "summary": "(調査中)",
+    "news": [],
+    "faq": []
+  },
+  {
+    "id": "oil-shock-1973",
+    "slug": "oil-shock-1973",
+    "title": "第一次オイルショック",
+    "date": "1973-10-16",
+    "category": "資源危機",
+    "window": [
+      "1973-01-25",
+      "1974-10-31"
+    ],
+    "summary": "(調査中)",
+    "news": [],
+    "faq": []
+  },
+  {
+    "id": "oil-shock-1979",
+    "slug": "oil-shock-1979",
+    "title": "第二次オイルショック",
+    "date": "1979-01-01",
+    "category": "資源危機",
+    "window": [
+      "1979-01-04",
+      "1980-12-27"
+    ],
+    "summary": "(調査中)",
+    "news": [],
+    "faq": []
+  },
+  {
     "id": "black-monday-1987",
     "slug": "black-monday-1987",
     "title": "ブラックマンデー",
