@@ -147,3 +147,18 @@ a { color: var(--accent); }
   .slv-vc .k { font-size: 10px; }
   .slv-vc .v { font-size: 17px; }
 }
+
+/* 主な企業の株価(書籍データ・年間の高値〜安値) */
+.slv-co { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin: 18px 0 0; }
+.slv-co > h2 { font-size: 15px; margin: 0 0 4px; }
+.slv-co-lead { color: var(--ink-2); font-size: 13.5px; margin: 0 0 10px; }
+.slv-co-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.slv-co table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 13.5px; }
+.slv-co th, .slv-co td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.slv-co thead th { color: var(--muted); font-size: 12px; font-weight: 700; }
+.slv-co th small { display: block; font-weight: 400; font-size: 11px; color: var(--muted); }
+.slv-co tbody th { text-align: left; font-weight: 700; }
+.slv-co .hi { font-weight: 700; } .slv-co .lo { color: var(--red); font-weight: 700; } .slv-co .sep { color: var(--muted); margin: 0 2px; }
+.slv-co td.cap { text-align: left; font-size: 12px; color: var(--ink-2); white-space: normal; min-width: 120px; }
+.slv-co td.na { color: var(--muted); text-align: center; }
+.slv-co-note { color: var(--muted); font-size: 11.5px; margin: 10px 0 0; line-height: 1.6; }

@@ -22,6 +22,12 @@ const REPO_ROOT = path.resolve(SCRIPT_DIR, "..", "..");
 const DATA_DIR = path.join(REPO_ROOT, "History", "events"); // 入力データ(events.json / <id>.json)の置き場
 const OUT_DIR = path.join(REPO_ROOT, "events");             // 出力: /events/<slug>.html (クリーンURL /events/<slug>)
 const EVENTS_JSON = path.join(DATA_DIR, "events.json");
+// 書籍から転記した企業別の年別株価(株価20年 等)。イベントの cfg.companies から参照する
+const BOOK_DIR = path.join(DATA_DIR, "books");
+function loadBook(name) {
+  const p = path.join(BOOK_DIR, `${name}.json`);
+  return fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, "utf8")) : null;
+}
 
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const jsonForScript = (o) => JSON.stringify(o).replace(/</g, "\\u003c");
@@ -40,6 +46,39 @@ function recoverStr(c) {
 const unitize = (s) => String(s)
   .replace(/^約/, '<span class="slv-u">約</span>')
   .replace(/(%|円|年|ヶ月)$/, '<span class="slv-u">$1</span>');
+
+const fmtYen = (v) => (v == null ? "" : Number(v).toLocaleString("ja-JP", { maximumFractionDigits: 1 }));
+function companiesTableHtml(spec) {
+  if (!spec) return "";
+  const book = loadBook(spec.book);
+  if (!book) { console.warn(`[warn] 書籍データ ${spec.book}.json がありません`); return ""; }
+  const years = spec.years;
+  const flagged = (cid, y) => book.flags.some((f) => f.company === cid && f.field === "annual" && String(f.year) === String(y));
+  const rows = [];
+  for (const id of spec.ids) {
+    const c = book.companies.find((x) => x.id === id);
+    if (!c) { console.warn(`[warn] ${spec.book}: 企業 ${id} がありません`); continue; }
+    if (years.some((y) => flagged(id, y))) { console.warn(`[warn] ${c.name}: 要確認の値を含むため表から除外`); continue; }
+    const cells = years.map((y) => {
+      const v = c.annual[String(y)];
+      return v ? `<td><span class="hi">${fmtYen(v[0])}</span><span class="sep">〜</span><span class="lo">${fmtYen(v[1])}</span></td>` : `<td class="na">—</td>`;
+    }).join("");
+    const caps = c.capital.filter((k) => years.includes(Number(k.ym.slice(0, 4))))
+      .map((k) => `${Number(k.ym.slice(0, 4))}年${Number(k.ym.slice(5, 7))}月`);
+    rows.push(`<tr><th scope="row">${esc(c.name)}<small>現 ${esc(c.now)}</small></th>${cells}<td class="cap">${caps.length ? esc(caps.join("・")) : "なし"}</td></tr>`);
+  }
+  if (!rows.length) return "";
+  return `
+    <section class="slv-co" aria-label="${esc(spec.title)}">
+      <h2>${esc(spec.title)}</h2>
+      ${spec.lead ? `<p class="slv-co-lead">${esc(spec.lead)}</p>` : ""}
+      <div class="slv-co-wrap"><table>
+        <thead><tr><th scope="col">企業（当時の社名）</th>${years.map((y) => `<th scope="col">${y}年<small>高値〜安値</small></th>`).join("")}<th scope="col">期間中の増資</th></tr></thead>
+        <tbody>${rows.join("")}</tbody>
+      </table></div>
+      <p class="slv-co-note">出典：『${esc(book.source.title)}』（運営者による転記）。単位は円。年間の最高値〜最安値で、増資による株価の切り下がり（権利落ち）は調整していません。増資のあった年の下落には、その影響が含まれます。当時の株価は額面や株式分割の違いから、現在の株価とは比べられません。</p>
+    </section>`;
+}
 
 function pageHtml(cfg, series) {
   const url = `${SITE_URL}/events/${cfg.slug}`;
@@ -100,6 +139,9 @@ function pageHtml(cfg, series) {
     </section>` : "";
 
   // FAQ(タイムラインの後・末尾)。details/summary でJS不要・全文クローラブル
+  // 主な企業の株価(年間の高値・安値)。書籍データから描画し、要確認(flags)の値は出さない
+  const companiesHtml = companiesTableHtml(cfg.companies);
+
   const faqHtml = faq.length ? `
     <section class="slv-faq" aria-label="よくある質問">
       <h2 class="slv-faq-h">よくある質問</h2>
@@ -158,7 +200,7 @@ function pageHtml(cfg, series) {
     <p class="slv-summary">${esc(cfg.summary || "")}</p>
 ${verdictHtml}
     <div id="slv-root"></div>
-
+${companiesHtml}
     <noscript>
       <h2>当時の主なニュース</h2>
       <ul>${newsHtml}</ul>
@@ -207,8 +249,8 @@ ${faqHtml}
 const TL_TYPE = { crash: "暴落", boom: "暴騰", turn: "転換点", note: "出来事" };
 function timelineHtml(items, info) {
   const url = `${SITE_URL}/timeline`;
-  const title = "日本株 暴落・暴騰の年表（1953〜2024）｜StockList";
-  const desc = "スターリン暴落、ブラックマンデー、バブル崩壊、リーマンショック、令和のブラックマンデーまで。日経平均・日本株を大きく動かした暴落・暴騰を年表で解説。主要な出来事はチャートと当時のニュースで振り返れます。";
+  const title = "日本株 暴落・暴騰の年表（1945〜2024）｜StockList";
+  const desc = "終戦後のドッジ不況、スターリン暴落、ブラックマンデー、バブル崩壊、リーマンショック、令和のブラックマンデーまで。日経平均・日本株を大きく動かした暴落・暴騰を年表で解説。主要な出来事はチャートと当時のニュースで振り返れます。";
   const ogImg = `${SITE_URL}/IMG_3857.jpg`;
   const breadcrumb = {
     "@context": "https://schema.org", "@type": "BreadcrumbList",
@@ -337,7 +379,7 @@ function timelineHtml(items, info) {
 <body>
   <div class="topbar"><a href="/">← StockList トップ</a><a href="/history">相場の歴史</a><a href="/now">今の下落と比べる</a></div>
   <header class="hero">
-    <p class="eyebrow">Nikkei 225 · 1953–2024</p>
+    <p class="eyebrow">Nikkei 225 · 1945–2024</p>
     <h1>日本株 暴落・暴騰の年表</h1>
     <p>東証再開（1949年）以降、日本株を大きく揺らした出来事を時系列で。青い線のある${nPages}つの出来事は、週次チャートと当時のニュースで詳しく振り返れます。</p>
   </header>
