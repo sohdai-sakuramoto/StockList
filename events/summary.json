@@ -42,6 +42,20 @@
     "trough_close": 7162.9
   },
   {
+    "slug": "dodge-recession",
+    "url": "/events/dodge-recession",
+    "title": "ドッジ不況",
+    "date": "1949-05-16",
+    "category": "デフレ不況",
+    "drawdown": -0.5162,
+    "drawdown_label": "−52%",
+    "recovered": true,
+    "months_to_recover": 32,
+    "recover_label": "約3年",
+    "trough_date": "1950-07-06",
+    "trough_close": 85.25
+  },
+  {
     "slug": "securities-recession",
     "url": "/events/securities-recession",
     "title": "証券不況",
