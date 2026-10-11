@@ -166,19 +166,5 @@
     "recover_label": "約13ヶ月",
     "trough_date": "2024-09-11",
     "trough_close": 35619.77
-  },
-  {
-    "slug": "oil-shock-1979",
-    "url": "/events/oil-shock-1979",
-    "title": "第二次オイルショック",
-    "date": "1979-01-01",
-    "category": "資源危機",
-    "drawdown": -0.0281,
-    "drawdown_label": "−3%",
-    "recovered": true,
-    "months_to_recover": 4,
-    "recover_label": "約4ヶ月",
-    "trough_date": "1979-04-10",
-    "trough_close": 5925.87
   }
 ]

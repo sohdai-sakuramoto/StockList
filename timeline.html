@@ -53,6 +53,7 @@
     .dot.crash,.tl-node.crash,.badge.crash{background:var(--red);}
     .dot.boom,.tl-node.boom,.badge.boom{background:var(--up);}
     .dot.turn,.tl-node.turn,.badge.turn{background:var(--amber);}
+    .dot.note,.tl-node.note,.badge.note{background:var(--muted);}
     .decade{font-size:13px;font-weight:800;letter-spacing:.04em;color:var(--muted);margin:26px 0 12px;padding-bottom:6px;border-bottom:1px dashed var(--line);}
     .tl-item{display:grid;grid-template-columns:62px 22px 1fr;gap:0 14px;}
     .tl-year{text-align:right;font-weight:800;font-size:15px;font-variant-numeric:tabular-nums;padding-top:14px;letter-spacing:-.02em;}
@@ -87,7 +88,7 @@
   <header class="hero">
     <p class="eyebrow">Nikkei 225 · 1953–2024</p>
     <h1>日本株 暴落・暴騰の年表</h1>
-    <p>東証再開（1949年）以降、日本株を大きく揺らした出来事を時系列で。青い線のある8つの出来事は、週次チャートと当時のニュースで詳しく振り返れます。</p>
+    <p>東証再開（1949年）以降、日本株を大きく揺らした出来事を時系列で。青い線のある12つの出来事は、週次チャートと当時のニュースで詳しく振り返れます。</p>
   </header>
   <main class="wrap">
     <div class="controls">
@@ -96,59 +97,59 @@
         <button type="button" data-filter="crash" aria-pressed="false">暴落だけ</button>
         <button type="button" data-filter="boom" aria-pressed="false">暴騰だけ</button>
       </div>
-      <p class="legend"><span><i class="dot crash"></i>暴落</span><span><i class="dot boom"></i>暴騰</span><span><i class="dot turn"></i>転換点</span></p>
+      <p class="legend"><span><i class="dot crash"></i>暴落</span><span><i class="dot boom"></i>暴騰</span><span><i class="dot turn"></i>転換点</span><span><i class="dot note"></i>出来事</span></p>
     </div>
     <div id="tl">
       <h2 class="decade">1950年代</h2>
       <article class="tl-item" data-type="crash">
         <div class="tl-year">1953<small>3月5日</small></div>
         <div class="tl-spine"><span class="tl-node crash"></span></div>
-        <div class="tl-card">
+        <div class="tl-card has-page">
           <div class="tl-head"><h3 class="tl-title">スターリン暴落</h3><span class="badge crash">暴落</span><span class="metric neg">前日比 −10.00%</span></div>
           <p class="tl-era"><b>背景</b>　東証再開後、朝鮮特需で市場は活況だった。</p>
           <p class="tl-cause">ソ連のスターリン首相の死去報道で「朝鮮特需が消える」との観測が広がり、主力株に売りが殺到。下落率10%は当時の過去最大で、その後34年間破られなかった。</p>
-          
+          <div class="tl-foot"><a class="tl-more" href="/events/stalin-crash">チャートと当時のニュースを見る →</a><span class="tl-rec">回復まで <b>約3年</b></span></div>
         </div>
       </article>
       <h2 class="decade">1960年代</h2>
       <article class="tl-item" data-type="crash">
         <div class="tl-year">1965</div>
         <div class="tl-spine"><span class="tl-node crash"></span></div>
-        <div class="tl-card">
-          <div class="tl-head"><h3 class="tl-title">証券不況</h3><span class="badge crash">暴落</span></div>
+        <div class="tl-card has-page">
+          <div class="tl-head"><h3 class="tl-title">証券不況</h3><span class="badge crash">暴落</span><span class="metric neg">高値比 −44%</span></div>
           <p class="tl-era"><b>背景</b>　東京五輪に向けた財政出動で好況が続いていた。</p>
           <p class="tl-cause">五輪後の反動で景気が急速に悪化し、株価が低迷。山一證券が経営危機に陥り、日銀特融による戦後初の大型救済が実施された。</p>
-          
+          <div class="tl-foot"><a class="tl-more" href="/events/securities-recession">チャートと当時のニュースを見る →</a><span class="tl-rec">回復まで <b>約7年</b></span></div>
         </div>
       </article>
       <h2 class="decade">1970年代</h2>
       <article class="tl-item" data-type="crash">
         <div class="tl-year">1971<small>8月</small></div>
         <div class="tl-spine"><span class="tl-node crash"></span></div>
-        <div class="tl-card">
-          <div class="tl-head"><h3 class="tl-title">ニクソンショック</h3><span class="badge crash">暴落</span></div>
+        <div class="tl-card has-page">
+          <div class="tl-head"><h3 class="tl-title">ニクソンショック</h3><span class="badge crash">暴落</span><span class="metric neg">高値比 −21%</span></div>
           <p class="tl-era"><b>背景</b>　1ドル=360円の固定相場が長く続いていた。</p>
           <p class="tl-cause">米国が金とドルの交換停止を発表。固定相場制の崩壊と急激な円高への懸念から、世界的に株式市場が動揺した。</p>
-          
+          <div class="tl-foot"><a class="tl-more" href="/events/nixon-shock">チャートと当時のニュースを見る →</a><span class="tl-rec">回復まで <b>約5ヶ月</b></span></div>
         </div>
       </article>
       <article class="tl-item" data-type="crash">
         <div class="tl-year">1973<small>〜74年</small></div>
         <div class="tl-spine"><span class="tl-node crash"></span></div>
-        <div class="tl-card">
-          <div class="tl-head"><h3 class="tl-title">第一次オイルショック</h3><span class="badge crash">暴落</span></div>
+        <div class="tl-card has-page">
+          <div class="tl-head"><h3 class="tl-title">第一次オイルショック</h3><span class="badge crash">暴落</span><span class="metric neg">高値比 −37%</span></div>
           <p class="tl-era"><b>背景</b>　高度経済成長が続いていた。</p>
           <p class="tl-cause">第四次中東戦争を機にOPECが原油価格を大幅に引き上げ。「狂乱物価」と景気後退への懸念から株価が大きく下落した。</p>
-          
+          <div class="tl-foot"><a class="tl-more" href="/events/oil-shock-1973">チャートと当時のニュースを見る →</a><span class="tl-rec">回復まで <b>約5年</b></span></div>
         </div>
       </article>
-      <article class="tl-item" data-type="crash">
+      <article class="tl-item" data-type="note">
         <div class="tl-year">1979</div>
-        <div class="tl-spine"><span class="tl-node crash"></span></div>
+        <div class="tl-spine"><span class="tl-node note"></span></div>
         <div class="tl-card">
-          <div class="tl-head"><h3 class="tl-title">第二次オイルショック</h3><span class="badge crash">暴落</span></div>
+          <div class="tl-head"><h3 class="tl-title">第二次オイルショック</h3><span class="badge note">出来事</span></div>
           
-          <p class="tl-cause">イラン革命に伴う原油供給不安の再燃でエネルギー価格が高騰し、株式市場を圧迫した。</p>
+          <p class="tl-cause">イラン革命に伴う原油供給不安で、原油価格が再び高騰した。ただし省エネや企業の減量経営が進んでいた日本株への影響は限定的で、日経平均の下落は高値比で数%にとどまった。</p>
           
         </div>
       </article>
