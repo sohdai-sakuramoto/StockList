@@ -43,7 +43,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add state.json History/events/*.json History/events/features/*.json events/*.html events/summary.json timeline.html sitemap.xml
+          git add state.json History/events/*.json History/events/features/*.json events/*.html events/summary.json timeline.html war-and-stocks.html sitemap.xml
           if git diff --cached --quiet; then
             echo "変更なし。スキップします。"
           else
