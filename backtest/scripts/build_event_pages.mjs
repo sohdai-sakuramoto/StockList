@@ -65,7 +65,9 @@ function companiesTableHtml(spec) {
     }).join("");
     const caps = c.capital.filter((k) => years.includes(Number(k.ym.slice(0, 4))))
       .map((k) => `${Number(k.ym.slice(0, 4))}年${Number(k.ym.slice(5, 7))}月`);
-    rows.push(`<tr><th scope="row">${esc(c.name)}<small>現 ${esc(c.now)}</small></th>${cells}<td class="cap">${caps.length ? esc(caps.join("・")) : "なし"}</td></tr>`);
+    // 前身企業の株価を含む年がある場合は社名の下に明記(例: 八幡製鐵の1949年以前は日本製鐵)
+    const pre = c.predecessor && years.some((y) => y <= c.predecessor.until) ? `<small>${c.predecessor.until}年以前は前身の${esc(c.predecessor.name)}</small>` : "";
+    rows.push(`<tr><th scope="row">${esc(c.name)}<small>現 ${esc(c.now)}</small>${pre}${cells}<td class="cap">${caps.length ? esc(caps.join("・")) : "なし"}</td></tr>`);
   }
   if (!rows.length) return "";
   return `
