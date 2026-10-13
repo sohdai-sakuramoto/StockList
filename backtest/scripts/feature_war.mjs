@@ -257,6 +257,9 @@ export function warFeatureHtml({ book, war, siteUrl }) {
     svg .hit{cursor:crosshair;} svg text{font-family:inherit;}
     @media (max-width:560px){ .tile .v{font-size:26px;} .grid{grid-template-columns:1fr;} }
   </style>
+  <!-- Vercel Web Analytics -->
+  <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
   <div class="topbar"><a href="/">← StockList トップ</a><a href="/history">相場の歴史</a><a href="/timeline">年表</a></div>

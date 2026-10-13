@@ -187,6 +187,9 @@ function pageHtml(cfg, series) {
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-06EHKG0SQ2"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-06EHKG0SQ2');</script>
+  <!-- Vercel Web Analytics -->
+  <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
   <div class="slv-topbar">
@@ -382,6 +385,9 @@ function timelineHtml(items, info) {
     .foot{color:var(--muted);font-size:12px;margin-top:30px;border-top:1px solid var(--line);padding-top:14px;}
     @media (max-width:560px){ .tl-item{grid-template-columns:54px 16px 1fr;gap:0 10px;} .tl-year{font-size:13.5px;} .tl-year small{font-size:10px;letter-spacing:-.04em;white-space:nowrap;} .tl-title{font-size:15.5px;} }
   </style>
+  <!-- Vercel Web Analytics -->
+  <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
   <div class="topbar"><a href="/">← StockList トップ</a><a href="/history">相場の歴史</a><a href="/now">今の下落と比べる</a></div>
