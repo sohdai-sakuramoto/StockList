@@ -219,7 +219,7 @@ ${faqHtml}
     <aside class="slv-cta">
       <p class="slv-cta-lead">暴落は、歴史的にはいつか戻ってきました。</p>
       <p class="slv-cta-sub">狼狽売りより、次の下落に備えて少額から。長期・積立の第一歩は口座づくりから。</p>
-      <a class="slv-cta-btn" href="/start/">はじめての証券口座を見る →</a>
+      <a class="slv-cta-btn" href="/start">はじめての証券口座を見る →</a>
     </aside>
 
     <section class="nl" data-newsletter-block hidden>
@@ -230,7 +230,7 @@ ${faqHtml}
         <button type="submit">登録する</button>
         <p class="nl-msg" data-nl-msg style="display:none"></p>
       </form>
-      <p class="nl-fine">登録は無料・配信は必要なときだけ。<a href="/privacy/">プライバシーポリシー</a></p>
+      <p class="nl-fine">登録は無料・配信は必要なときだけ。<a href="/privacy">プライバシーポリシー</a></p>
     </section>
 
     <p class="slv-foot">
@@ -415,7 +415,7 @@ function timelineHtml(items, info) {
     <aside class="cta">
       <b>暴落は、歴史的にはいつか戻ってきました。</b>
       <p>焦って売るより、次の下落に備えて少額から。長期・積立の第一歩は口座づくりから。</p>
-      <a class="btn" href="/start/">はじめての証券口座を見る →</a>
+      <a class="btn" href="/start">はじめての証券口座を見る →</a>
     </aside>
     <section class="nl" data-newsletter-block hidden>
       <h2>急落モードの日に、一通だけ。</h2>
@@ -425,7 +425,7 @@ function timelineHtml(items, info) {
         <button type="submit">登録する</button>
         <p class="nl-msg" data-nl-msg style="display:none"></p>
       </form>
-      <p class="nl-fine">登録は無料・配信は必要なときだけ。<a href="/privacy/">プライバシーポリシー</a></p>
+      <p class="nl-fine">登録は無料・配信は必要なときだけ。<a href="/privacy">プライバシーポリシー</a></p>
     </section>
     <p class="foot">
       ※ 教育・情報提供目的のページです。投資助言ではありません。数値は日経平均の終値などに基づく参考値で、チャートは検証用データ（Stooq/FRED）を使用しています。
@@ -463,13 +463,13 @@ function main() {
   ALL = JSON.parse(fs.readFileSync(EVENTS_JSON, "utf8"));
   const urls = [
     { loc: `${SITE_URL}/`, pri: "1.0" },
-    { loc: `${SITE_URL}/start/`, pri: "0.9" },
+    { loc: `${SITE_URL}/start`, pri: "0.9" },
     { loc: `${SITE_URL}/history`, pri: "0.8" },
     { loc: `${SITE_URL}/timeline`, pri: "0.8" },
     { loc: `${SITE_URL}/war-and-stocks`, pri: "0.8" },
     { loc: `${SITE_URL}/now`, pri: "0.7" },
-    { loc: `${SITE_URL}/disclosure/`, pri: "0.3" },
-    { loc: `${SITE_URL}/privacy/`, pri: "0.3" },
+    { loc: `${SITE_URL}/disclosure`, pri: "0.3" },
+    { loc: `${SITE_URL}/privacy`, pri: "0.3" },
   ];
   fs.mkdirSync(OUT_DIR, { recursive: true });
   const summary = []; // /now(今の下落 vs 過去の暴落)ページ用の比較データ

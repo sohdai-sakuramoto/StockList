@@ -337,7 +337,7 @@ export function warFeatureHtml({ book, war, siteUrl }) {
       <aside class="cta">
         <b>暴落は、歴史的にはいつか戻ってきました。</b>
         <p>焦って売るより、次の下落に備えて少額から。長期・積立の第一歩は口座づくりから。</p>
-        <a class="btn" href="/start/">はじめての証券口座を見る →</a>
+        <a class="btn" href="/start">はじめての証券口座を見る →</a>
       </aside>
       <section class="nl" data-newsletter-block hidden>
         <h2>急落モードの日に、一通だけ。</h2>
@@ -347,7 +347,7 @@ export function warFeatureHtml({ book, war, siteUrl }) {
           <button type="submit">登録する</button>
           <p class="nl-msg" data-nl-msg style="display:none"></p>
         </form>
-        <p class="nl-fine">登録は無料・配信は必要なときだけ。<a href="/privacy/">プライバシーポリシー</a></p>
+        <p class="nl-fine">登録は無料・配信は必要なときだけ。<a href="/privacy">プライバシーポリシー</a></p>
       </section>
     </section>
 
