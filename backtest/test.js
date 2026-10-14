@@ -242,3 +242,15 @@ test("実データ: 東日本大震災期間 (2011-03) に単日 -4% 以下の�
   }
   assert.ok(found, "2011-03-14/15 のいずれかで -4% 超の下落があるはず");
 });
+
+test("vercel.json: リダイレクトはすべて301で、転送先(固定パス)のページが実在する", () => {
+  const ROOT = path.resolve(SCRIPT_DIR, "..");
+  const cfg = JSON.parse(fs.readFileSync(path.join(ROOT, "vercel.json"), "utf8"));
+  const pageExists = (p) => p === "/" || [`${p}.html`, `${p}/index.html`].some((f) => fs.existsSync(path.join(ROOT, f)));
+  for (const r of cfg.redirects) {
+    assert.equal(r.statusCode, 301, `${r.source} は statusCode:301 にする(permanent:true は308になる)`);
+    assert.ok(!("permanent" in r), `${r.source}: permanent と statusCode は併用不可`);
+    if (!r.destination.includes(":")) assert.ok(pageExists(r.destination), `${r.source} → ${r.destination} の転送先ページがない`);
+    assert.ok(!r.destination.endsWith("/") || r.destination === "/", `${r.destination}: trailingSlash:false なので末尾スラッシュなし`);
+  }
+});

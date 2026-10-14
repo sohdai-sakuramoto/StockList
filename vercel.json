@@ -3,62 +3,36 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
-    { "source": "/History/History.html", "destination": "/history", "permanent": true },
-    { "source": "/History/History", "destination": "/history", "permanent": true },
-    { "source": "/History/events/lehman.html", "destination": "/events/lehman-shock", "permanent": true },
-    { "source": "/History/events/lehman", "destination": "/events/lehman-shock", "permanent": true },
-    { "source": "/History/events/great-east-japan.html", "destination": "/events/great-east-japan-earthquake", "permanent": true },
-    { "source": "/History/events/great-east-japan", "destination": "/events/great-east-japan-earthquake", "permanent": true },
-    { "source": "/History/events/covid.html", "destination": "/events/covid-shock", "permanent": true },
-    { "source": "/History/events/covid", "destination": "/events/covid-shock", "permanent": true },
-    { "source": "/History/events/ishiba.html", "destination": "/events/ishiba-shock", "permanent": true },
-    { "source": "/History/events/ishiba", "destination": "/events/ishiba-shock", "permanent": true }
+    { "source": "/History/History.html", "destination": "/history", "statusCode": 301 },
+    { "source": "/History/History", "destination": "/history", "statusCode": 301 },
+    { "source": "/History", "destination": "/history", "statusCode": 301 },
+    { "source": "/History/events/lehman.html", "destination": "/events/lehman-shock", "statusCode": 301 },
+    { "source": "/History/events/lehman", "destination": "/events/lehman-shock", "statusCode": 301 },
+    { "source": "/History/events/great-east-japan.html", "destination": "/events/great-east-japan-earthquake", "statusCode": 301 },
+    { "source": "/History/events/great-east-japan", "destination": "/events/great-east-japan-earthquake", "statusCode": 301 },
+    { "source": "/History/events/covid.html", "destination": "/events/covid-shock", "statusCode": 301 },
+    { "source": "/History/events/covid", "destination": "/events/covid-shock", "statusCode": 301 },
+    { "source": "/History/events/ishiba.html", "destination": "/events/ishiba-shock", "statusCode": 301 },
+    { "source": "/History/events/ishiba", "destination": "/events/ishiba-shock", "statusCode": 301 },
+    { "source": "/History/EventViewer.html", "destination": "/events/lehman-shock", "statusCode": 301, "has": [{ "type": "query", "key": "e", "value": "lehman" }] },
+    { "source": "/History/EventViewer", "destination": "/events/lehman-shock", "statusCode": 301, "has": [{ "type": "query", "key": "e", "value": "lehman" }] },
+    { "source": "/History/EventViewer.html", "destination": "/events/great-east-japan-earthquake", "statusCode": 301, "has": [{ "type": "query", "key": "e", "value": "great-east-japan" }] },
+    { "source": "/History/EventViewer", "destination": "/events/great-east-japan-earthquake", "statusCode": 301, "has": [{ "type": "query", "key": "e", "value": "great-east-japan" }] },
+    { "source": "/History/EventViewer.html", "destination": "/events/covid-shock", "statusCode": 301, "has": [{ "type": "query", "key": "e", "value": "covid" }] },
+    { "source": "/History/EventViewer", "destination": "/events/covid-shock", "statusCode": 301, "has": [{ "type": "query", "key": "e", "value": "covid" }] },
+    { "source": "/History/EventViewer.html", "destination": "/events/ishiba-shock", "statusCode": 301, "has": [{ "type": "query", "key": "e", "value": "ishiba" }] },
+    { "source": "/History/EventViewer", "destination": "/events/ishiba-shock", "statusCode": 301, "has": [{ "type": "query", "key": "e", "value": "ishiba" }] },
+    { "source": "/History/EventViewer", "destination": "/history", "statusCode": 301 },
+    { "source": "/History/events/:slug", "destination": "/events/:slug", "statusCode": 301 },
+    { "source": "/History/Covid19/:path*", "destination": "/events/covid-shock", "statusCode": 301 },
+    { "source": "/History/GreatEastJapanEarthquake/:path*", "destination": "/events/great-east-japan-earthquake", "statusCode": 301 },
+    { "source": "/History/FinancialCrisis2008/:path*", "destination": "/events/lehman-shock", "statusCode": 301 }
   ],
   "headers": [
-    {
-      "source": "/state.json",
-      "headers": [{ "key": "Cache-Control", "value": "no-cache, max-age=0, must-revalidate" }]
-    },
-    {
-      "source": "/events/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "no-cache, max-age=0, must-revalidate" }]
-    },
-
-    {
-      "source": "/ContactForm.html",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
-    },
-    {
-      "source": "/News/(.*)",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
-    },
-    {
-      "source": "/History/Covid19/(.*)",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
-    },
-    {
-      "source": "/History/GreatEastJapanEarthquake/(.*)",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
-    },
-    {
-      "source": "/History/FinancialCrisis2008/(.*)",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
-    },
-    {
-      "source": "/History/EventViewer.html",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
-    },
-    {
-      "source": "/History/history_test.html",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
-    },
-    {
-      "source": "/History/index.html",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
-    },
-    {
-      "source": "/History",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
-    }
+    { "source": "/state.json", "headers": [{ "key": "Cache-Control", "value": "no-cache, max-age=0, must-revalidate" }] },
+    { "source": "/events/(.*)", "headers": [{ "key": "Cache-Control", "value": "no-cache, max-age=0, must-revalidate" }] },
+    { "source": "/ContactForm", "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }] },
+    { "source": "/News/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }] },
+    { "source": "/History/history_test", "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }] }
   ]
 }
