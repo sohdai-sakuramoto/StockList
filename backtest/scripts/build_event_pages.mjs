@@ -96,7 +96,12 @@ function pageHtml(cfg, series) {
       ? `${cfg.title}で日経平均は高値から約${ddPct(c.drawdown)}下落。底は${yearMonth(c.trough.date)}（${cfg.troughLabel || "この局面の底"}）、回復までの最安値は${yearMonth(ll.date)}の${troughPriceStr({ trough: ll })}（${ddPct(ll.drawdown)}）、高値回復まで${recoverStr(c)}。チャートと当時のニュースで振り返ります。`
       : `${cfg.title}で日経平均は高値から約${ddPct(c.drawdown)}下落。底は${yearMonth(c.trough.date)}、高値回復まで${recoverStr(c)}。週次チャートと当時のニュースで、下落率・底・回復の流れを振り返ります。`
     : `${cfg.title}（${cfg.date}前後)の日経平均を週次チャートと当時のニュースで振り返ります。`;
-  const ogImg = `${SITE_URL}/IMG_3857.jpg`;
+  // OGP画像: build_og_images.mjs が生成したイベント別画像(1200×630)。無ければ共通画像
+  const ogFile = path.join(REPO_ROOT, "og", "events", `${cfg.slug}.png`);
+  const og = fs.existsSync(ogFile)
+    ? { url: `${SITE_URL}/og/events/${cfg.slug}.png`, w: 1200, h: 630, alt: c ? `${cfg.title}：日経平均の最大下落率${ddPct(c.drawdown)}、高値回復まで${recoverStr(c)}` : cfg.title }
+    : { url: `${SITE_URL}/IMG_3857.jpg`, w: 1957, h: 1468, alt: "StockList" };
+  const ogImg = og.url;
   const modified = (series && series.generated_at ? series.generated_at : new Date().toISOString()).slice(0, 10);
 
   const jsonld = {
@@ -177,10 +182,14 @@ function pageHtml(cfg, series) {
   <meta property="og:description" content="${esc(desc)}" />
   <meta property="og:url" content="${url}" />
   <meta property="og:image" content="${ogImg}" />
+  <meta property="og:image:width" content="${og.w}" />
+  <meta property="og:image:height" content="${og.h}" />
+  <meta property="og:image:alt" content="${esc(og.alt)}" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="${esc(title)}" />
   <meta name="twitter:description" content="${esc(desc)}" />
   <meta name="twitter:image" content="${ogImg}" />
+  <meta name="twitter:image:alt" content="${esc(og.alt)}" />
   <link rel="stylesheet" href="/crash-mode.css" />
   <link rel="stylesheet" href="/events/viewer.css" />
   <link rel="stylesheet" href="/newsletter.css" />
