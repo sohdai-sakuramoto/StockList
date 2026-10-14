@@ -258,7 +258,7 @@ export function warFeatureHtml({ book, war, siteUrl }) {
     @media (max-width:560px){ .tile .v{font-size:26px;} .grid{grid-template-columns:1fr;} }
   </style>
   <!-- Vercel Web Analytics -->
-  <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
+  <script defer src="/analytics-config.js"></script>
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
