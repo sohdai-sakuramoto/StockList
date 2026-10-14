@@ -140,6 +140,13 @@
     var tx = x(tIdx), ty = y(pts[tIdx].close);
     s += '<circle cx="' + tx.toFixed(1) + '" cy="' + ty.toFixed(1) + '" r="3.8" fill="none" stroke="var(--red)" stroke-width="1.8"/>';
     s += '<text x="' + tx.toFixed(1) + '" y="' + (ty + 17).toFixed(1) + '" text-anchor="middle" font-size="11" font-weight="700" fill="var(--red)">底</text>';
+    // 回復までにイベント本体の底より安い値をつけた場合、その期間に「最安値」マーカー
+    var llIdx = conc && conc.later_low ? weekIdxOf(conc.later_low.date) : -1;
+    if (llIdx >= 0 && llIdx !== tIdx) {
+      var lx = x(llIdx), ly = y(pts[llIdx].close);
+      s += '<circle cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="3.8" fill="none" stroke="var(--red)" stroke-width="1.8"/>';
+      s += '<text x="' + lx.toFixed(1) + '" y="' + (ly + 17).toFixed(1) + '" text-anchor="middle" font-size="11" font-weight="700" fill="var(--red)">最安値</text>';
+    }
 
     pts.forEach(function (p, i) { if (newsByWeek[p.week]) s += '<circle cx="' + x(i).toFixed(1) + '" cy="' + y(p.close).toFixed(1) + '" r="4.5" fill="var(--red)" stroke="var(--surface)" stroke-width="1.6"/>'; });
     s += '<circle class="slv-hoverdot" r="4.5" fill="var(--navy)" stroke="var(--surface)" stroke-width="1.6" style="display:none"/>';

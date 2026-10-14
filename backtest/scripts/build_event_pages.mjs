@@ -35,7 +35,7 @@ const jsonForScript = (o) => JSON.stringify(o).replace(/</g, "\\u003c");
 
 const yearMonth = (d) => { const [y, m] = d.split("-"); return `${y}年${Number(m)}月`; };
 const ddPct = (dd) => `${dd < 0 ? "−" : ""}${Math.abs(Math.round(dd * 100))}%`;
-// 底値: 大底の終値を「◯,◯◯◯円」で表示
+// 底値: 底(期間内の最安値)の終値を「◯,◯◯◯円」で表示
 const troughPriceStr = (c) => `${Math.round(c.trough.close).toLocaleString("ja-JP")}円`;
 // 下落前の水準に戻るまで: 24ヶ月以上は「約◯年」、未満は「約◯ヶ月」、未回復は「未回復」
 function recoverStr(c) {
@@ -89,8 +89,11 @@ function pageHtml(cfg, series) {
 
   // title/meta は検索クエリ対応の形式に統一
   const title = `${cfg.title}で日経平均は何%下落?回復まで何年?｜StockList`;
+  const ll = c && c.later_low ? c.later_low : null;
   const desc = c
-    ? `${cfg.title}で日経平均は高値から約${ddPct(c.drawdown)}下落。底は${yearMonth(c.trough.date)}、高値回復まで${recoverStr(c)}。週次チャートと当時のニュースで、下落率・底・回復の流れを振り返ります。`
+    ? ll
+      ? `${cfg.title}で日経平均は高値から約${ddPct(c.drawdown)}下落。底は${yearMonth(c.trough.date)}（${cfg.troughLabel || "この局面の底"}）、回復までの最安値は${yearMonth(ll.date)}の${troughPriceStr({ trough: ll })}（${ddPct(ll.drawdown)}）、高値回復まで${recoverStr(c)}。チャートと当時のニュースで振り返ります。`
+      : `${cfg.title}で日経平均は高値から約${ddPct(c.drawdown)}下落。底は${yearMonth(c.trough.date)}、高値回復まで${recoverStr(c)}。週次チャートと当時のニュースで、下落率・底・回復の流れを振り返ります。`
     : `${cfg.title}（${cfg.date}前後)の日経平均を週次チャートと当時のニュースで振り返ります。`;
   const ogImg = `${SITE_URL}/IMG_3857.jpg`;
   const modified = (series && series.generated_at ? series.generated_at : new Date().toISOString()).slice(0, 10);
@@ -134,10 +137,11 @@ function pageHtml(cfg, series) {
   const verdictHtml = c ? `
     <section class="slv-verdict" aria-label="30秒でわかる結論">
       <h2 class="slv-verdict-h">30秒でわかる結論</h2>
-      <div class="slv-verdict-grid">
-        <div class="slv-vc"><div class="k">最大下落率</div><div class="v neg">${unitize(ddPct(c.drawdown))}</div><div class="note">高値からの下落</div></div>
+      <div class="slv-verdict-grid${ll ? " four" : ""}">
+        <div class="slv-vc"><div class="k">最大下落率</div><div class="v neg">${unitize(ddPct(c.drawdown))}</div><div class="note">${ll ? `${yearMonth(c.trough.date)}までの下落` : "高値からの下落"}</div></div>
         <div class="slv-vc"><div class="k">下落前の水準に戻るまで</div><div class="v">${unitize(recoverStr(c))}</div><div class="note">${c.recovered ? esc(cfg.recoveryNote || "下落前の高値を回復") : yearMonth(c.as_of) + "時点で未回復"}</div></div>
-        <div class="slv-vc"><div class="k">底値</div><div class="v">${unitize(troughPriceStr(c))}</div><div class="note">${yearMonth(c.trough.date)}に大底</div></div>
+        <div class="slv-vc"><div class="k">底値</div><div class="v">${unitize(troughPriceStr(c))}</div><div class="note">${ll ? `${yearMonth(c.trough.date)}・${esc(cfg.troughLabel || "この局面の底")}` : `${yearMonth(c.trough.date)}に大底`}</div></div>
+        ${ll ? `<div class="slv-vc"><div class="k">回復までの最安値</div><div class="v">${unitize(troughPriceStr({ trough: ll }))}</div><div class="note">${yearMonth(ll.date)}・高値比${ddPct(ll.drawdown)}${cfg.laterLowNote ? `<br>${esc(cfg.laterLowNote)}` : ""}</div></div>` : ""}
       </div>
     </section>` : "";
 

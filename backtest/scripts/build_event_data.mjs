@@ -111,6 +111,8 @@ export const PEAK_LOOKBACK_MONTHS = 15;
  *  最大下落率    = trough/peak - 1(終値ベース)
  *  底までの期間  = 高値日→底日(営業日数 と 月数)
  *  高値回復まで  = 高値日→ 終値が高値を初めて上回った日(全期間を前方探索)。無ければ未回復
+ *  回復までの最安値 later_low = 底の翌日〜回復日(未回復なら最新)の終値最安値。底より安い場合のみ。
+ *                 (期間内の底は「その局面の底」であり、回復までにさらに安値があれば明示するため)
  */
 export function computeConclusion(rows, ev) {
   const [wStart, wEnd] = ev.window;
@@ -132,6 +134,13 @@ export function computeConclusion(rows, ev) {
   let recovery = null;
   for (const r of rows) { if (r.date <= trough.date) continue; if (r.close >= peak.close) { recovery = r; break; } }
 
+  let laterLow = null;
+  for (const r of rows) {
+    if (r.date <= trough.date) continue;
+    if (recovery && r.date >= recovery.date) break;
+    if (r.close < trough.close && (!laterLow || r.close < laterLow.close)) laterLow = r;
+  }
+
   return {
     peak: { date: peak.date, close: round2(peak.close) },
     trough: { date: trough.date, close: round2(trough.close) },
@@ -141,6 +150,7 @@ export function computeConclusion(rows, ev) {
     recovered: !!recovery,
     recovery_date: recovery ? recovery.date : null,
     months_to_recover: recovery ? monthsBetween(peak.date, recovery.date) : null,
+    later_low: laterLow ? { date: laterLow.date, close: round2(laterLow.close), drawdown: round4(laterLow.close / peak.close - 1) } : null,
     as_of: rows[rows.length - 1].date,
   };
 }
