@@ -111,6 +111,17 @@ a { color: var(--accent); }
 /* ══════════ スマホ最適化(PC・タブレットは不変) ══════════
    原則「内は近く・外は遠く」。余白でグループを作り、数値を主役にする。 */
 @media (max-width: 640px) {
+  /* 広告LP対応: ファーストビューにイベント名・発生日・下落率を収める
+     - 出来事の切り替えは横スクロール1行(現在の出来事は読み込み時に左端へ)
+     - 「30秒でわかる結論」を概要文より前に(PCは従来どおり 見出し→概要→結論) */
+  .slv-picker { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    margin: 0 -20px 12px; padding: 2px 20px 4px; }
+  .slv-picker::-webkit-scrollbar { display: none; }
+  .slv-picker a { flex: 0 0 auto; padding: 7px 13px; font-size: 13.5px; }
+  .slv-intro { display: flex; flex-direction: column; }
+  .slv-intro > .slv-verdict { order: 1; margin: 12px 0 0; }
+  .slv-intro > .slv-summary { order: 2; margin: 22px 0 24px; }
+
   /* セクション境界を大きく離す(結論↔チャート↔ニュース↔FAQ↔CTA) */
   .slv-summary { line-height: 1.8; margin: 6px 0 24px; }        /* 改修5: 本文の行間 */
   .slv-grid { gap: 26px; }

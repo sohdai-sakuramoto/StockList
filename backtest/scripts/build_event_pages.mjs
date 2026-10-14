@@ -34,6 +34,7 @@ const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&":
 const jsonForScript = (o) => JSON.stringify(o).replace(/</g, "\\u003c");
 
 const yearMonth = (d) => { const [y, m] = d.split("-"); return `${y}年${Number(m)}月`; };
+const jaDate = (d) => { const [y, m, dd] = d.split("-"); return `${y}年${Number(m)}月${Number(dd)}日`; };
 const ddPct = (dd) => `${dd < 0 ? "−" : ""}${Math.abs(Math.round(dd * 100))}%`;
 // 底値: 底(期間内の最安値)の終値を「◯,◯◯◯円」で表示
 const troughPriceStr = (c) => `${Math.round(c.trough.close).toLocaleString("ja-JP")}円`;
@@ -202,13 +203,16 @@ function pageHtml(cfg, series) {
   </div>
   <div class="slv-wrap">
     <nav class="slv-picker" aria-label="出来事を選ぶ">${nav}</nav>
+    <script>(function(){var p=document.currentScript.previousElementSibling,c=p&&p.querySelector('[aria-current="true"]');if(c&&p.scrollWidth>p.clientWidth)p.scrollLeft=c.offsetLeft-p.offsetLeft-20;})();</script>
+    <div class="slv-intro">
     <div class="slv-head">
       <h1>${esc(cfg.title)}</h1>
       <span class="cat">${esc(cfg.category || "")}</span>
-      <span class="date">${esc(cfg.date || "")} 前後</span>
+      ${cfg.date ? `<time class="date" datetime="${esc(cfg.date)}">${jaDate(cfg.date)}</time>` : ""}
     </div>
     <p class="slv-summary">${esc(cfg.summary || "")}</p>
 ${verdictHtml}
+    </div>
     <div id="slv-root"></div>
 ${companiesHtml}
     <noscript>
