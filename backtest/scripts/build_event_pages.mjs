@@ -140,8 +140,8 @@ function pageHtml(cfg, series) {
       <div class="slv-verdict-grid${ll ? " four" : ""}">
         <div class="slv-vc"><div class="k">最大下落率</div><div class="v neg">${unitize(ddPct(c.drawdown))}</div><div class="note">${ll ? `${yearMonth(c.trough.date)}までの下落` : "高値からの下落"}</div></div>
         <div class="slv-vc"><div class="k">下落前の水準に戻るまで</div><div class="v">${unitize(recoverStr(c))}</div><div class="note">${c.recovered ? esc(cfg.recoveryNote || "下落前の高値を回復") : yearMonth(c.as_of) + "時点で未回復"}</div></div>
-        <div class="slv-vc"><div class="k">底値</div><div class="v">${unitize(troughPriceStr(c))}</div><div class="note">${ll ? `${yearMonth(c.trough.date)}・${esc(cfg.troughLabel || "この局面の底")}` : `${yearMonth(c.trough.date)}に大底`}</div></div>
-        ${ll ? `<div class="slv-vc"><div class="k">回復までの最安値</div><div class="v">${unitize(troughPriceStr({ trough: ll }))}</div><div class="note">${yearMonth(ll.date)}・高値比${ddPct(ll.drawdown)}${cfg.laterLowNote ? `<br>${esc(cfg.laterLowNote)}` : ""}</div></div>` : ""}
+        <div class="slv-vc"><div class="k">底値</div><div class="v">${unitize(troughPriceStr(c))}</div><div class="note">${ll ? `${yearMonth(c.trough.date)}・${esc(cfg.troughLabel || "この局面の底")}` : `${yearMonth(c.trough.date)}に大底`}</div></div>${ll ? `
+        <div class="slv-vc"><div class="k">回復までの最安値</div><div class="v">${unitize(troughPriceStr({ trough: ll }))}</div><div class="note">${yearMonth(ll.date)}・高値比${ddPct(ll.drawdown)}${cfg.laterLowNote ? `<br>${esc(cfg.laterLowNote)}` : ""}</div></div>` : ""}
       </div>
     </section>` : "";
 
