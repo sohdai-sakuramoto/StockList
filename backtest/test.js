@@ -254,3 +254,16 @@ test("vercel.json: リダイレクトはすべて301で、転送先(固定パス
     assert.ok(!r.destination.endsWith("/") || r.destination === "/", `${r.destination}: trailingSlash:false なので末尾スラッシュなし`);
   }
 });
+
+test("og/events/*.png: OGP画像は 1200×630 のPNGで、対応するイベントがある", () => {
+  const ROOT = path.resolve(SCRIPT_DIR, "..");
+  const dir = path.join(ROOT, "og", "events");
+  if (!fs.existsSync(dir)) return;
+  const slugs = new Set(JSON.parse(fs.readFileSync(path.join(ROOT, "History", "events", "events.json"), "utf8")).map((e) => e.slug));
+  for (const f of fs.readdirSync(dir).filter((x) => x.endsWith(".png"))) {
+    const b = fs.readFileSync(path.join(dir, f));
+    assert.equal(b.toString("ascii", 1, 4), "PNG", `${f} はPNG`);
+    assert.deepEqual([b.readUInt32BE(16), b.readUInt32BE(20)], [1200, 630], `${f} のサイズ`);
+    assert.ok(slugs.has(f.replace(/\.png$/, "")), `${f} に対応するイベントが events.json にない`);
+  }
+});
