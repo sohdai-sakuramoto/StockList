@@ -44,6 +44,23 @@ test("computeConclusion: データ期間内に回復しなければ未回復", (
   const c = computeConclusion(rows, { window: ["2020-02-01", "2020-05-01"], date: "2020-02-10" });
   assert.equal(c.recovered, false);
   assert.equal(c.recovery_date, null);
+  assert.equal(c.later_low, null, "底より安い値がなければ later_low は null");
+});
+
+test("computeConclusion: 期間後〜回復までに底より安い値があれば later_low に出す(回復後は対象外)", () => {
+  const rows = [
+    { date: "2019-12-02", close: 95 },
+    { date: "2020-01-06", close: 100 },    // 高値
+    { date: "2020-02-17", close: 60 },     // 期間内の底
+    { date: "2020-06-01", close: 80 },
+    { date: "2020-09-01", close: 50 },     // 期間後のさらに安い値
+    { date: "2020-10-01", close: 55 },
+    { date: "2021-01-04", close: 101 },    // 回復
+    { date: "2021-03-01", close: 40 },     // 回復後(対象外)
+  ];
+  const c = computeConclusion(rows, { window: ["2020-02-01", "2020-05-01"], date: "2020-02-10" });
+  assert.equal(c.trough.date, "2020-02-17", "底は期間内のまま");
+  assert.deepEqual(c.later_low, { date: "2020-09-01", close: 50, drawdown: -0.5 });
 });
 
 /** 2020-01-06(月)起点の連続営業日で終値列から rows を作る */

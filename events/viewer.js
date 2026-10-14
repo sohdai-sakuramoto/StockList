@@ -87,6 +87,7 @@
     var closes = pts.map(function (p) { return p.close; });
     var lo = Math.min.apply(null, closes), hi = Math.max.apply(null, closes);
     if (conc) { lo = Math.min(lo, conc.trough.close, conc.peak.close); hi = Math.max(hi, conc.peak.close); }
+    if (conc && conc.later_low) lo = Math.min(lo, conc.later_low.close);
     var pad = (hi - lo) * 0.08 || 1; lo -= pad; hi += pad;
     var x = function (i) { return ML + (n <= 1 ? 0 : i / (n - 1)) * iw; };
     var y = function (v) { return MT + (1 - (v - lo) / (hi - lo)) * ih; };
@@ -137,9 +138,17 @@
       s += '<text x="' + rx.toFixed(1) + '" y="' + (MT - 6).toFixed(1) + '" text-anchor="middle" font-size="11" font-weight="700" fill="var(--accent)">回復</text>';
     }
     // イベント本体の底マーカー(回復途中の別局面の安値と区別するためラベル付き)
-    var tx = x(tIdx), ty = y(pts[tIdx].close);
+    // 月次/週次の線は期末値。マーカーは底の実際の終値(期間内の最安終値)の高さに置く
+    var tx = x(tIdx), ty = y(conc && weekIdxOf(conc.trough.date) === tIdx ? conc.trough.close : pts[tIdx].close);
     s += '<circle cx="' + tx.toFixed(1) + '" cy="' + ty.toFixed(1) + '" r="3.8" fill="none" stroke="var(--red)" stroke-width="1.8"/>';
     s += '<text x="' + tx.toFixed(1) + '" y="' + (ty + 17).toFixed(1) + '" text-anchor="middle" font-size="11" font-weight="700" fill="var(--red)">底</text>';
+    // 回復までにイベント本体の底より安い値をつけた場合、その期間に「最安値」マーカー
+    var llIdx = conc && conc.later_low ? weekIdxOf(conc.later_low.date) : -1;
+    if (llIdx >= 0 && llIdx !== tIdx) {
+      var lx = x(llIdx), ly = y(conc.later_low.close);
+      s += '<circle cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="3.8" fill="none" stroke="var(--red)" stroke-width="1.8"/>';
+      s += '<text x="' + lx.toFixed(1) + '" y="' + (ly + 17).toFixed(1) + '" text-anchor="middle" font-size="11" font-weight="700" fill="var(--red)">最安値</text>';
+    }
 
     pts.forEach(function (p, i) { if (newsByWeek[p.week]) s += '<circle cx="' + x(i).toFixed(1) + '" cy="' + y(p.close).toFixed(1) + '" r="4.5" fill="var(--red)" stroke="var(--surface)" stroke-width="1.6"/>'; });
     s += '<circle class="slv-hoverdot" r="4.5" fill="var(--navy)" stroke="var(--surface)" stroke-width="1.6" style="display:none"/>';

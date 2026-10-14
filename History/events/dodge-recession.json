@@ -2,7 +2,7 @@
   "id": "dodge-recession",
   "title": "ドッジ不況",
   "source": "real",
-  "generated_at": "2026-10-13T16:50:08.397Z",
+  "generated_at": "2026-10-14T00:38:31.078Z",
   "granularity": "week",
   "window": [
     "1949-05-17",
@@ -36,6 +36,7 @@
     "recovered": true,
     "recovery_date": "1952-01-14",
     "months_to_recover": 32,
+    "later_low": null,
     "as_of": "2026-10-09"
   },
   "points": [

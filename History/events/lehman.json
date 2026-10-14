@@ -2,7 +2,7 @@
   "id": "lehman",
   "title": "リーマンショック",
   "source": "real",
-  "generated_at": "2026-10-13T16:50:08.461Z",
+  "generated_at": "2026-10-14T00:38:31.151Z",
   "granularity": "week",
   "window": [
     "2008-08-18",
@@ -36,6 +36,11 @@
     "recovered": true,
     "recovery_date": "2015-02-19",
     "months_to_recover": 91,
+    "later_low": {
+      "date": "2009-03-10",
+      "close": 7054.98,
+      "drawdown": -0.6137
+    },
     "as_of": "2026-10-09"
   },
   "points": [
