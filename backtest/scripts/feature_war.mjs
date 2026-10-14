@@ -196,6 +196,7 @@ export function warFeatureHtml({ book, war, siteUrl }) {
   <script src="/newsletter-config.js" defer></script>
   <script type="application/ld+json">${JSON.stringify(article)}</script>
   <script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>
+  <script src="/analytics-config.js"></script>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-06EHKG0SQ2"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-06EHKG0SQ2');</script>
@@ -258,7 +259,6 @@ export function warFeatureHtml({ book, war, siteUrl }) {
     @media (max-width:560px){ .tile .v{font-size:26px;} .grid{grid-template-columns:1fr;} }
   </style>
   <!-- Vercel Web Analytics -->
-  <script defer src="/analytics-config.js"></script>
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>

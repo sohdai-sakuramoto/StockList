@@ -188,11 +188,11 @@ function pageHtml(cfg, series) {
   <script type="application/ld+json">${JSON.stringify(jsonld)}</script>
   <script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>
   ${faqLd ? `<script type="application/ld+json">${JSON.stringify(faqLd)}</script>` : ""}
+  <script src="/analytics-config.js"></script>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-06EHKG0SQ2"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-06EHKG0SQ2');</script>
   <!-- Vercel Web Analytics -->
-  <script defer src="/analytics-config.js"></script>
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
@@ -325,6 +325,7 @@ function timelineHtml(items, info) {
   <script src="/crash-mode.js" data-state="/state.json" defer></script>
   <script src="/newsletter-config.js" defer></script>
   <script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>
+  <script src="/analytics-config.js"></script>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-06EHKG0SQ2"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-06EHKG0SQ2');</script>
@@ -390,7 +391,6 @@ function timelineHtml(items, info) {
     @media (max-width:560px){ .tl-item{grid-template-columns:54px 16px 1fr;gap:0 10px;} .tl-year{font-size:13.5px;} .tl-year small{font-size:10px;letter-spacing:-.04em;white-space:nowrap;} .tl-title{font-size:15.5px;} }
   </style>
   <!-- Vercel Web Analytics -->
-  <script defer src="/analytics-config.js"></script>
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
