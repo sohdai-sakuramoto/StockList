@@ -23,16 +23,16 @@
     { "source": "/History/EventViewer.html", "destination": "/events/ishiba-shock", "statusCode": 301, "has": [{ "type": "query", "key": "e", "value": "ishiba" }] },
     { "source": "/History/EventViewer", "destination": "/events/ishiba-shock", "statusCode": 301, "has": [{ "type": "query", "key": "e", "value": "ishiba" }] },
     { "source": "/History/EventViewer", "destination": "/history", "statusCode": 301 },
-    { "source": "/History/events/:slug", "destination": "/events/:slug", "statusCode": 301 }
+    { "source": "/History/events/:slug", "destination": "/events/:slug", "statusCode": 301 },
+    { "source": "/History/Covid19/:path*", "destination": "/events/covid-shock", "statusCode": 301 },
+    { "source": "/History/GreatEastJapanEarthquake/:path*", "destination": "/events/great-east-japan-earthquake", "statusCode": 301 },
+    { "source": "/History/FinancialCrisis2008/:path*", "destination": "/events/lehman-shock", "statusCode": 301 }
   ],
   "headers": [
     { "source": "/state.json", "headers": [{ "key": "Cache-Control", "value": "no-cache, max-age=0, must-revalidate" }] },
     { "source": "/events/(.*)", "headers": [{ "key": "Cache-Control", "value": "no-cache, max-age=0, must-revalidate" }] },
     { "source": "/ContactForm", "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }] },
     { "source": "/News/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }] },
-    { "source": "/History/Covid19/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }] },
-    { "source": "/History/GreatEastJapanEarthquake/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }] },
-    { "source": "/History/FinancialCrisis2008/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }] },
     { "source": "/History/history_test", "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }] }
   ]
 }

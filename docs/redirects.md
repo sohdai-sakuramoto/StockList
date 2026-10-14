@@ -15,6 +15,9 @@
 | `/History/events/<その他>` | `/events/<その他>` | 念のための包括ルール |
 | `/History/EventViewer?e=lehman` 等（`.html` 付きも） | `/events/<新スラッグ>` | 旧イベントビューア。以前はJSリダイレクトのみだった |
 | `/History/EventViewer`（`e` なし） | `/history` | |
+| `/History/Covid19/*`（2021年の月別ページ9件） | `/events/covid-shock` | 旧コンテンツ。2026-10 に noindex から 301 へ切り替え |
+| `/History/GreatEastJapanEarthquake/*`（ANA・日本郵船など6件） | `/events/great-east-japan-earthquake` | 同上 |
+| `/History/FinancialCrisis2008/*` | `/events/lehman-shock` | 同上 |
 
 ## 転送の段数とステータスコード
 
@@ -37,6 +40,7 @@
 /History/EventViewer.html?e=lehman         308 → /History/EventViewer?e=lehman  301 → /events/lehman-shock?e=lehman
 /history/                                  308 → /history
 /start/                                    308 → /start
+/History/Covid19/2020-1                    301 → /events/covid-shock
 /events/lehman-shock                       200（転送なし）
 /history                                   200（転送なし）
 ```
