@@ -2,7 +2,7 @@
   "id": "reiwa-black-monday",
   "title": "令和のブラックマンデー",
   "source": "real",
-  "generated_at": "2026-10-14T00:38:31.165Z",
+  "generated_at": "2026-10-14T14:25:47.841Z",
   "granularity": "week",
   "window": [
     "2024-07-12",
@@ -41,7 +41,7 @@
       "close": 31136.58,
       "drawdown": -0.2626
     },
-    "as_of": "2026-10-09"
+    "as_of": "2026-10-14"
   },
   "points": [
     {

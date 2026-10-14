@@ -2,7 +2,7 @@
   "id": "securities-recession",
   "title": "証券不況",
   "source": "real",
-  "generated_at": "2026-10-14T00:38:31.091Z",
+  "generated_at": "2026-10-14T14:25:47.779Z",
   "granularity": "week",
   "window": [
     "1961-07-19",
@@ -37,7 +37,7 @@
     "recovery_date": "1968-09-30",
     "months_to_recover": 86,
     "later_low": null,
-    "as_of": "2026-10-09"
+    "as_of": "2026-10-14"
   },
   "points": [
     {
