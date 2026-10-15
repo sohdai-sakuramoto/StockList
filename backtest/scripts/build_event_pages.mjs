@@ -16,6 +16,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { warFeatureHtml } from "./feature_war.mjs";
+import { selectCompare, selectRelated, compareHtml, nextReadHtml } from "./event_nav.mjs";
 
 const SITE_URL = "https://www.stocklist.jp"; // ← 独自ドメイン導入時に変更
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
@@ -23,6 +24,8 @@ const REPO_ROOT = path.resolve(SCRIPT_DIR, "..", "..");
 const DATA_DIR = path.join(REPO_ROOT, "History", "events"); // 入力データ(events.json / <id>.json)の置き場
 const OUT_DIR = path.join(REPO_ROOT, "events");             // 出力: /events/<slug>.html (クリーンURL /events/<slug>)
 const EVENTS_JSON = path.join(DATA_DIR, "events.json");
+// 回遊導線(比較ブロック・次に読む)の選定ルール
+const NAV_JSON = path.join(DATA_DIR, "navigation.json");
 // 書籍から転記した企業別の年別株価(株価20年 等)。イベントの cfg.companies から参照する
 const BOOK_DIR = path.join(DATA_DIR, "books");
 function loadBook(name) {
@@ -228,7 +231,9 @@ ${companiesHtml}
       <h2>当時の主なニュース</h2>
       <ul>${newsHtml}</ul>
     </noscript>
+${compareHtml(cfg.id, selectCompare(cfg.id, EVS, NAV, cfg.compare))}
 ${faqHtml}
+${nextReadHtml(selectRelated(cfg.id, EVS, NAV, cfg.related), EVS.length)}
     <aside class="slv-cta">
       <p class="slv-cta-lead">暴落は、歴史的にはいつか戻ってきました。</p>
       <p class="slv-cta-sub">狼狽売りより、次の下落に備えて少額から。長期・積立の第一歩は口座づくりから。</p>
@@ -257,6 +262,18 @@ ${faqHtml}
     (function () {
       var D = JSON.parse(document.getElementById("slv-data").textContent);
       StockListViewer.render(document.getElementById("slv-root"), D.cfg, D.series);
+      // 比較ブロック: スマホ(640px以下)はチャートの直後・ニュースの前へ移す(PCはニュースの後のまま)
+      var cmp = document.querySelector(".slv-cmp"), grid = document.querySelector("#slv-root .slv-grid");
+      if (cmp && grid && grid.children.length > 1 && window.matchMedia) {
+        var home = document.createComment("slv-cmp"), mq = window.matchMedia("(max-width: 640px)");
+        cmp.parentNode.insertBefore(home, cmp);
+        var place = function () {
+          if (mq.matches) grid.insertBefore(cmp, grid.children[1]);
+          else home.parentNode.insertBefore(cmp, home.nextSibling);
+        };
+        place();
+        if (mq.addEventListener) mq.addEventListener("change", place); else if (mq.addListener) mq.addListener(place);
+      }
     })();
   </script>
 </body>
@@ -472,8 +489,18 @@ function timelineHtml(items, info) {
 }
 
 let ALL = [];
+let NAV = {};  // navigation.json
+let EVS = [];  // 回遊導線用のイベント要約(結論データのあるイベントのみ。数値は conclusion から)
 function main() {
   ALL = JSON.parse(fs.readFileSync(EVENTS_JSON, "utf8"));
+  NAV = fs.existsSync(NAV_JSON) ? JSON.parse(fs.readFileSync(NAV_JSON, "utf8")) : {};
+  EVS = [];
+  for (const cfg of ALL) {
+    const p = path.join(DATA_DIR, `${cfg.id}.json`);
+    const c = fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, "utf8")).conclusion : null;
+    if (!c) { console.warn(`[warn] ${cfg.id}: 結論データが無いため比較・次に読むの対象外`); continue; }
+    EVS.push({ id: cfg.id, slug: cfg.slug, title: cfg.title, date: cfg.date, drawdown: c.drawdown, recover_label: recoverStr(c) });
+  }
   const urls = [
     { loc: `${SITE_URL}/`, pri: "1.0" },
     { loc: `${SITE_URL}/start`, pri: "0.9" },

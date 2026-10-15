@@ -1,0 +1,14 @@
+{
+  "_comment": "イベントページの回遊導線の設定。build_event_pages.mjs が読む。表示する数値はここに書かず、各イベントの結論データ(<id>.json の conclusion)から取る。イベント個別に変えたい場合は events.json の各イベントに compare / related (id の配列)を書くと優先される。",
+  "compare": {
+    "_comment": "本文中盤の比較ブロック。default の各イベント+いま見ているイベントを、最大下落率の深い順に並べる(最大 max 行)。",
+    "default": ["bubble-collapse", "lehman", "covid", "reiwa-black-monday", "black-monday-1987"],
+    "max": 6
+  },
+  "next": {
+    "_comment": "ページ末尾の「次に読む」。featured(記憶に新しいイベント・並び順が優先順)から featuredSlots 件、残りから下落率が最も近いイベントを similarSlots 件。",
+    "featured": ["ishiba", "covid", "reiwa-black-monday"],
+    "featuredSlots": 2,
+    "similarSlots": 1
+  }
+}
