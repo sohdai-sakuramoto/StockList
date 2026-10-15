@@ -90,3 +90,21 @@ export function nextReadHtml(related, totalEvents) {
       <a class="slv-next-all" href="/history">相場の歴史をすべて見る（全${totalEvents}件）<span aria-hidden="true">→</span></a>
     </section>`;
 }
+
+// X のロゴ(公式ウィジェットは使わず、インラインSVGのみ。外部スクリプトなし)
+const X_LOGO = '<svg class="x-ic" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>';
+
+// 読点の後で区切った語句を inline-block にし、語句の途中(「X」と「で」の間など)で改行しないようにする
+const phrases = (t) => String(t || "").split(/(?<=、)/).map((p) => `<span class="ph">${esc(p)}</span>`).join("");
+
+/** Xフォロー導線(次に読むの直後)。navigation.json の follow から生成 */
+export function followHtml(follow, cls = "slv-follow") {
+  if (!follow || !follow.handle) return "";
+  const url = `https://x.com/${encodeURIComponent(follow.handle)}`;
+  return `
+    <aside class="${cls}" aria-label="StockList の X アカウント">
+      ${X_LOGO}
+      <div class="txt"><p class="lead">${phrases(follow.lead)}</p><p class="sub">@${esc(follow.handle)}</p></div>
+      <a class="btn" href="${url}" target="_blank" rel="noopener">${esc(follow.button || "フォローする")}</a>
+    </aside>`;
+}

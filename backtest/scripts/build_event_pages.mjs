@@ -16,7 +16,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { warFeatureHtml } from "./feature_war.mjs";
-import { selectCompare, selectRelated, compareHtml, nextReadHtml } from "./event_nav.mjs";
+import { selectCompare, selectRelated, compareHtml, nextReadHtml, followHtml } from "./event_nav.mjs";
 
 const SITE_URL = "https://www.stocklist.jp"; // ← 独自ドメイン導入時に変更
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
@@ -234,6 +234,7 @@ ${companiesHtml}
 ${compareHtml(cfg.id, selectCompare(cfg.id, EVS, NAV, cfg.compare))}
 ${faqHtml}
 ${nextReadHtml(selectRelated(cfg.id, EVS, NAV, cfg.related), EVS.length)}
+${followHtml(NAV.follow)}
     <aside class="slv-cta">
       <p class="slv-cta-lead">暴落は、歴史的にはいつか戻ってきました。</p>
       <p class="slv-cta-sub">狼狽売りより、次の下落に備えて少額から。長期・積立の第一歩は口座づくりから。</p>

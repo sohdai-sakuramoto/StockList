@@ -10,5 +10,11 @@
     "featured": ["ishiba", "covid", "reiwa-black-monday"],
     "featuredSlots": 2,
     "similarSlots": 1
+  },
+  "follow": {
+    "_comment": "「次に読む」の直後のXフォロー導線。外部スクリプトは読み込まず、通常のリンク(新しいタブ)で開く。",
+    "handle": "stock_list25459",
+    "lead": "暴落と急騰の記録を、Xで毎日発信しています",
+    "button": "Xでフォローする"
   }
 }
