@@ -7,6 +7,7 @@
  *   判定は window.SL_ANALYTICS.isExcluded() で他のスクリプトからも参照できる。除外に該当する場合:
  *   - Vercel Web Analytics … beforeSend で null を返し送信しない
  *   - GA4(Google アナリティクス) … gtag.js 自体を読み込まない
+ *   - X ウェブサイトタグ(リターゲティング用) … ベースコード・イベントコードとも読み込まない
  *
  * 有効化 / 解除:
  *   - URL に ?va-disable=1 を付けて開く → 除外を有効化(スマホの Safari でも可)
@@ -75,6 +76,25 @@
     s.async = true;
     s.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(CFG.gaId);
     document.head.appendChild(s);
+  }
+
+  // X ウェブサイトタグ: ページの表示に影響しないよう、load 後の空き時間に読み込む。
+  // ベースコード(uwt.js)の読み込み完了後に、ページビュー毎のイベントコードを送る。
+  // (ページ遷移はすべて通常の画面読み込みのため、1ページの読み込み=1ページビュー)
+  if (!isExcluded() && CFG.xPixelId) {
+    var loadX = function () {
+      if (isExcluded()) return;
+      var twq = window.twq = window.twq || function () { twq.exe ? twq.exe.apply(twq, arguments) : twq.queue.push(arguments); };
+      twq.version = "1.1"; twq.queue = twq.queue || [];
+      var x = document.createElement("script");
+      x.async = true;
+      x.src = "https://static.ads-twitter.com/uwt.js";
+      if (CFG.xEventId) x.onload = function () { window.twq("event", CFG.xEventId, {}); };
+      document.head.appendChild(x);
+      window.twq("config", CFG.xPixelId);
+    };
+    var idle = function () { (window.requestIdleCallback || function (f) { setTimeout(f, 1); })(loadX, { timeout: 3000 }); };
+    if (document.readyState === "complete") idle(); else window.addEventListener("load", idle, { once: true });
   }
 
   // 切り替えた時だけ、画面下に数秒だけ結果を表示(スマホで確認しやすいように)
