@@ -296,6 +296,11 @@ test("site-config: 環境変数の計測IDを形式チェックして埋め込�
   assert.equal(buildConfig({}).cfg.gaId, null);
   assert.equal(buildConfig({ GA_MEASUREMENT_ID: 'G-X";alert(1)//' }).cfg.gaId, null, "スクリプト注入になる値は拒否");
   assert.match(configJs({ gaId: "G-ABC123" }), /^\/\*[^\n]*\*\/\nwindow\.SL_CONFIG = \{"gaId":"G-ABC123"\};\n$/);
+  const x = buildConfig({ X_PIXEL_ID: "rh6rz", X_PIXEL_EVENT_ID: "tw-rh6rz-rhaa7" }).cfg;
+  assert.equal(x.xPixelId, "rh6rz");
+  assert.equal(x.xEventId, "tw-rh6rz-rhaa7");
+  assert.equal(buildConfig({ X_PIXEL_ID: "rh6rz');alert(1)//" }).cfg.xPixelId, null);
+  assert.equal(buildConfig({ X_PIXEL_EVENT_ID: "rhaa7" }).cfg.xEventId, null, "tw-<ピクセルID>-<イベント> 形式のみ");
 });
 
 test("計測IDはHTMLに直書きしない(site-config.js 経由で環境変数から読む)", () => {

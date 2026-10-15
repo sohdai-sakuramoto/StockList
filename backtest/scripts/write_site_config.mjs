@@ -8,6 +8,8 @@
  *
  *   環境変数                 例                 用途
  *   GA_MEASUREMENT_ID        G-XXXXXXXXXX       GA4 の測定ID
+ *   X_PIXEL_ID               abc12              X(Twitter)ウェブサイトタグのピクセルID(twq('config', …))
+ *   X_PIXEL_EVENT_ID         tw-abc12-def34     X のイベントコード(ページビュー毎に twq('event', …))
  *
  * 値の形式が不正・未設定の項目は null にし、その計測は読み込まない(ビルドは失敗させない)。
  * 実行: GA_MEASUREMENT_ID=G-XXXX node backtest/scripts/write_site_config.mjs
@@ -22,6 +24,8 @@ const OUT = path.join(ROOT, "site-config.js");
 // 環境変数名 → 設定キーと許可する形式(HTML/JSに埋め込むため英数字等に限定)
 export const ENV_SPEC = [
   { env: "GA_MEASUREMENT_ID", key: "gaId", re: /^G-[A-Z0-9]{4,20}$/ },
+  { env: "X_PIXEL_ID", key: "xPixelId", re: /^[a-z0-9]{3,20}$/ },
+  { env: "X_PIXEL_EVENT_ID", key: "xEventId", re: /^tw-[a-z0-9]{3,20}-[a-z0-9]{3,20}$/ },
 ];
 
 export function buildConfig(env) {
