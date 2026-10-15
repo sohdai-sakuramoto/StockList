@@ -21,6 +21,24 @@
     th, td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
     th { background:var(--surface); width:120px; color:var(--ink); }
     td { color:var(--ink-2); }
+    /* 外部送信の一覧(スマホはサービスごとのカードに組み替え) */
+    .xt-wrap { margin:10px 0; }
+    .xt { font-size:13.5px; line-height:1.6; }
+    .xt th, .xt td { padding:10px 12px; }
+    .xt thead th { background:var(--plane); font-size:12.5px; white-space:nowrap; width:auto; }
+    .xt tbody th { width:22%; }
+    .xt small { color:var(--muted); font-weight:400; }
+    @media (max-width:640px) {
+      .xt thead { display:none; }
+      .xt, .xt tbody, .xt tr, .xt th, .xt td { display:block; width:auto; }
+      .xt tr { border:1px solid var(--line); border-radius:10px; margin:0 0 12px; overflow:hidden; background:var(--surface); }
+      .xt th, .xt td { border:0; border-top:1px solid var(--line); }
+      .xt tbody th { width:auto; background:var(--plane); border-top:0; }
+      .xt td::before { display:block; font-size:11.5px; font-weight:700; color:var(--muted); }
+      .xt td:nth-of-type(1)::before { content:"送信される情報"; }
+      .xt td:nth-of-type(2)::before { content:"利用目的"; }
+      .xt td:nth-of-type(3)::before { content:"詳細・停止方法"; }
+    }
   </style>
   <!-- Vercel Web Analytics -->
   <script defer src="/site-config.js"></script>
@@ -31,28 +49,46 @@
   <div class="topbar"><a href="/">← StockList トップ</a></div>
   <div class="wrap">
     <h1>プライバシーポリシー・運営者情報</h1>
-    <p class="upd">最終更新: 2026-07-09</p>
+    <p class="upd">最終更新: 2026-10-15</p>
 
     <h2>運営者情報</h2>
     <table>
       <tr><th>サイト名</th><td>StockList</td></tr>
       <tr><th>運営者</th><td>sohdai-sakuramoto(個人運営)</td></tr>
       <tr><th>お問い合わせ</th><td><a href="/ContactForm.html">お問い合わせフォーム</a></td></tr>
-      <tr><th>運営形態</th><td>個人によるメディア運営(教育・情報提供を目的とした非営利〜副業規模の個人サイト)</td></tr>
+      <tr><th>運営形態</th><td>個人によるメディア運営(日経平均の歴史的な暴落・急騰を記録・解説する情報サイト。広告・アフィリエイトによる収益があります)</td></tr>
     </table>
 
     <h2>個人情報の取り扱いについて</h2>
     <p>当サイトでは、お問い合わせフォーム(Googleフォーム)を通じて、お名前・メールアドレス等の情報をご入力いただく場合があります。これらの情報は、お問い合わせへの対応以外の目的には使用しません。第三者への提供は、法令に基づく場合を除き行いません。</p>
 
-    <h2>アクセス解析ツール(Googleアナリティクス)について</h2>
-    <p>当サイトは、アクセス状況を把握するために Google アナリティクスを利用しています。Google アナリティクスは、Cookie を使用してトラフィックデータを収集します。このトラフィックデータは匿名で収集されており、個人を特定するものではありません。</p>
-    <p>この機能は Cookie を無効にすることで収集を拒否することが可能です。詳細は
-      <a href="https://policies.google.com/technologies/partner-sites?hl=ja" target="_blank" rel="noopener noreferrer">Google のポリシーと規約</a>
-      をご確認ください。
-    </p>
+
+    <h2 id="external-transmission">外部送信について（利用者情報の外部送信）</h2>
+    <p>当サイトでは、サイトの利用状況の把握と広告の効果測定のため、以下の外部サービスを利用しています。当サイトのページを表示すると、利用者の端末から各サービスの提供事業者へ、次の情報が送信されます。</p>
+    <div class="xt-wrap"><table class="xt">
+    <thead><tr><th scope="col">サービス（送信先）</th><th scope="col">送信される情報</th><th scope="col">利用目的</th><th scope="col">詳細・停止方法</th></tr></thead>
+    <tbody>
+    <tr><th scope="row">Vercel Web Analytics<br><small>Vercel Inc.（米国）</small></th>
+    <td>閲覧したページのURL、参照元のURL、ブラウザ・OS・端末の種類、IPアドレスから推定した国・地域<br><small>※Cookie は使用しません</small></td>
+    <td>ページごとの閲覧数や流入元など、アクセス状況を把握してサイトを改善するため</td>
+    <td><a target="_blank" rel="noopener noreferrer" href="https://vercel.com/docs/analytics/privacy-policy">Vercel のプライバシーポリシー</a></td></tr>
+    <tr><th scope="row">Google アナリティクス<br><small>Google LLC（米国）</small></th>
+    <td>閲覧したページのURL（広告のパラメータを含む）、参照元のURL、閲覧日時・滞在時間・スクロールやクリックなどの操作、ブラウザ・OS・端末の種類、IPアドレスから推定したおおよその地域、Cookie に保存する識別子</td>
+    <td>新しい訪問者と再訪問者の区別、ページごとの閲覧状況や滞在時間の分析、広告から訪れた方の閲覧状況の把握によるサイトの改善のため</td>
+    <td><a target="_blank" rel="noopener noreferrer" href="https://policies.google.com/technologies/partner-sites?hl=ja">Google のポリシー</a><br><a target="_blank" rel="noopener noreferrer" href="https://tools.google.com/dlpage/gaoptout?hl=ja">オプトアウト アドオン</a></td></tr>
+    <tr><th scope="row">X ウェブサイトタグ<br><small>X Corp.（米国）</small></th>
+    <td>閲覧したページのURL、参照元のURL、閲覧日時、ページを閲覧したという情報、ブラウザ・OS・端末の種類、IPアドレス、Cookie 等に保存する識別子</td>
+    <td>X（旧Twitter）に出稿した広告の効果を測定するため、および当サイトを訪れた方に X 上で当サイトの広告を表示するため</td>
+    <td><a target="_blank" rel="noopener noreferrer" href="https://x.com/ja/privacy">X のプライバシーポリシー</a><br>X の設定「プライバシーと安全 &gt; 広告の環境設定」でパーソナライズ広告を停止できます</td></tr>
+    <tr><th scope="row">Google フォーム<br><small>Google LLC（米国）</small><br><small>お問い合わせページのみ</small></th>
+    <td>フォームに入力した内容、ブラウザ・端末の種類、IPアドレス、Cookie</td>
+    <td>お問い合わせを受け付け、対応するため</td>
+    <td><a target="_blank" rel="noopener noreferrer" href="https://policies.google.com/privacy?hl=ja">Google のプライバシーポリシー</a></td></tr>
+    </tbody></table></div>
+    <p>いずれの送信も、ブラウザの設定で Cookie を無効にする、上記の停止方法を利用する、などの方法で止めることができます（一部の機能に影響する場合があります）。送信先はいずれも米国の事業者です。米国の個人情報保護制度については、<a target="_blank" rel="noopener noreferrer" href="https://www.ppc.go.jp/personalinfo/legal/kaiseihogohou/#gaikoku">個人情報保護委員会の資料（外国における個人情報の保護に関する制度）</a>をご覧ください。</p>
 
     <h2>アフィリエイトプログラムについて</h2>
-    <p>当サイトは、A8.net・アクセストレード等のアフィリエイトプログラムに参加しており、成果報酬型広告を掲載しています。広告の配信・効果測定のために、各ASP(アフィリエイトサービスプロバイダ)が独自に Cookie を使用する場合があります。詳しくは各ASPのプライバシーポリシーをご確認ください。アフィリエイト表記・免責事項の詳細は<a href="/disclosure">こちら</a>をご覧ください。</p>
+    <p>当サイトは、バリューコマース・アクセストレード等のアフィリエイトプログラムに参加しており、成果報酬型広告を掲載しています。広告の配信・効果測定のために、各ASP(アフィリエイトサービスプロバイダ)が独自に Cookie を使用する場合があります。詳しくは各ASPのプライバシーポリシーをご確認ください。アフィリエイト表記・免責事項の詳細は<a href="/disclosure">こちら</a>をご覧ください。</p>
 
     <h2>本ポリシーの変更について</h2>
     <p>当サイトは、個人情報に関して適用される日本の法令を遵守するとともに、本ポリシーの内容を必要に応じて予告なく変更することがあります。変更後のプライバシーポリシーは、本ページに掲載した時点から効力を生じるものとします。</p>

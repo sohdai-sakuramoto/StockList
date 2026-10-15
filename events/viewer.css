@@ -227,6 +227,9 @@ a { color: var(--accent); }
   .slv-follow .btn { width: 100%; justify-content: center; min-height: 44px; }
 }
 
+/* 規約・ポリシーへのリンク(全ページ下部) */
+.sl-legal { display:flex; flex-wrap:wrap; justify-content:center; gap:4px 18px; margin:14px 0 0; padding-top:14px; border-top:1px solid var(--line); font-size:12.5px; } .sl-legal a { color:var(--ink-2); text-decoration:none; padding:6px 0; } .sl-legal a:hover { text-decoration:underline; }
+
 /* 主な企業の株価(書籍データ・年間の高値〜安値) */
 .slv-co { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin: 18px 0 0; }
 .slv-co > h2 { font-size: 15px; margin: 0 0 4px; }
