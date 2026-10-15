@@ -267,3 +267,25 @@ test("og/events/*.png: OGP画像は 1200×630 のPNGで、対応するイベン�
     assert.ok(slugs.has(f.replace(/\.png$/, "")), `${f} に対応するイベントが events.json にない`);
   }
 });
+
+test("event_nav: 比較ブロックは既定セット+現在のイベントを深い順に、上限超過時は下落率が近い既定イベントと入れ替える", async () => {
+  const { selectCompare } = await import("./scripts/event_nav.mjs");
+  const ev = (id, dd, date) => ({ id, slug: id, title: id, date, drawdown: dd, recover_label: "" });
+  const events = [ev("a", -0.6, "1990-01-01"), ev("b", -0.3, "2020-01-01"), ev("c", -0.22, "1987-01-01"), ev("d", -0.25, "2024-01-01")];
+  assert.deepEqual(selectCompare("d", events, { compare: { default: ["a", "b", "c"], max: 6 } }).map((e) => e.id), ["a", "b", "d", "c"]);
+  assert.deepEqual(selectCompare("b", events, { compare: { default: ["a", "b", "c"] } }).map((e) => e.id), ["a", "b", "c"], "既定に含まれていれば追加しない");
+  assert.deepEqual(selectCompare("d", events, { compare: { default: ["a", "b", "c"], max: 3 } }).map((e) => e.id), ["a", "b", "d"], "上限3: -25%に最も近い c(-22%) と入れ替え");
+  assert.deepEqual(selectCompare("d", events, { compare: { default: ["a"] } }, ["c"]).map((e) => e.id), ["d", "c"], "イベント個別の compare が優先");
+});
+
+test("event_nav: 次に読むは featured から2件+下落率が近いイベント1件(現在・featured を除く)", async () => {
+  const { selectRelated } = await import("./scripts/event_nav.mjs");
+  const ev = (id, dd, date) => ({ id, slug: id, title: id, date, drawdown: dd, recover_label: "" });
+  const events = [ev("old1", -0.5, "1950-01-01"), ev("old2", -0.22, "1987-01-01"), ev("f1", -0.16, "2024-09-01"), ev("f2", -0.31, "2020-02-01"), ev("f3", -0.25, "2024-08-01")];
+  const nav = { next: { featured: ["f1", "f2", "f3"], featuredSlots: 2, similarSlots: 1 } };
+  const ids = (cur, o) => selectRelated(cur, events, nav, o).map((r) => r.ev.id);
+  assert.deepEqual(ids("old1"), ["f1", "f2", "old2"]);
+  assert.deepEqual(ids("f1"), ["f2", "f3", "old2"], "自分自身は featured から除く");
+  assert.deepEqual(ids("f3"), ["f1", "f2", "old2"]);
+  assert.deepEqual(ids("old1", ["f3", "old1"]), ["f3"], "イベント個別の related が優先(自分は除く)");
+});
