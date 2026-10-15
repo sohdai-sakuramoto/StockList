@@ -196,10 +196,8 @@ export function warFeatureHtml({ book, war, siteUrl }) {
   <script src="/newsletter-config.js" defer></script>
   <script type="application/ld+json">${JSON.stringify(article)}</script>
   <script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>
-  <script src="/analytics-config.js"></script>
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-06EHKG0SQ2"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-06EHKG0SQ2');</script>
+  <script defer src="/site-config.js"></script>
+  <script defer src="/analytics-config.js"></script>
   <style>
     :root{ --navy:#1b2538; --navy-2:#243149; --red:#da3c41; --good:#1a7f4b; --ink:#16202e; --ink-2:#56606e; --muted:#8a929e;
       --line:#e7e9ee; --surface:#fff; --plane:#f4f6f9; --accent:#2f6fd0; --series:#2f6fd0; --band:#f1f3f7;

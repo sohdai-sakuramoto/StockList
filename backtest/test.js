@@ -289,3 +289,22 @@ test("event_nav: 次に読むは featured から2件+下落率が近いイベン
   assert.deepEqual(ids("f3"), ["f1", "f2", "old2"]);
   assert.deepEqual(ids("old1", ["f3", "old1"]), ["f3"], "イベント個別の related が優先(自分は除く)");
 });
+
+test("site-config: 環境変数の計測IDを形式チェックして埋め込み、不正・未設定は null", async () => {
+  const { buildConfig, configJs } = await import("./scripts/write_site_config.mjs");
+  assert.deepEqual(buildConfig({ GA_MEASUREMENT_ID: "G-T0G5R1TXTF" }).cfg.gaId, "G-T0G5R1TXTF");
+  assert.equal(buildConfig({}).cfg.gaId, null);
+  assert.equal(buildConfig({ GA_MEASUREMENT_ID: 'G-X";alert(1)//' }).cfg.gaId, null, "スクリプト注入になる値は拒否");
+  assert.match(configJs({ gaId: "G-ABC123" }), /^\/\*[^\n]*\*\/\nwindow\.SL_CONFIG = \{"gaId":"G-ABC123"\};\n$/);
+});
+
+test("計測IDはHTMLに直書きしない(site-config.js 経由で環境変数から読む)", () => {
+  const ROOT = path.resolve(SCRIPT_DIR, "..");
+  const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) =>
+    e.name.startsWith(".") || e.name === "node_modules" ? [] : e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]);
+  const files = walk(ROOT).filter((f) => /\.(html|mjs)$/.test(f) && !f.includes(`${path.sep}backtest${path.sep}test`));
+  for (const f of files) {
+    const s = fs.readFileSync(f, "utf8");
+    assert.ok(!/googletagmanager\.com\/gtag\/js\?id=G-/.test(s), `${path.relative(ROOT, f)} に GA の測定IDが直書きされている`);
+  }
+});

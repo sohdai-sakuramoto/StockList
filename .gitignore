@@ -1,0 +1,2 @@
+# Vercel のビルドで環境変数から生成する計測設定(backtest/scripts/write_site_config.mjs)
+/site-config.js
