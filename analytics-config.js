@@ -97,6 +97,25 @@
     if (document.readyState === "complete") idle(); else window.addEventListener("load", idle, { once: true });
   }
 
+  // クリック計測(GA4): 全ページ共通。後から差し込まれる要素(急落バナー等)も拾えるよう document で受ける。
+  //   share              … 「今の相場」ページの Xシェアボタン(#share-x)。シミュレーターのシェアは simulate_share で別計測
+  //   x_follow           … X のアカウントへのリンク(シェア用の /intent/ は除く)
+  //   crash_banner_click … 急落バナーの「過去の暴落と比べる →」
+  function gaEvent(name, params) {
+    try { if (typeof window.gtag === "function") window.gtag("event", name, params); } catch (e) { /* 計測失敗は無視 */ }
+  }
+  document.addEventListener("click", function (ev) {
+    var a = ev.target && ev.target.closest ? ev.target.closest("a[href]") : null;
+    if (!a) return;
+    var page = location.pathname;
+    if (a.id === "share-x") { gaEvent("share", { method: "x", content_type: "page", item_id: page, page: page }); return; }
+    if (a.classList.contains("cm-more")) { gaEvent("crash_banner_click", { page: page }); return; }
+    var host = a.hostname.replace(/^www\./, "");
+    if ((host === "x.com" || host === "twitter.com") && a.pathname.indexOf("/intent/") !== 0) {
+      gaEvent("x_follow", { page: page });
+    }
+  }, true);
+
   // 切り替えた時だけ、画面下に数秒だけ結果を表示(スマホで確認しやすいように)
   if (toggled) {
     var show = function () {
