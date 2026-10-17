@@ -244,3 +244,49 @@ a { color: var(--accent); }
 .slv-co td.cap { text-align: left; font-size: 12px; color: var(--ink-2); white-space: normal; min-width: 120px; }
 .slv-co td.na { color: var(--muted); text-align: center; }
 .slv-co-note { color: var(--muted); font-size: 11.5px; margin: 10px 0 0; line-height: 1.6; }
+
+/* 投資シミュレーション(simulator.js) */
+.slv-sim { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px 16px; margin: 22px 0 0; }
+.slv-sim:empty { display: none; }
+.slv-sim h2 { font-size: 16px; margin: 0 0 2px; }
+.slv-sim-sub { color: var(--muted); font-size: 12.5px; margin: 0 0 14px; }
+.slv-sim-form { display: grid; gap: 14px; }
+.slv-sim-field .lbl { font-size: 12.5px; font-weight: 700; color: var(--ink-2); margin-bottom: 6px; }
+.slv-sim-amt, .slv-sim-buy { display: flex; flex-wrap: wrap; gap: 8px; }
+.slv-sim-amt button, .slv-sim-buy button {
+  font: inherit; cursor: pointer; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  border-radius: 10px; transition: .15s; min-height: 44px;
+}
+.slv-sim-amt button { padding: 8px 14px; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.slv-sim-buy button { padding: 8px 14px; text-align: left; display: flex; flex-direction: column; line-height: 1.4; }
+.slv-sim-buy button .t { font-size: 14px; font-weight: 700; }
+.slv-sim-buy button .d { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.slv-sim-amt button:hover, .slv-sim-buy button:hover { border-color: #c4ccd8; }
+.slv-sim-amt button[aria-pressed="true"], .slv-sim-buy button[aria-checked="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
+.slv-sim-buy button[aria-checked="true"] .d { color: #c9d3e6; }
+.slv-sim-amt .free { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--ink-2); }
+.slv-sim-amt .free input {
+  font: inherit; width: 110px; min-height: 44px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--surface); color: var(--ink); text-align: right; font-variant-numeric: tabular-nums;
+}
+.slv-sim-lead { margin: 18px 0 10px; font-size: 14.5px; }
+.slv-sim-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.slv-sim-res { background: var(--plane); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+.slv-sim-res .k { font-size: 12.5px; color: var(--ink-2); font-weight: 700; }
+.slv-sim-res .k span { margin-left: 6px; font-weight: 400; color: var(--muted); font-variant-numeric: tabular-nums; }
+.slv-sim-res .v { font-size: 26px; font-weight: 800; margin-top: 2px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.slv-sim-res .v.sm { font-size: 16px; }
+.slv-sim-res .g { font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink-2); }
+.slv-sim-res .g.pos { color: var(--accent); }
+.slv-sim-res .g.neg { color: var(--red); }
+.slv-sim-res .x { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.slv-sim-share { margin-top: 14px; }
+.slv-sim-x { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 16px; border-radius: 999px; background: var(--ink); color: var(--surface); font-weight: 700; font-size: 14px; text-decoration: none; }
+.slv-sim-x:hover { opacity: .88; }
+.slv-sim-note { color: var(--muted); font-size: 12px; margin: 12px 0 0; }
+@media (max-width: 640px) {
+  .slv-sim { padding: 14px 14px 12px; }
+  .slv-sim h2 { font-size: 15px; }
+  .slv-sim-buy button { flex: 1 1 100%; }
+  .slv-sim-res .v { font-size: 22px; }
+}
