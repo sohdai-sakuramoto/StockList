@@ -224,6 +224,7 @@ function pageHtml(cfg, series) {
 ${verdictHtml}
     </div>
     <div id="slv-root"></div>
+    <section class="slv-sim" id="slv-sim" aria-labelledby="slv-sim-h"></section>
 ${companiesHtml}
     <noscript>
       <h2>当時の主なニュース</h2>
@@ -258,10 +259,12 @@ ${followHtml(NAV.follow)}
 
   <script type="application/json" id="slv-data">${jsonForScript({ cfg, series })}</script>
   <script src="/events/viewer.js"></script>
+  <script src="/events/simulator.js"></script>
   <script>
     (function () {
       var D = JSON.parse(document.getElementById("slv-data").textContent);
       StockListViewer.render(document.getElementById("slv-root"), D.cfg, D.series);
+      StockListSimulator.render(document.getElementById("slv-sim"), D.cfg, D.series);
       // 比較ブロック: スマホ(640px以下)はチャートの直後・ニュースの前へ移す(PCはニュースの後のまま)
       var cmp = document.querySelector(".slv-cmp"), grid = document.querySelector("#slv-root .slv-grid");
       if (cmp && grid && grid.children.length > 1 && window.matchMedia) {

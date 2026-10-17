@@ -32,6 +32,8 @@ test("computeConclusion: 高値・底・回復・下落率が定義どおり算�
   assert.ok(Math.abs(c.drawdown - -0.4) < 1e-9, "最大下落率 = 60/100 - 1 = -0.4");
   assert.equal(c.recovered, true);
   assert.equal(c.recovery_date, "2020-08-03");
+  assert.equal(c.recovery_close, 101);
+  assert.deepEqual(c.event_day, { date: "2020-02-03", close: 88 }, "イベント日が休場なら直前の営業日");
 });
 
 test("computeConclusion: データ期間内に回復しなければ未回復", () => {
@@ -44,6 +46,7 @@ test("computeConclusion: データ期間内に回復しなければ未回復", (
   const c = computeConclusion(rows, { window: ["2020-02-01", "2020-05-01"], date: "2020-02-10" });
   assert.equal(c.recovered, false);
   assert.equal(c.recovery_date, null);
+  assert.equal(c.recovery_close, null);
   assert.equal(c.later_low, null, "底より安い値がなければ later_low は null");
 });
 
