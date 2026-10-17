@@ -15,6 +15,8 @@
   var NS = {};
   var PRESETS = [10, 100, 1000];   // 万円
   var DEFAULT_MAN = 100;
+  var MAX_MAN = 100000;
+  var SHARE_MAX = 115;   // シェア文の上限(文字)。X は全角1字=2カウントで上限280、URL(23)の分を残す
 
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function jpDate(d) { return Number(d.slice(0, 4)) + "年" + Number(d.slice(5, 7)) + "月" + Number(d.slice(8, 10)) + "日"; }
@@ -79,6 +81,12 @@
     var recClose = recoveryClose(c, series);
     var latest = null;   // { date, close } /state.json から非同期で取得
     var state = { buy: (opts.filter(function (o) { return o.key === "event"; })[0] || opts[0]).key, man: DEFAULT_MAN };
+    // シェアされたURL(?buy=&amt=)で開いたら、その条件で表示する
+    try {
+      var q = new URLSearchParams(location.search), qb = q.get("buy"), qm = Math.floor(Number(q.get("amt")));
+      if (opts.some(function (o) { return o.key === qb; })) state.buy = qb;
+      if (qm >= 1) state.man = Math.min(qm, MAX_MAN);
+    } catch (e) { /* 既定の条件で表示 */ }
 
     root.innerHTML =
       '<h2 id="slv-sim-h">もし、このとき日経平均に投資していたら？</h2>' +
@@ -87,7 +95,7 @@
         '<div class="slv-sim-field"><div class="lbl" id="slv-sim-amt-l">投資額</div>' +
           '<div class="slv-sim-amt" role="group" aria-labelledby="slv-sim-amt-l">' +
             PRESETS.map(function (m) { return '<button type="button" data-man="' + m + '">' + jpNum(m) + '万円</button>'; }).join("") +
-            '<label class="free"><input type="number" inputmode="numeric" min="1" max="100000" step="1" value="' + DEFAULT_MAN + '" aria-label="投資額(万円)" /><span>万円</span></label>' +
+            '<label class="free"><input type="number" inputmode="numeric" min="1" max="' + MAX_MAN + '" step="1" value="' + state.man + '" aria-label="投資額(万円)" /><span>万円</span></label>' +
           '</div></div>' +
         '<div class="slv-sim-field"><div class="lbl" id="slv-sim-buy-l">買ったタイミング</div>' +
           '<div class="slv-sim-buy" role="radiogroup" aria-labelledby="slv-sim-buy-l">' +
@@ -142,13 +150,23 @@
       html += '</div>';
       out.innerHTML = html;
 
-      // シェア文: 最新があれば最新、無ければ回復時点
-      var tail = latest
-        ? jpDate(latest.date) + "時点で" + yen(amount * latest.close / buy.close) + "（" + signedPct(latest.close / buy.close - 1) + "）"
-        : recVal != null ? "高値を回復した" + jpDate(c.recovery_date) + "時点で" + yen(recVal) : "";
-      var text = cfg.title + "の" + buy.label + "（" + jpDate(buy.date) + "）に日経平均へ" + yen(amount) + "投資していたら、" +
-        (worst ? "途中で" + yen(amount * worst.close / buy.close) + "まで減り、" : "") + tail + "になっていました。";
-      xLink.href = "https://x.com/intent/post?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(location.origin + location.pathname);
+      // シェア文: 値上がり率より「どれだけ減り、どれだけ待ったか」を前に出す(煽りに見せない)。
+      // 高値で買った場合は 回復日 = 元本に戻った日。それ以外は回復日の評価額。最新は字数に余裕があれば添える
+      var head = cfg.title + "の" + buy.label + "（" + jpDate(buy.date) + "）に日経平均へ" + yen(amount) + "投資していたら、" +
+        (worst ? "途中" + yen(amount * worst.close / buy.close) + "まで減り、" : "");
+      var mid = recVal == null ? ""
+        : buy.key === "peak" ? "元本に戻るまで" + spanStr(buy.date, c.recovery_date) + "かかりました。"
+        : "高値を回復した" + jpDate(c.recovery_date) + "には" + yen(recVal) + "でした。";
+      var last = latest ? jpDate(latest.date) + "時点では" + yen(amount * latest.close / buy.close) + "です。" : "";
+      var foot = "※指数終値の概算";
+      var text = head + mid + (head.length + mid.length + last.length + foot.length <= SHARE_MAX ? last : "") + foot;
+      xLink.href = "https://x.com/intent/post?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(shareUrl());
+    }
+
+    // シェアURL: 開いた人にも同じ条件で表示されるよう buy/amt を付け、シェア経由の流入を GA4 で区別する UTM を付ける
+    function shareUrl() {
+      return location.origin + location.pathname + "?buy=" + state.buy + "&amt=" + state.man +
+        "&utm_source=x&utm_medium=social&utm_campaign=sim";
     }
 
     root.addEventListener("click", function (e) {
@@ -163,7 +181,7 @@
     input.addEventListener("input", function () {
       var v = Math.floor(Number(input.value));
       if (!(v >= 1)) return;
-      state.man = Math.min(v, 100000);
+      state.man = Math.min(v, MAX_MAN);
       update();
     });
     input.addEventListener("change", function () { track("simulate", { event_id: cfg.id, buy: state.buy, amount_man: state.man }); });
