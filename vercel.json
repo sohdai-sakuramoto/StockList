@@ -28,7 +28,10 @@
     { "source": "/History/events/:slug", "destination": "/events/:slug", "statusCode": 301 },
     { "source": "/History/Covid19/:path*", "destination": "/events/covid-shock", "statusCode": 301 },
     { "source": "/History/GreatEastJapanEarthquake/:path*", "destination": "/events/great-east-japan-earthquake", "statusCode": 301 },
-    { "source": "/History/FinancialCrisis2008/:path*", "destination": "/events/lehman-shock", "statusCode": 301 }
+    { "source": "/History/FinancialCrisis2008/:path*", "destination": "/events/lehman-shock", "statusCode": 301 },
+    { "source": "/CLAUDE.md", "destination": "/", "statusCode": 301 },
+    { "source": "/.claude/:path*", "destination": "/", "statusCode": 301 },
+    { "source": "/docs/:path*", "destination": "/", "statusCode": 301 }
   ],
   "headers": [
     { "source": "/state.json", "headers": [{ "key": "Cache-Control", "value": "no-cache, max-age=0, must-revalidate" }] },
