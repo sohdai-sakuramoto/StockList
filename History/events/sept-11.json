@@ -1,0 +1,121 @@
+{
+  "id": "sept-11",
+  "title": "米同時多発テロ",
+  "source": "real",
+  "generated_at": "2026-10-18T12:57:51.592Z",
+  "granularity": "week",
+  "window": [
+    "2001-09-11",
+    "2001-10-31"
+  ],
+  "chart_range": [
+    "2001-09-11",
+    "2001-10-31"
+  ],
+  "data_range": [
+    "2001-09-11",
+    "2001-10-31"
+  ],
+  "kpi": {
+    "max_drawdown": -0.0766,
+    "trough_close": 9504.41,
+    "weeks": 8
+  },
+  "conclusion": {
+    "peak": {
+      "date": "2001-09-11",
+      "close": 10292.95
+    },
+    "trough": {
+      "date": "2001-09-17",
+      "close": 9504.41
+    },
+    "drawdown": -0.0766,
+    "bdays_to_bottom": 4,
+    "months_to_bottom": 0,
+    "recovered": true,
+    "recovery_date": "2001-10-11",
+    "recovery_close": 10347.01,
+    "months_to_recover": 1,
+    "event_day": {
+      "date": "2001-09-11",
+      "close": 10292.95
+    },
+    "later_low": null,
+    "as_of": "2026-10-16"
+  },
+  "points": [
+    {
+      "week": "2001-09-10",
+      "weekEnd": "2001-09-14",
+      "open": 10292.95,
+      "close": 10008.89,
+      "high": 10292.95,
+      "low": 9610.1,
+      "days": 4
+    },
+    {
+      "week": "2001-09-17",
+      "weekEnd": "2001-09-21",
+      "open": 9504.41,
+      "close": 9554.99,
+      "high": 9939.6,
+      "low": 9504.41,
+      "days": 5
+    },
+    {
+      "week": "2001-09-24",
+      "weekEnd": "2001-09-28",
+      "open": 9693.97,
+      "close": 9774.68,
+      "high": 9774.68,
+      "low": 9641.7,
+      "days": 4
+    },
+    {
+      "week": "2001-10-01",
+      "weekEnd": "2001-10-05",
+      "open": 9972.28,
+      "close": 10205.87,
+      "high": 10205.87,
+      "low": 9924.23,
+      "days": 5
+    },
+    {
+      "week": "2001-10-08",
+      "weekEnd": "2001-10-12",
+      "open": 10011.77,
+      "close": 10632.35,
+      "high": 10632.35,
+      "low": 9964.88,
+      "days": 4
+    },
+    {
+      "week": "2001-10-15",
+      "weekEnd": "2001-10-19",
+      "open": 10452.54,
+      "close": 10538.79,
+      "high": 10755.45,
+      "low": 10452.54,
+      "days": 5
+    },
+    {
+      "week": "2001-10-22",
+      "weekEnd": "2001-10-26",
+      "open": 10565.41,
+      "close": 10795.16,
+      "high": 10880.1,
+      "low": 10565.41,
+      "days": 5
+    },
+    {
+      "week": "2001-10-29",
+      "weekEnd": "2001-10-31",
+      "open": 10612.31,
+      "close": 10366.34,
+      "high": 10612.31,
+      "low": 10366.34,
+      "days": 3
+    }
+  ]
+}
