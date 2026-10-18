@@ -51,6 +51,20 @@ test("computeConclusion: troughFrom があれば底はその日以降に限る(�
   assert.ok(Math.abs(c.drawdown - -0.2) < 1e-9);
 });
 
+test("computeConclusion: peakFrom があれば高値はその日以降に限る(前の局面の高値を拾わない)", () => {
+  const rows = [
+    { date: "2019-12-02", close: 150 },   // peakFrom より前の高値(高値にしない)
+    { date: "2020-01-31", close: 100 },   // peakFrom = 期間開始 = 高値
+    { date: "2020-02-03", close: 90 },    // 底
+    { date: "2020-02-17", close: 101 },   // 回復
+  ];
+  const c = computeConclusion(rows, { window: ["2020-01-31", "2020-05-01"], date: "2020-01-31", peakFrom: "2020-01-31" });
+  assert.equal(c.peak.date, "2020-01-31");
+  assert.equal(c.trough.date, "2020-02-03");
+  assert.equal(c.recovery_date, "2020-02-17");
+  assert.ok(Math.abs(c.drawdown - -0.1) < 1e-9);
+});
+
 test("computeConclusion: データ期間内に回復しなければ未回復", () => {
   const rows = [
     { date: "2019-12-02", close: 95 },
