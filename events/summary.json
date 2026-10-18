@@ -173,12 +173,12 @@
     "title": "石破ショック",
     "date": "2024-09-27",
     "category": "政治",
-    "drawdown": -0.1564,
-    "drawdown_label": "−16%",
+    "drawdown": -0.1046,
+    "drawdown_label": "−10%",
     "recovered": true,
     "months_to_recover": 13,
     "recover_label": "約13ヶ月",
-    "trough_date": "2024-09-11",
-    "trough_close": 35619.77
+    "trough_date": "2024-10-02",
+    "trough_close": 37808.76
   }
 ]

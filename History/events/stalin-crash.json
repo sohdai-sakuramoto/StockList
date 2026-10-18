@@ -2,7 +2,7 @@
   "id": "stalin-crash",
   "title": "スターリン暴落",
   "source": "real",
-  "generated_at": "2026-10-16T13:51:48.692Z",
+  "generated_at": "2026-10-18T09:56:11.080Z",
   "granularity": "week",
   "window": [
     "1953-02-05",
@@ -35,7 +35,12 @@
     "months_to_bottom": 2,
     "recovered": true,
     "recovery_date": "1956-04-13",
+    "recovery_close": 474.6,
     "months_to_recover": 38,
+    "event_day": {
+      "date": "1953-03-05",
+      "close": 340.41
+    },
     "later_low": null,
     "as_of": "2026-10-16"
   },

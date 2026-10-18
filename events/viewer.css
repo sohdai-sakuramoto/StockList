@@ -204,9 +204,9 @@ a { color: var(--accent); }
 .slv-next-card .meta { display: contents; }
 .slv-next-card time { grid-area: date; font-size: 12.5px; color: var(--ink-2); }
 .slv-next-card .dd { grid-area: dd; font-size: 20px; font-weight: 800; color: var(--red); font-variant-numeric: tabular-nums; }
-.slv-next-all { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding: 13px 16px; min-height: 48px;
+.slv-next-all, .slv-cmp-all { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding: 13px 16px; min-height: 48px;
   border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--accent); font-weight: 700; font-size: 14.5px; text-decoration: none; }
-.slv-next-all:hover { border-color: #c4ccd8; }
+.slv-next-all:hover, .slv-cmp-all:hover { border-color: #c4ccd8; }
 
 /* Xフォロー導線(次に読むの直後)。主張しすぎないよう、枠線のみの控えめなカード */
 .slv-follow { display: flex; align-items: center; gap: 14px; margin: 18px 0 0; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }

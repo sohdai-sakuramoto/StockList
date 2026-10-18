@@ -104,7 +104,7 @@ export const PEAK_LOOKBACK_MONTHS = 15;
 /**
  * 「30秒でわかる結論」の数値を実データから機械算出する(指示書の定義に準拠)。
  *  rows: 昇順の [{date, close}](全期間の日次)
- *  ev:   { window:[start,end], date }
+ *  ev:   { window:[start,end], date, troughFrom? }
  *
  *  高値 peak    = イベント期間開始前(直近 PEAK_LOOKBACK_MONTHS ヶ月)の終値最高値
  *  底  trough   = 高値の日以降・イベント期間終了までの終値最安値
@@ -124,7 +124,8 @@ export function computeConclusion(rows, ev) {
   for (const r of pre) if (r.close > peak.close) peak = r;
 
   // 底はイベント期間内(window)に限定。高値日〜期間開始の間に別局面の安値があっても拾わない。
-  const seg = rows.filter((r) => r.date >= wStart && r.date <= wEnd);
+  // ev.troughFrom があれば、底はその日以降に限る(例: 石破ショックは総裁選より後を底とする。チャートの期間は変えない)
+  const seg = rows.filter((r) => r.date >= (ev.troughFrom || wStart) && r.date <= wEnd);
   let trough = seg[0];
   for (const r of seg) if (r.close < trough.close) trough = r;
 

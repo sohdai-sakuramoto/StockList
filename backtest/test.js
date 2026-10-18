@@ -36,6 +36,21 @@ test("computeConclusion: 高値・底・回復・下落率が定義どおり算�
   assert.deepEqual(c.event_day, { date: "2020-02-03", close: 88 }, "イベント日が休場なら直前の営業日");
 });
 
+test("computeConclusion: troughFrom があれば底はその日以降に限る(期間の開始は変えない)", () => {
+  const rows = [
+    { date: "2019-12-02", close: 95 },
+    { date: "2020-01-06", close: 100 },   // 高値
+    { date: "2020-02-03", close: 70 },    // troughFrom より前の安値(底にしない)
+    { date: "2020-02-17", close: 85 },
+    { date: "2020-03-02", close: 80 },    // troughFrom 以降の最安値 = 底
+    { date: "2020-04-06", close: 101 },
+  ];
+  const c = computeConclusion(rows, { window: ["2020-02-01", "2020-05-01"], date: "2020-02-10", troughFrom: "2020-02-10" });
+  assert.equal(c.peak.date, "2020-01-06");
+  assert.equal(c.trough.date, "2020-03-02");
+  assert.ok(Math.abs(c.drawdown - -0.2) < 1e-9);
+});
+
 test("computeConclusion: データ期間内に回復しなければ未回復", () => {
   const rows = [
     { date: "2019-12-02", close: 95 },
@@ -315,4 +330,28 @@ test("計測IDはHTMLに直書きしない(site-config.js 経由で環境変数�
     const s = fs.readFileSync(f, "utf8");
     assert.ok(!/googletagmanager\.com\/gtag\/js\?id=G-/.test(s), `${path.relative(ROOT, f)} に GA の測定IDが直書きされている`);
   }
+});
+
+test("暴落ランキング: 下落率の深い順・回復の早い順(未回復は末尾)に並び、事実を結論データから算出", async () => {
+  const { rankCrashes } = await import("./scripts/feature_ranking.mjs");
+  const ev = (id, date, drawdown, months, later) => ({
+    cfg: { id, slug: id, title: id, date },
+    c: { drawdown, recovered: months != null, months_to_recover: months, later_low: later || null },
+  });
+  const { byDrawdown, byRecovery, facts } = rankCrashes([
+    ev("a", "2000-01-01", -0.3, 10),
+    ev("b", "2001-01-01", -0.6, 90, { date: "2003-01-01", drawdown: -0.8 }),
+    ev("c", "2002-01-01", -0.2, null),
+    ev("d", "2003-01-01", -0.5, 70),
+    { cfg: { id: "x", slug: "x", title: "x", date: "2004-01-01" }, c: null },
+  ]);
+  assert.deepEqual(byDrawdown.map((r) => r.id), ["b", "d", "a", "c"], "結論データの無いイベントは除外");
+  assert.deepEqual(byRecovery.map((r) => r.id), ["a", "d", "b", "c"]);
+  assert.equal(facts.n, 4);
+  assert.equal(facts.deepest.id, "b");
+  assert.equal(facts.deepestLater.id, "b", "その後の安値が最初の底より深ければ出す");
+  assert.deepEqual(facts.withinYear.map((r) => r.id), ["a"]);
+  assert.deepEqual(facts.overFiveYears.map((r) => r.id).sort(), ["b", "d"]);
+  assert.equal(facts.slowest.id, "b");
+  assert.equal(facts.top3MinYears, 0, "上位3件(b,d,a)の最短は10ヶ月=0年");
 });

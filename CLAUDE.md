@@ -55,10 +55,10 @@ StocList claude.md
   - `affiliate-config.js` `newsletter-config.js` `crash-mode.js` … アフィリエイト・メルマガ・急落モード表示
   - `.github/workflows/` … 市場データの自動更新（平日18時 JST）・株価スナップショット（市場時間中15分毎）
   - `docs/` … リダイレクト対応表など
-  - ※ `events/*.html` `timeline.html` `war-and-stocks.html` `sitemap.xml` `state.json` は自動生成。直接編集せず、生成スクリプトかデータを直す
+  - ※ `events/*.html` `timeline.html` `war-and-stocks.html` `crash-ranking.html` `sitemap.xml` `state.json` は自動生成。直接編集せず、生成スクリプトかデータを直す
 - コマンド：
   - テスト：`npm --prefix backtest test`
-  - ページ再生成：`node backtest/scripts/build_event_pages.mjs`（イベントページ・年表・特集・sitemap）
+  - ページ再生成：`node backtest/scripts/build_event_pages.mjs`（イベントページ・年表・特集・暴落ランキング・sitemap）
   - データ更新：`node backtest/scripts/update_state.mjs` → `build_event_data.mjs` → `build_feature_data.mjs`
     （外部の株価データを取得するため、通常は GitHub Actions「Update market state」で実行）
   - OGP 画像の再生成：`node backtest/scripts/build_og_images.mjs`（Playwright と Noto Sans JP フォントが必要。イベント追加時のみ）
