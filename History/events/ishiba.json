@@ -2,11 +2,11 @@
   "id": "ishiba",
   "title": "石破ショック",
   "source": "real",
-  "generated_at": "2026-10-18T03:51:58.603Z",
+  "generated_at": "2026-10-18T09:56:11.162Z",
   "granularity": "week",
   "window": [
     "2024-09-02",
-    "2025-03-03"
+    "2024-10-31"
   ],
   "chart_range": [
     "2024-09-02",
@@ -27,12 +27,12 @@
       "close": 42224.02
     },
     "trough": {
-      "date": "2025-02-28",
-      "close": 37155.5
+      "date": "2024-10-02",
+      "close": 37808.76
     },
-    "drawdown": -0.12,
-    "bdays_to_bottom": 153,
-    "months_to_bottom": 8,
+    "drawdown": -0.1046,
+    "bdays_to_bottom": 55,
+    "months_to_bottom": 3,
     "recovered": true,
     "recovery_date": "2025-08-12",
     "recovery_close": 42718.17,
