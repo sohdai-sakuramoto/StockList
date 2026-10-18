@@ -70,6 +70,7 @@ export function compareHtml(currentId, rows) {
       <ol class="slv-cmp-list">
         ${li}
       </ol>
+      <a class="slv-cmp-all" href="/crash-ranking">暴落ランキングで全件を比べる<span aria-hidden="true">→</span></a>
     </section>`;
 }
 

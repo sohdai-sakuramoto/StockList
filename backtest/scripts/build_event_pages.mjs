@@ -16,6 +16,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { warFeatureHtml } from "./feature_war.mjs";
+import { crashRankingHtml } from "./feature_ranking.mjs";
 import { selectCompare, selectRelated, compareHtml, nextReadHtml, followHtml } from "./event_nav.mjs";
 
 const SITE_URL = "https://www.stocklist.jp"; // ← 独自ドメイン導入時に変更
@@ -91,13 +92,14 @@ function pageHtml(cfg, series) {
   const url = `${SITE_URL}/events/${cfg.slug}`;
   const c = series && series.conclusion ? series.conclusion : null;
 
-  // title/meta は検索クエリ対応の形式に統一
-  const title = `${cfg.title}で日経平均は何%下落?回復まで何年?｜StockList`;
+  // title/meta は検索クエリ対応の形式に統一。年を入れて「◯◯ いつ」の検索にも応える
+  const named = cfg.date ? `${cfg.title}（${cfg.date.slice(0, 4)}年）` : cfg.title;
+  const title = `${named}で日経平均は何%下落?回復まで何年?｜StockList`;
   const ll = c && c.later_low ? c.later_low : null;
   const desc = c
     ? ll
-      ? `${cfg.title}で日経平均は高値から約${ddPct(c.drawdown)}下落。底は${yearMonth(c.trough.date)}（${cfg.troughLabel || "この局面の底"}）、回復までの最安値は${yearMonth(ll.date)}の${troughPriceStr({ trough: ll })}（${ddPct(ll.drawdown)}）、高値回復まで${recoverStr(c)}。チャートと当時のニュースで振り返ります。`
-      : `${cfg.title}で日経平均は高値から約${ddPct(c.drawdown)}下落。底は${yearMonth(c.trough.date)}、高値回復まで${recoverStr(c)}。週次チャートと当時のニュースで、下落率・底・回復の流れを振り返ります。`
+      ? `${named}で日経平均は高値から約${ddPct(c.drawdown)}下落。底は${yearMonth(c.trough.date)}（${cfg.troughLabel || "この局面の底"}）、回復までの最安値は${yearMonth(ll.date)}の${troughPriceStr({ trough: ll })}（${ddPct(ll.drawdown)}）、高値回復まで${recoverStr(c)}。チャートと当時のニュースで振り返ります。`
+      : `${named}で日経平均は高値から約${ddPct(c.drawdown)}下落。底は${yearMonth(c.trough.date)}、高値回復まで${recoverStr(c)}。週次チャートと当時のニュースで、下落率・底・回復の流れを振り返ります。`
     : `${cfg.title}（${cfg.date}前後)の日経平均を週次チャートと当時のニュースで振り返ります。`;
   // OGP画像: build_og_images.mjs が生成したイベント別画像(1200×630)。無ければ共通画像
   const ogFile = path.join(REPO_ROOT, "og", "events", `${cfg.slug}.png`);
@@ -426,7 +428,7 @@ function timelineHtml(items, info) {
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
-  <div class="topbar"><a href="/">← StockList トップ</a><a href="/history">相場の歴史</a><a href="/now">今の下落と比べる</a></div>
+  <div class="topbar"><a href="/">← StockList トップ</a><a href="/history">相場の歴史</a><a href="/crash-ranking">暴落ランキング</a><a href="/now">今の下落と比べる</a></div>
   <header class="hero">
     <p class="eyebrow">Nikkei 225 · 1945–2026</p>
     <h1>日本株 暴落・暴騰の年表</h1>
@@ -509,6 +511,7 @@ function main() {
     { loc: `${SITE_URL}/start`, pri: "0.9" },
     { loc: `${SITE_URL}/history`, pri: "0.8" },
     { loc: `${SITE_URL}/timeline`, pri: "0.8" },
+    { loc: `${SITE_URL}/crash-ranking`, pri: "0.8" },
     { loc: `${SITE_URL}/war-and-stocks`, pri: "0.8" },
     { loc: `${SITE_URL}/now`, pri: "0.7" },
     { loc: `${SITE_URL}/disclosure`, pri: "0.3" },
@@ -517,6 +520,7 @@ function main() {
   fs.mkdirSync(OUT_DIR, { recursive: true });
   const summary = []; // /now(今の下落 vs 過去の暴落)ページ用の比較データ
   const info = {};    // /timeline 用: id → { slug, title, c(結論) }
+  const ranking = []; // /crash-ranking 用: { cfg, c }
   for (const cfg of ALL) {
     const dataPath = path.join(DATA_DIR, `${cfg.id}.json`);
     let series = { points: [], kpi: null, source: "real" };
@@ -528,6 +532,7 @@ function main() {
     console.log(`[out] events/${cfg.slug}.html`);
     const c = series.conclusion;
     info[cfg.id] = { slug: cfg.slug, title: cfg.title, c: c || null };
+    if (c) ranking.push({ cfg, c });
     if (c) summary.push({
       slug: cfg.slug, url: `/events/${cfg.slug}`, title: cfg.title, date: cfg.date, category: cfg.category || "",
       drawdown: c.drawdown, drawdown_label: ddPct(c.drawdown),
@@ -547,6 +552,10 @@ function main() {
   }
   fs.writeFileSync(path.join(REPO_ROOT, "timeline.html"), timelineHtml(timeline, info), "utf8");
   console.log(`[out] timeline.html (${timeline.length}件)`);
+
+  // 横断ページ「暴落の歴史ランキング」: 各イベントの結論データから静的生成
+  fs.writeFileSync(path.join(REPO_ROOT, "crash-ranking.html"), crashRankingHtml({ rows: ranking, siteUrl: SITE_URL }), "utf8");
+  console.log(`[out] crash-ranking.html (${ranking.length}件)`);
 
   // 特集「戦争と株価」: 書籍データ(株価20年) + 現代の戦争の実データ(build_feature_data.mjs)
   const book = loadBook("kabuka20");
