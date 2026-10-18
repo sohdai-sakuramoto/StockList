@@ -104,9 +104,10 @@ export const PEAK_LOOKBACK_MONTHS = 15;
 /**
  * 「30秒でわかる結論」の数値を実データから機械算出する(指示書の定義に準拠)。
  *  rows: 昇順の [{date, close}](全期間の日次)
- *  ev:   { window:[start,end], date, troughFrom? }
+ *  ev:   { window:[start,end], date, peakFrom?, troughFrom? }
  *
  *  高値 peak    = イベント期間開始前(直近 PEAK_LOOKBACK_MONTHS ヶ月)の終値最高値
+ *                 ev.peakFrom があれば、その日〜期間開始の終値最高値(前の局面の高値を拾わないため)
  *  底  trough   = 高値の日以降・イベント期間終了までの終値最安値
  *  最大下落率    = trough/peak - 1(終値ベース)
  *  底までの期間  = 高値日→底日(営業日数 と 月数)
@@ -117,9 +118,10 @@ export const PEAK_LOOKBACK_MONTHS = 15;
  */
 export function computeConclusion(rows, ev) {
   const [wStart, wEnd] = ev.window;
-  const peakStart = shiftMonths(wStart, -PEAK_LOOKBACK_MONTHS);
+  // ev.peakFrom があれば、高値はその日以降に限る(例: 同時多発テロは直前のITバブル崩壊局面の高値を拾わず、テロ当日の終値を基準にする)
+  const peakStart = ev.peakFrom || shiftMonths(wStart, -PEAK_LOOKBACK_MONTHS);
   const pre = rows.filter((r) => r.date >= peakStart && r.date <= wStart);
-  if (pre.length < 2) return null;
+  if (pre.length < (ev.peakFrom ? 1 : 2)) return null;
   let peak = pre[0];
   for (const r of pre) if (r.close > peak.close) peak = r;
 

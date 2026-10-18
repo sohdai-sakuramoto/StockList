@@ -84,6 +84,20 @@
     "trough_close": 295.18
   },
   {
+    "slug": "asian-financial-crisis",
+    "url": "/events/asian-financial-crisis",
+    "title": "アジア通貨危機",
+    "date": "1997-07-02",
+    "category": "通貨危機",
+    "drawdown": -0.3772,
+    "drawdown_label": "−38%",
+    "recovered": true,
+    "months_to_recover": 33,
+    "recover_label": "約3年",
+    "trough_date": "1998-10-09",
+    "trough_close": 12879.97
+  },
+  {
     "slug": "oil-shock-1973",
     "url": "/events/oil-shock-1973",
     "title": "第一次オイルショック",
@@ -180,5 +194,19 @@
     "recover_label": "約13ヶ月",
     "trough_date": "2024-10-02",
     "trough_close": 37808.76
+  },
+  {
+    "slug": "september-11-attacks",
+    "url": "/events/september-11-attacks",
+    "title": "米同時多発テロ",
+    "date": "2001-09-11",
+    "category": "テロ",
+    "drawdown": -0.0766,
+    "drawdown_label": "−8%",
+    "recovered": true,
+    "months_to_recover": 1,
+    "recover_label": "約1ヶ月",
+    "trough_date": "2001-09-17",
+    "trough_close": 9504.41
   }
 ]
