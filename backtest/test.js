@@ -36,6 +36,21 @@ test("computeConclusion: 高値・底・回復・下落率が定義どおり算�
   assert.deepEqual(c.event_day, { date: "2020-02-03", close: 88 }, "イベント日が休場なら直前の営業日");
 });
 
+test("computeConclusion: troughFrom があれば底はその日以降に限る(期間の開始は変えない)", () => {
+  const rows = [
+    { date: "2019-12-02", close: 95 },
+    { date: "2020-01-06", close: 100 },   // 高値
+    { date: "2020-02-03", close: 70 },    // troughFrom より前の安値(底にしない)
+    { date: "2020-02-17", close: 85 },
+    { date: "2020-03-02", close: 80 },    // troughFrom 以降の最安値 = 底
+    { date: "2020-04-06", close: 101 },
+  ];
+  const c = computeConclusion(rows, { window: ["2020-02-01", "2020-05-01"], date: "2020-02-10", troughFrom: "2020-02-10" });
+  assert.equal(c.peak.date, "2020-01-06");
+  assert.equal(c.trough.date, "2020-03-02");
+  assert.ok(Math.abs(c.drawdown - -0.2) < 1e-9);
+});
+
 test("computeConclusion: データ期間内に回復しなければ未回復", () => {
   const rows = [
     { date: "2019-12-02", close: 95 },
