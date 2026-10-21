@@ -2,7 +2,7 @@
   "id": "it-bubble",
   "title": "ITバブル崩壊",
   "source": "real",
-  "generated_at": "2026-10-20T14:12:40.030Z",
+  "generated_at": "2026-10-21T14:25:13.628Z",
   "granularity": "month",
   "window": [
     "2000-04-13",
@@ -46,7 +46,7 @@
       "close": 7054.98,
       "drawdown": -0.6614
     },
-    "as_of": "2026-10-20"
+    "as_of": "2026-10-21"
   },
   "points": [
     {
