@@ -2,7 +2,7 @@
   "id": "asian-crisis",
   "title": "アジア通貨危機",
   "source": "real",
-  "generated_at": "2026-10-23T14:09:25.954Z",
+  "generated_at": "2026-10-26T16:00:36.197Z",
   "granularity": "week",
   "window": [
     "1997-07-01",
@@ -42,7 +42,7 @@
       "close": 20196.42
     },
     "later_low": null,
-    "as_of": "2026-10-23"
+    "as_of": "2026-10-26"
   },
   "points": [
     {
