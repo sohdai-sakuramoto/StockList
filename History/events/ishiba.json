@@ -2,7 +2,7 @@
   "id": "ishiba",
   "title": "石破ショック",
   "source": "real",
-  "generated_at": "2026-10-28T15:50:59.071Z",
+  "generated_at": "2026-10-29T15:58:07.054Z",
   "granularity": "week",
   "window": [
     "2024-09-02",
@@ -46,7 +46,7 @@
       "close": 31136.58,
       "drawdown": -0.2626
     },
-    "as_of": "2026-10-28"
+    "as_of": "2026-10-29"
   },
   "points": [
     {
