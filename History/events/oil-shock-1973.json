@@ -2,7 +2,7 @@
   "id": "oil-shock-1973",
   "title": "第一次オイルショック",
   "source": "real",
-  "generated_at": "2026-10-29T15:58:06.999Z",
+  "generated_at": "2026-10-30T15:44:47.750Z",
   "granularity": "week",
   "window": [
     "1973-01-25",
@@ -42,7 +42,7 @@
       "close": 4477.58
     },
     "later_low": null,
-    "as_of": "2026-10-29"
+    "as_of": "2026-10-30"
   },
   "points": [
     {

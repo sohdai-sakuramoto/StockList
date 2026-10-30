@@ -2,7 +2,7 @@
   "id": "nixon-shock",
   "title": "ニクソンショック",
   "source": "real",
-  "generated_at": "2026-10-29T15:58:06.992Z",
+  "generated_at": "2026-10-30T15:44:47.745Z",
   "granularity": "week",
   "window": [
     "1971-08-15",
@@ -42,7 +42,7 @@
       "close": 2530.48
     },
     "later_low": null,
-    "as_of": "2026-10-29"
+    "as_of": "2026-10-30"
   },
   "points": [
     {
