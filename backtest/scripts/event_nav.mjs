@@ -98,7 +98,7 @@ const X_LOGO = '<svg class="x-ic" viewBox="0 0 24 24" width="22" height="22" ari
 // 読点の後で区切った語句を inline-block にし、語句の途中(「X」と「で」の間など)で改行しないようにする
 const phrases = (t) => String(t || "").split(/(?<=、)/).map((p) => `<span class="ph">${esc(p)}</span>`).join("");
 
-/** Xフォロー導線(次に読むの直後)。navigation.json の follow から生成 */
+/** Xフォロー導線(イベントページではシミュレーションの直後)。navigation.json の follow から生成 */
 export function followHtml(follow, cls = "slv-follow") {
   if (!follow || !follow.handle) return "";
   const url = `https://x.com/${encodeURIComponent(follow.handle)}`;
