@@ -227,21 +227,14 @@ ${verdictHtml}
     </div>
     <div id="slv-root"></div>
     <section class="slv-sim" id="slv-sim" aria-labelledby="slv-sim-h"></section>
+    <!-- 再訪導線: 直帰率が高いため、チャートとシミュレーションの直後に置く(スマホは比較の直後へ移す) -->
+${followHtml(NAV.follow)}
 ${companiesHtml}
     <noscript>
       <h2>当時の主なニュース</h2>
       <ul>${newsHtml}</ul>
     </noscript>
 ${compareHtml(cfg.id, selectCompare(cfg.id, EVS, NAV, cfg.compare))}
-${faqHtml}
-${nextReadHtml(selectRelated(cfg.id, EVS, NAV, cfg.related), EVS.length)}
-${followHtml(NAV.follow)}
-    <aside class="slv-cta">
-      <p class="slv-cta-lead">暴落は、歴史的にはいつか戻ってきました。</p>
-      <p class="slv-cta-sub">狼狽売りより、次の下落に備えて少額から。長期・積立の第一歩は口座づくりから。</p>
-      <a class="slv-cta-btn" href="/start">はじめての証券口座を見る →</a>
-    </aside>
-
     <section class="nl" data-newsletter-block hidden>
       <h2>急落モードの日に、一通だけ。</h2>
       <p class="nl-sub">相場が大きく動いた日に、過去の暴落との比較を1通だけお届けします。しつこい配信はしません。いつでも解除できます。</p>
@@ -252,6 +245,13 @@ ${followHtml(NAV.follow)}
       </form>
       <p class="nl-fine">登録は無料・配信は必要なときだけ。<a href="/privacy">プライバシーポリシー</a></p>
     </section>
+${faqHtml}
+${nextReadHtml(selectRelated(cfg.id, EVS, NAV, cfg.related), EVS.length)}
+    <aside class="slv-cta">
+      <p class="slv-cta-lead">暴落は、歴史的にはいつか戻ってきました。</p>
+      <p class="slv-cta-sub">狼狽売りより、次の下落に備えて少額から。長期・積立の第一歩は口座づくりから。</p>
+      <a class="slv-cta-btn" href="/start">はじめての証券口座を見る →</a>
+    </aside>
 
     <p class="slv-foot">
       ※ 教育・情報提供目的のページです。投資助言ではありません。株価データは検証用（Stooq/FRED）、ニュースは見出し・要約とリンクに留めています。
@@ -268,13 +268,22 @@ ${followHtml(NAV.follow)}
       StockListViewer.render(document.getElementById("slv-root"), D.cfg, D.series);
       StockListSimulator.render(document.getElementById("slv-sim"), D.cfg, D.series);
       // 比較ブロック: スマホ(640px以下)はチャートの直後・ニュースの前へ移す(PCはニュースの後のまま)
+      // Xフォロー導線もスマホでは比較の直後へ(ニュース一覧が長く、元の位置まで読まれにくいため)
       var cmp = document.querySelector(".slv-cmp"), grid = document.querySelector("#slv-root .slv-grid");
+      var fol = document.querySelector(".slv-follow");
       if (cmp && grid && grid.children.length > 1 && window.matchMedia) {
         var home = document.createComment("slv-cmp"), mq = window.matchMedia("(max-width: 640px)");
+        var folHome = fol && document.createComment("slv-follow");
         cmp.parentNode.insertBefore(home, cmp);
+        if (fol) fol.parentNode.insertBefore(folHome, fol);
         var place = function () {
-          if (mq.matches) grid.insertBefore(cmp, grid.children[1]);
-          else home.parentNode.insertBefore(cmp, home.nextSibling);
+          if (mq.matches) {
+            grid.insertBefore(cmp, grid.children[1]);
+            if (fol) grid.insertBefore(fol, cmp.nextSibling);
+          } else {
+            home.parentNode.insertBefore(cmp, home.nextSibling);
+            if (fol) folHome.parentNode.insertBefore(fol, folHome.nextSibling);
+          }
         };
         place();
         if (mq.addEventListener) mq.addEventListener("change", place); else if (mq.addListener) mq.addListener(place);
