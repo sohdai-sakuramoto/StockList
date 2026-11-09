@@ -2,7 +2,7 @@
   "id": "covid",
   "title": "コロナショック",
   "source": "real",
-  "generated_at": "2026-11-06T16:39:55.386Z",
+  "generated_at": "2026-11-09T19:40:09.772Z",
   "granularity": "week",
   "window": [
     "2020-01-20",
@@ -42,7 +42,7 @@
       "close": 22605.41
     },
     "later_low": null,
-    "as_of": "2026-11-06"
+    "as_of": "2026-11-09"
   },
   "points": [
     {
