@@ -94,7 +94,8 @@ function pageHtml(cfg, series) {
 
   // title/meta は検索クエリ対応の形式に統一。年を入れて「◯◯ いつ」の検索にも応える
   const named = cfg.date ? `${cfg.title}（${cfg.date.slice(0, 4)}年）` : cfg.title;
-  const title = `${named}で日経平均は何%下落?回復まで何年?｜StockList`;
+  // 「〜 チャート」「〜 日経平均 チャート」の検索に合わせ、チャートを前半に置く(2026-11 Search Console)
+  const title = `${named}の日経平均チャート｜何%下落?回復まで何年?｜StockList`;
   const ll = c && c.later_low ? c.later_low : null;
   const desc = c
     ? ll
@@ -554,7 +555,12 @@ function main() {
   console.log(`[out] timeline.html (${timeline.length}件)`);
 
   // 横断ページ「暴落の歴史ランキング」: 各イベントの結論データから静的生成
-  fs.writeFileSync(path.join(REPO_ROOT, "crash-ranking.html"), crashRankingHtml({ rows: ranking, siteUrl: SITE_URL }), "utf8");
+  // 1日の下落ランキング(手入力・出典つき)。無ければ節ごと省略
+  const dailyPath = path.join(DATA_DIR, "features", "daily-drops.json");
+  const daily = fs.existsSync(dailyPath) ? JSON.parse(fs.readFileSync(dailyPath, "utf8")) : null;
+  if (!daily) console.warn("[warn] features/daily-drops.json が無いため、1日の下落ランキングは省略");
+  const slugOf = Object.fromEntries(Object.entries(info).map(([id, v]) => [id, v.slug]));
+  fs.writeFileSync(path.join(REPO_ROOT, "crash-ranking.html"), crashRankingHtml({ rows: ranking, daily, slugOf, siteUrl: SITE_URL }), "utf8");
   console.log(`[out] crash-ranking.html (${ranking.length}件)`);
 
   // 特集「戦争と株価」: 書籍データ(株価20年) + 現代の戦争の実データ(build_feature_data.mjs)
