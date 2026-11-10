@@ -46,22 +46,52 @@ export function rankCrashes(rows) {
   };
 }
 
-export function crashRankingHtml({ rows, siteUrl }) {
+/**
+ * 1日の下落ランキング(History/events/features/daily-drops.json)を並べ直す。
+ * 手入力データなので、順位はファイルの並びではなく値から決める(入力ミスで順位が狂わないように)。
+ * slugOf: events.json の id → ページの slug(関連ページへのリンク用)
+ */
+export function rankDaily(daily, slugOf = {}) {
+  const link = (it) => ({ ...it, slug: it.event && slugOf[it.event] ? slugOf[it.event] : "" });
+  const byRate = daily.by_rate.items.map(link).sort((a, b) => a.pct - b.pct);
+  const byPoints = daily.by_points.items.map(link).sort((a, b) => a.change - b.change);
+  const recent = (daily.recent ? daily.recent.items : []).map(link).sort((a, b) => a.date.localeCompare(b.date));
+  return { byRate, byPoints, recent };
+}
+
+export function crashRankingHtml({ rows, daily = null, slugOf = {}, siteUrl }) {
   const { byDrawdown, byRecovery, facts: f } = rankCrashes(rows);
+  const d = daily ? rankDaily(daily, slugOf) : null;
+  const pct2 = (p) => `−${Math.abs(p).toFixed(2)}%`;
+  const yenDown = (v) => `${Math.round(Math.abs(v)).toLocaleString("ja-JP")}円`;
+  const dayName = (it) => (it.slug ? `<a href="/events/${esc(it.slug)}">${esc(ymd(it.date))}</a>` : esc(ymd(it.date))) + (it.label ? `<small>${esc(it.label)}</small>` : "");
   const url = `${siteUrl}/crash-ranking`;
   const years = byDrawdown.map((r) => Number(r.year));
   const y0 = Math.min(...years), y1 = Math.max(...years);
-  const title = `日経平均 暴落の歴史ランキング｜下落率と回復までの期間を比較（${y0}〜${y1}年）｜StockList`;
-  const desc = `日経平均株価の過去の暴落${f.n}件を、最大下落率と高値回復までの期間でランキング。最大は${f.deepest.title}の${ddPct(f.deepest.c.drawdown)}。リーマンショック、バブル崩壊、コロナショックなどの下落と回復を一覧で比べられます。`;
+  // 検索は「日経平均 下落率 最大」「一番下がった日」「下げ幅 ランキング」など1日の下落が中心(2026-11 Search Console)。
+  // 1日のランキングを先頭に出し、title/description もそれに合わせる。年の範囲は古く見えるので title に入れない
+  const r1 = d && d.byRate[0], p1 = d && d.byPoints[0];
+  const title = d
+    ? `日経平均 暴落ランキング｜1日の最大下落率・下げ幅と歴代の暴落${f.n}件｜StockList`
+    : `日経平均 暴落ランキング｜歴代の暴落${f.n}件の下落率と回復までの期間｜StockList`;
+  const desc = (d
+    ? `日経平均株価が1日で最も大きく下落したのは${ymd(r1.date)}の${pct2(r1.pct)}${r1.label ? `（${r1.label}）` : ""}、下げ幅の最大は${ymd(p1.date)}の${yenDown(p1.change)}安。`
+    : "") +
+    `高値から底までの下落率でも過去の暴落${f.n}件をランキングし、最大は${f.deepest.title}の${ddPct(f.deepest.c.drawdown)}。回復までの期間も比べられます。`;
   const ogImg = `${siteUrl}/IMG_3857.jpg`;
   const names = (rs) => rs.map((r) => r.title).join("、");
 
   const faq = [
+    ...(d ? [{
+      q: "日経平均が1日で一番下がった日は?",
+      a: `下落率では${ymd(r1.date)}${r1.label ? `（${r1.label}）` : ""}の${pct2(r1.pct)}が歴代最大です。下げ幅（円）では${ymd(p1.date)}${p1.label ? `（${p1.label}）` : ""}の${yenDown(p1.change)}安が最大です。` +
+        "株価の水準が高いほど同じ下落率でも下げ幅は大きくなるため、近年の下落は下げ幅の上位に入りやすくなります。",
+    }] : []),
     {
       q: "日経平均で過去最大の暴落は?",
       a: `高値から底までの下落率で比べると、${f.deepest.title}（${f.deepest.year}年）の約${ddPct(f.deepest.c.drawdown)}が最大です（${f.n}件の比較）。` +
         (f.deepestLater ? `その後の安値まで含めると、${f.deepestLater.title}は${ym(f.deepestLater.c.later_low.date)}に高値から約${ddPct(f.deepestLater.c.later_low.drawdown)}の水準まで下げています。` : "") +
-        "1日の下落率では、ブラックマンデー翌日の1987年10月20日（−14.90%）が過去最大です。",
+        (d ? "1日の下落率で比べた場合は、下の質問をご覧ください。" : ""),
     },
     {
       q: "暴落から回復するまで、どのくらいかかった?",
@@ -201,19 +231,21 @@ export function crashRankingHtml({ rows, siteUrl }) {
   <div class="topbar"><a href="/">← StockList トップ</a><a href="/history">相場の歴史</a><a href="/timeline">年表</a><a href="/now">今の下落と比べる</a></div>
   <header class="hero">
     <p class="eyebrow">Nikkei 225 · Crash Ranking</p>
-    <h1>日経平均 暴落の歴史ランキング</h1>
-    <p>${y0}年から${y1}年まで、日経平均株価が大きく下げた${f.n}の局面を、最大下落率と下落前の高値を回復するまでの期間で比べます。数値はすべて日経平均の終値から算出しています。</p>
+    <h1>日経平均 暴落ランキング</h1>
+    <p>${d ? "日経平均株価が1日で大きく下げた日の下落率・下げ幅の歴代ランキングと、" : ""}${y0}年から${y1}年まで大きく下げた${f.n}の局面の、最大下落率と下落前の高値を回復するまでの期間を比べます。</p>
   </header>
   <main class="wrap">
     <div class="tiles">
-      <div class="tile"><div class="k">最大下落率が最も大きい</div><div class="v" style="color:var(--red)">${ddPct(f.deepest.c.drawdown)}</div><div class="n">${esc(f.deepest.title)}（${esc(f.deepest.year)}年）</div></div>
+      ${d ? `<div class="tile"><div class="k">1日の下落率が最も大きい</div><div class="v" style="color:var(--red)">${pct2(r1.pct)}</div><div class="n">${esc(ymd(r1.date))}${r1.label ? `（${esc(r1.label)}）` : ""}</div></div>` : ""}
+      <div class="tile"><div class="k">高値から底までの下落率が最も大きい</div><div class="v" style="color:var(--red)">${ddPct(f.deepest.c.drawdown)}</div><div class="n">${esc(f.deepest.title)}（${esc(f.deepest.year)}年）</div></div>
       ${f.fastest ? `<div class="tile"><div class="k">高値の回復が最も早い</div><div class="v">${esc(recoverStr(f.fastest.c))}</div><div class="n">${esc(f.fastest.title)}（${esc(f.fastest.year)}年）</div></div>` : ""}
       <div class="tile"><div class="k">1年以内に高値を回復</div><div class="v">${f.withinYear.length}<span style="font-size:16px">／${f.n}件</span></div><div class="n">${esc(names(f.withinYear))}</div></div>
     </div>
 
+${d ? dailyHtml(d, daily, { pct2, yenDown, dayName }) : ""}
     <section aria-labelledby="h-dd">
-      <h2 id="h-dd">下落率ランキング</h2>
-      <p class="lead">下落前の高値から、その局面の底までの下落率が大きい順です。出来事の名前から、チャートと当時のニュースを見られます。</p>
+      <h2 id="h-dd">高値から底までの下落率ランキング</h2>
+      <p class="lead">1日ではなく、下落前の高値から、その局面の底までの下落率が大きい順です。出来事の名前から、チャートと当時のニュースを見られます。</p>
       <div class="tbl"><table>
         <thead><tr><th scope="col">順位</th><th scope="col">出来事</th><th scope="col">最大下落率</th><th scope="col" class="opt">高値 → 底</th><th scope="col" class="opt">底まで</th><th scope="col">高値回復まで</th></tr></thead>
         <tbody>
@@ -237,6 +269,7 @@ export function crashRankingHtml({ rows, siteUrl }) {
     <section aria-labelledby="h-pt">
       <h2 id="h-pt">ランキングから分かること</h2>
       <div class="points"><ul>
+        ${d ? `<li>1日の下げ幅（円）の上位には近年の下落が多く入りますが、下落率の上位は${esc(ymd(r1.date))}など過去の暴落が中心です。株価の水準が高いと、同じ下落率でも下げ幅は大きくなります。</li>` : ""}
         <li>下落率が大きい上位3件（${esc(names(f.top3))}）は、いずれも高値の回復に${f.top3MinYears}年以上かかりました。</li>
         <li>1年以内に高値を回復したのは${f.withinYear.length}件（${esc(names(f.withinYear))}）です。下落の大きさと回復の早さは、局面ごとに大きく異なります。</li>
         <li>これは過去の結果をまとめたもので、今後の値動きを示すものではありません。</li>
@@ -264,11 +297,54 @@ export function crashRankingHtml({ rows, siteUrl }) {
       <p class="nl-fine">登録は無料・配信は必要なときだけ。<a href="/privacy">プライバシーポリシー</a></p>
     </section>
     <p class="foot">
-      ※ 教育・情報提供目的のページです。投資助言ではありません。数値は検証用データ（Stooq/FRED）の日経平均の終値から算出した参考値です。
+      ※ 教育・情報提供目的のページです。投資助言ではありません。高値から底までの数値は、検証用データ（Stooq/FRED）の日経平均の終値から算出した参考値です。${d ? "1日の下落ランキングの出典は、各表の下に記載しています。" : ""}
     </p>
     <nav class="sl-legal" aria-label="規約・ポリシー"><a href="/privacy">プライバシーポリシー</a><a href="/privacy#external-transmission">外部送信について</a><a href="/disclosure">アフィリエイト表記・免責事項</a></nav>
   </main>
 </body>
 </html>
+`;
+}
+
+// 1日の下落ランキングの節(/crash-ranking の先頭)。数値はすべて daily-drops.json(出典つきの手入力)から
+function dailyHtml(d, daily, { pct2, yenDown, dayName }) {
+  const rateRows = d.byRate.map((it, i) => `<tr>
+          <td class="rk">${i + 1}</td>
+          <th scope="row">${dayName(it)}</th>
+          <td class="neg">${pct2(it.pct)}</td>
+          <td class="opt">${yenDown(it.change)}安</td>
+          <td class="opt">${Number(it.close).toLocaleString("ja-JP", { minimumFractionDigits: 2 })}円</td>
+        </tr>`).join("\n        ");
+  const ptRows = d.byPoints.map((it, i) => `<tr>
+          <td class="rk">${i + 1}</td>
+          <th scope="row">${dayName(it)}</th>
+          <td class="neg">${yenDown(it.change)}安</td>
+        </tr>`).join("\n        ");
+  const recent = d.recent.length ? `
+      <p class="note">${esc(daily.recent.title)}：${d.recent.map((it) => `${esc(ymd(it.date))}は${pct2(it.pct)}（${yenDown(it.change)}安、終値${Number(it.close).toLocaleString("ja-JP", { minimumFractionDigits: 2 })}円）`).join("、")}。出典：${d.recent.map((it) => esc(it.source)).join("／")}。</p>` : "";
+  return `
+    <section aria-labelledby="h-day">
+      <h2 id="h-day">1日の下落率ランキング（歴代）</h2>
+      <p class="lead">日経平均株価が、前日の終値から1日で大きく下げた日を、下落率の大きい順に並べました。日付に下線があるものは、その出来事のチャートと当時のニュースを見られます。</p>
+      <div class="tbl"><table>
+        <thead><tr><th scope="col">順位</th><th scope="col">日付</th><th scope="col">下落率</th><th scope="col" class="opt">下げ幅</th><th scope="col" class="opt">終値</th></tr></thead>
+        <tbody>
+        ${rateRows}
+        </tbody>
+      </table></div>
+      <p class="note">${esc(ymd(daily.by_rate.as_of))}時点。出典：${esc(daily.by_rate.source)}（<a href="${esc(daily.by_rate.url)}" rel="nofollow noopener" target="_blank">PDF</a>）。${daily.by_rate.change_source ? esc(daily.by_rate.change_source) + "。" : ""}下げ幅は円未満を四捨五入しています。</p>${recent}
+    </section>
+
+    <section aria-labelledby="h-pt-day">
+      <h2 id="h-pt-day">1日の下げ幅ランキング（歴代）</h2>
+      <p class="lead">同じ日の下落を、下げ幅（円）の大きい順に並べました。株価の水準が高い近年ほど、下げ幅は大きくなりやすくなります。</p>
+      <div class="tbl"><table>
+        <thead><tr><th scope="col">順位</th><th scope="col">日付</th><th scope="col">下げ幅</th></tr></thead>
+        <tbody>
+        ${ptRows}
+        </tbody>
+      </table></div>
+      <p class="note">${esc(ymd(daily.by_points.as_of))}の取引まで。出典：${esc(daily.by_points.source)}（<a href="${esc(daily.by_points.url)}" rel="nofollow noopener" target="_blank">株トレ</a>）。円未満は四捨五入しています。</p>
+    </section>
 `;
 }

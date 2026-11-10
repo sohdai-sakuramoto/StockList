@@ -369,3 +369,33 @@ test("暴落ランキング: 下落率の深い順・回復の早い順(未回�
   assert.equal(facts.slowest.id, "b");
   assert.equal(facts.top3MinYears, 0, "上位3件(b,d,a)の最短は10ヶ月=0年");
 });
+
+test("1日の下落ランキング: 値の順に並び、データに出典と既存イベントへのリンクがある", async () => {
+  const { rankDaily } = await import("./scripts/feature_ranking.mjs");
+  const d = rankDaily({
+    by_rate: { items: [{ date: "2000-01-02", pct: -5, change: -100, event: "x" }, { date: "2000-01-01", pct: -9, change: -50, event: "" }] },
+    by_points: { items: [{ date: "2000-01-02", change: -100 }, { date: "2000-01-03", change: -300 }] },
+  }, { x: "x-slug" });
+  assert.deepEqual(d.byRate.map((r) => r.pct), [-9, -5], "ファイルの並びではなく下落率の大きい順");
+  assert.equal(d.byRate[1].slug, "x-slug");
+  assert.equal(d.byRate[0].slug, "", "event が空ならリンクなし");
+  assert.deepEqual(d.byPoints.map((r) => r.change), [-300, -100]);
+  assert.deepEqual(d.recent, []);
+
+  const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+  const real = JSON.parse(fs.readFileSync(path.join(root, "History/events/features/daily-drops.json"), "utf8"));
+  const ids = new Set(JSON.parse(fs.readFileSync(path.join(root, "History/events/events.json"), "utf8")).map((e) => e.id));
+  for (const k of ["by_rate", "by_points"]) {
+    assert.ok(real[k].source && real[k].url && real[k].as_of && real[k].checked, `${k} に出典・時点・確認日がある`);
+    for (const it of real[k].items) {
+      assert.match(it.date, /^\d{4}-\d{2}-\d{2}$/);
+      assert.ok(it.change < 0);
+      if (it.event) assert.ok(ids.has(it.event), `${it.date} の event=${it.event} が events.json にない`);
+    }
+  }
+  for (const it of real.by_rate.items) {
+    const prev = it.close - it.change; // 前日終値
+    assert.ok(Math.abs((it.change / prev) * 100 - it.pct) < 0.01, `${it.date}: 下げ幅・終値と下落率が合わない`);
+  }
+  for (const it of real.recent.items) assert.ok(it.source, `${it.date} に出典がある`);
+});

@@ -1,0 +1,49 @@
+{
+  "_comment": "日経平均の1日の下落ランキング(/crash-ranking の「1日の下落ランキング」)。手入力のデータ。数値を変えるときは出典(source/url)と確認日(checked)も必ず更新する。event は History/events/events.json の id(関連ページへのリンク)。",
+  "by_rate": {
+    "title": "1日の下落率ランキング",
+    "as_of": "2024-08-07",
+    "source": "日本経済新聞社のデータをもとに三菱UFJアセットマネジメントが作成した表(2024年8月7日現在)",
+    "url": "https://www.am.mufg.jp/report/investigate/column_240808.pdf",
+    "checked": "2026-11-10",
+    "items": [
+      { "date": "1987-10-20", "pct": -14.90, "change": -3836.48, "close": 21910.08, "label": "ブラックマンデー", "event": "black-monday-1987" },
+      { "date": "2024-08-05", "pct": -12.40, "change": -4451.28, "close": 31458.42, "label": "令和のブラックマンデー", "event": "reiwa-black-monday" },
+      { "date": "2008-10-16", "pct": -11.41, "change": -1089.02, "close": 8458.45, "label": "リーマンショック", "event": "lehman" },
+      { "date": "2011-03-15", "pct": -10.55, "change": -1015.34, "close": 8605.15, "label": "東日本大震災", "event": "great-east-japan" },
+      { "date": "1953-03-05", "pct": -10.00, "change": -37.80, "close": 340.41, "label": "スターリン暴落", "event": "stalin-crash" },
+      { "date": "2008-10-10", "pct": -9.62, "change": -881.06, "close": 8276.43, "label": "リーマンショック", "event": "lehman" },
+      { "date": "2008-10-24", "pct": -9.60, "change": -811.90, "close": 7649.08, "label": "リーマンショック", "event": "lehman" },
+      { "date": "2008-10-08", "pct": -9.38, "change": -952.58, "close": 9203.32, "label": "リーマンショック", "event": "lehman" },
+      { "date": "1970-04-30", "pct": -8.69, "change": -201.11, "close": 2114.32, "label": "", "event": "" },
+      { "date": "2016-06-24", "pct": -7.92, "change": -1286.33, "close": 14952.02, "label": "英国のEU離脱決定", "event": "" }
+    ],
+    "change_source": "下げ幅は株カリン「【歴代】日経平均株価 下落率・上昇率ランキング」(https://kabukarin.net/?p=5677、2025年4月10日更新)"
+  },
+  "by_points": {
+    "title": "1日の下げ幅ランキング",
+    "as_of": "2026-11-06",
+    "source": "株トレ「日経平均株価の歴代値下がり幅ランキング」(0.1円単位の表記)。1位・2位は日本経済新聞社のデータ(三菱UFJアセットマネジメントの表)、3位はフィスコ配信の大引け記事、8位は株カリンの値",
+    "url": "https://www.kabutore.biz/shisu/sisurank.html?sisu=nikkeiheikin&sort=down",
+    "checked": "2026-11-10",
+    "items": [
+      { "date": "2024-08-05", "change": -4451.28, "label": "令和のブラックマンデー", "event": "reiwa-black-monday" },
+      { "date": "1987-10-20", "change": -3836.48, "label": "ブラックマンデー", "event": "black-monday-1987" },
+      { "date": "2026-11-06", "change": -3643.13, "label": "", "event": "" },
+      { "date": "2026-10-15", "change": -3318.4, "label": "", "event": "" },
+      { "date": "2026-06-26", "change": -3005.4, "label": "", "event": "" },
+      { "date": "2026-03-09", "change": -2892.1, "label": "", "event": "" },
+      { "date": "2026-07-17", "change": -2694.4, "label": "", "event": "" },
+      { "date": "2025-04-07", "change": -2644.00, "label": "", "event": "" },
+      { "date": "2026-07-28", "change": -2566.3, "label": "", "event": "" },
+      { "date": "2026-06-23", "change": -2565.6, "label": "", "event": "" }
+    ]
+  },
+  "recent": {
+    "title": "2024年8月7日より後の大きな下落(参考)",
+    "items": [
+      { "date": "2025-04-07", "pct": -7.83, "change": -2644.00, "close": 31136.58, "source": "株カリン(https://kabukarin.net/?p=5677)" },
+      { "date": "2026-11-06", "pct": -5.96, "change": -3643.13, "close": 57434.77, "source": "フィスコ「日経平均大引け：前日比3643.13円安の57434.77円」(ザイFX!掲載)。下落率は前日終値61,077.90円から計算" }
+    ]
+  }
+}
