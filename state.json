@@ -1,15 +1,15 @@
 {
   "schema": "stocklist-crash-mode/1",
-  "generated_at": "2026-11-12T17:28:51.261Z",
-  "as_of": "2026-11-12",
+  "generated_at": "2026-11-13T17:03:16.602Z",
+  "as_of": "2026-11-13",
   "mode": "crash",
   "label": "急落モード",
   "headline": "大きく下げています。",
   "message": "暴落しても、焦らないこと。",
   "metrics": {
-    "close": 60819.36,
-    "drawdown": -0.1396,
-    "daily_return": -0.007,
+    "close": 61142.35,
+    "drawdown": -0.135,
+    "daily_return": 0.0053,
     "peak_date": "2026-10-06",
     "peak_close": 70683.98
   },
@@ -20,7 +20,7 @@
   "config_source": "default",
   "data_range": [
     "2000-01-04",
-    "2026-11-12"
+    "2026-11-13"
   ],
   "disclaimer": "検証用データ(Stooq/FRED)に基づく参考値。投資判断は自己責任で。"
 }
