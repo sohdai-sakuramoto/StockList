@@ -2,7 +2,7 @@
   "id": "black-monday-1987",
   "title": "ブラックマンデー",
   "source": "real",
-  "generated_at": "2026-11-16T19:26:55.576Z",
+  "generated_at": "2026-11-17T18:20:53.598Z",
   "granularity": "week",
   "window": [
     "1987-10-16",
@@ -42,7 +42,7 @@
       "close": 21910.08
     },
     "later_low": null,
-    "as_of": "2026-11-16"
+    "as_of": "2026-11-17"
   },
   "points": [
     {
