@@ -2,7 +2,7 @@
   "id": "bubble-collapse",
   "title": "バブル崩壊",
   "source": "real",
-  "generated_at": "2026-11-17T18:20:53.615Z",
+  "generated_at": "2026-11-18T17:54:25.182Z",
   "granularity": "month",
   "window": [
     "1990-01-04",
@@ -46,7 +46,7 @@
       "close": 7054.98,
       "drawdown": -0.8187
     },
-    "as_of": "2026-11-17"
+    "as_of": "2026-11-18"
   },
   "points": [
     {
