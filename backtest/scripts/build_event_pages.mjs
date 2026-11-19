@@ -19,6 +19,7 @@ import { warFeatureHtml } from "./feature_war.mjs";
 import { crashRankingHtml } from "./feature_ranking.mjs";
 import { siteHeaderHtml, breadcrumbLd, injectStaticPages } from "./site_header.mjs";
 import { injectHomeHub } from "./home_hub.mjs";
+import { injectHistoryList, viewToggleHtml, VIEW_TOGGLE_CSS } from "./history_list.mjs";
 import { selectCompare, selectRelated, compareHtml, nextReadHtml, followHtml } from "./event_nav.mjs";
 
 const SITE_URL = "https://www.stocklist.jp"; // ← 独自ドメイン導入時に変更
@@ -356,6 +357,8 @@ function timelineHtml(items, info) {
       </article>`;
   }).join("");
   const nPages = items.filter((e) => e.event && info[e.event]).length;
+  const decades = [...new Set(items.map((e) => Math.floor(Number(e.y) / 10) * 10))];
+  const firstYear = Math.min(...items.map((e) => Number(e.y)));
 
   return `<!DOCTYPE html>
 <html lang="ja">
@@ -394,14 +397,15 @@ function timelineHtml(items, info) {
     body{margin:0;background:var(--plane);color:var(--ink);line-height:1.7;
       font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI",system-ui,-apple-system,sans-serif;}
     a{color:var(--accent);text-decoration:none;}
-    .topbar{background:var(--navy);color:#fff;padding:12px 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;}
-    .topbar a{color:#cdd7ea;font-weight:600;font-size:14px;} .topbar a:hover{color:#fff;}
-    .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 100%);color:#fff;padding:46px 20px 50px;text-align:center;position:relative;overflow:hidden;}
-    .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--red);}
-    .hero .eyebrow{font-size:12px;letter-spacing:.22em;color:#9fb0cc;margin:0 0 10px;text-transform:uppercase;}
-    .hero h1{font-size:clamp(24px,4.4vw,38px);margin:0 0 10px;font-weight:800;letter-spacing:-.01em;}
-    .hero p{margin:0 auto;max-width:36em;color:#c7d1e2;font-size:15px;}
-    .wrap{max-width:900px;margin:0 auto;padding:26px 20px 72px;}
+    .pg-head h1{font-size:clamp(22px,4.4vw,32px);margin:0 0 6px;font-weight:800;letter-spacing:-.01em;line-height:1.35;}
+    .pg-head p{margin:0 0 14px;color:var(--ink-2);font-size:14.5px;line-height:1.7;}
+    ${VIEW_TOGGLE_CSS}
+    .dec-jump{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:-8px 0 4px;padding:2px 0 6px;}
+    .dec-jump::-webkit-scrollbar{display:none;}
+    .dec-jump a{flex:none;font-size:12.5px;font-weight:700;color:var(--ink-2);border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:4px 10px;}
+    .dec-jump a:hover{color:var(--accent);text-decoration:none;}
+    .decade{scroll-margin-top:12px;}
+    .wrap{max-width:900px;margin:0 auto;padding:20px 20px 72px;}
     .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin:0 0 22px;}
     .filters{display:flex;gap:8px;flex-wrap:wrap;}
     .filters button{font:inherit;font-size:13.5px;font-weight:700;cursor:pointer;padding:7px 16px;border-radius:999px;
@@ -447,12 +451,12 @@ function timelineHtml(items, info) {
 </head>
 <body>
   ${siteHeaderHtml({ active: "timeline", crumbs })}
-  <header class="hero">
-    <p class="eyebrow">Nikkei 225 · 1945–2026</p>
-    <h1>日本株 暴落・暴騰の年表</h1>
-    <p>東証再開（1949年）以降、日本株を大きく揺らした出来事を時系列で。青い線のある${nPages}つの出来事は、週次チャートと当時のニュースで詳しく振り返れます。</p>
-  </header>
   <main class="wrap">
+    <div class="pg-head">
+      <h1>日本株 暴落・暴騰の年表（${firstYear}年〜）</h1>
+      <p>東証再開（1949年）以降、日本株を大きく揺らした出来事を時系列でたどれます。青い線のある${nPages}つの出来事は、週次チャートと当時のニュースで詳しく振り返れます。</p>
+    </div>
+    ${viewToggleHtml("timeline")}
     <div class="controls">
       <div class="filters" hidden>
         <button type="button" data-filter="all" aria-pressed="true">すべて</button>
@@ -461,6 +465,7 @@ function timelineHtml(items, info) {
       </div>
       <p class="legend"><span><i class="dot crash"></i>暴落</span><span><i class="dot boom"></i>暴騰</span><span><i class="dot turn"></i>転換点</span><span><i class="dot note"></i>出来事</span></p>
     </div>
+    <nav class="dec-jump" aria-label="年代へ移動">${decades.map((d) => `<a href="#d${d}">${d}年代</a>`).join("")}</nav>
     <div id="tl">${rows}
     </div>
 
@@ -608,6 +613,7 @@ function main() {
   const statePath = path.join(REPO_ROOT, "state.json");
   const state = fs.existsSync(statePath) ? JSON.parse(fs.readFileSync(statePath, "utf8")) : null;
   if (injectHomeHub(REPO_ROOT, { state, daily, events: summary, slugOf })) console.log("[out] index.html (home hub)");
+  if (injectHistoryList(REPO_ROOT, { events: summary })) console.log("[out] history.html (出来事一覧)");
 
   // 手書きページ(index・history・now など)の共通ヘッダーも同じ定義で更新
   const hdr = injectStaticPages(REPO_ROOT);

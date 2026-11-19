@@ -478,3 +478,20 @@ test("出来事ページ: 目次の移動先がすべてあり、前後の出来
   assert.equal(Object.values(pn).filter((x) => !x.prev).length, 1, "最初の出来事は1つ");
   assert.equal(Object.values(pn).filter((x) => !x.next).length, 1, "最後の出来事は1つ");
 });
+
+test("出来事一覧と年表: 一覧は summary.json と同じ件数・下落率の深い順で、互いに切り替えられる", () => {
+  const root = path.resolve(SCRIPT_DIR, "..");
+  const summary = JSON.parse(fs.readFileSync(path.join(root, "events/summary.json"), "utf8"));
+  const hist = fs.readFileSync(path.join(root, "history.html"), "utf8");
+  const tl = fs.readFileSync(path.join(root, "timeline.html"), "utf8");
+  assert.ok(hist.includes(`出来事一覧（${summary.length}件）`), "見出しの件数");
+  const hrefs = [...hist.matchAll(/<li data-cat[^>]*><a href="([^"]+)"/g)].map((m) => m[1]);
+  const deep = [...summary].sort((a, b) => a.drawdown - b.drawdown).map((e) => e.url);
+  assert.deepEqual(hrefs, deep, "JSなしでも下落率の深い順に全件");
+  for (const h of hrefs) assert.ok(fs.existsSync(path.join(root, h + ".html")), `${h} がある`);
+  assert.ok(/<nav class="vw-toggle"[^>]*><a href="\/history" aria-current="page">一覧で見る<\/a><a href="\/timeline">年表で見る<\/a>/.test(hist), "一覧側の切り替え");
+  assert.ok(/<nav class="vw-toggle"[^>]*><a href="\/history">一覧で見る<\/a><a href="\/timeline" aria-current="page">年表で見る<\/a>/.test(tl), "年表側の切り替え");
+  for (const [, d] of tl.matchAll(/<nav class="dec-jump"[\s\S]*?<\/nav>/g).next().value[0].matchAll(/href="#(d\d+)"/g)) {
+    assert.ok(tl.includes(`id="${d}"`), `年表に #${d} がある`);
+  }
+});

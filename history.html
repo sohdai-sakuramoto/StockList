@@ -3,13 +3,13 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>株価が大きく動いた出来事の年表｜StockList</title>
-        <meta name="description" content="日経平均が大きく動いた歴史的な出来事（ドッジ不況・スターリン暴落・オイルショック・ブラックマンデー・バブル崩壊・ITバブル崩壊・リーマンショック・東日本大震災・コロナショック・令和のブラックマンデー・石破ショック）の年表。各イベントの週次チャートと当時のニュースへ。">
+        <title>日経平均が大きく下げた出来事一覧｜下落率・回復期間で比較｜StockList</title>
+        <meta name="description" content="日経平均株価が大きく下げた歴史的な出来事（ドッジ不況・スターリン暴落・オイルショック・ブラックマンデー・バブル崩壊・ITバブル崩壊・リーマンショック・コロナショック・令和のブラックマンデーなど）の一覧。最大下落率・回復までの期間で並べ替え、週次チャートと当時のニュースへ。">
         <link rel="canonical" href="https://www.stocklist.jp/history">
         <meta property="og:type" content="website">
         <meta property="og:site_name" content="StockList">
-        <meta property="og:title" content="株価が大きく動いた出来事の年表｜StockList">
-        <meta property="og:description" content="日経平均が大きく動いた歴史的な出来事の年表。週次チャートと当時のニュースで振り返る。">
+        <meta property="og:title" content="日経平均が大きく下げた出来事一覧｜StockList">
+        <meta property="og:description" content="日経平均株価が大きく下げた歴史的な出来事を、最大下落率と回復までの期間で比べる一覧。週次チャートと当時のニュースで振り返る。">
         <meta property="og:url" content="https://www.stocklist.jp/history">
         <meta property="og:image" content="https://www.stocklist.jp/IMG_3857.jpg">
         <link rel="stylesheet" href="/crash-mode.css">
@@ -32,37 +32,45 @@
           body { margin:0; background:var(--plane); color:var(--ink);
             font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI",system-ui,-apple-system,sans-serif; line-height:1.7; }
           a { color:inherit; text-decoration:none; }
-          .topbar { background:var(--navy); color:#fff; padding:12px 20px; display:flex; gap:16px; align-items:center; }
-          .topbar a { color:#cdd7ea; font-weight:600; font-size:14px; } .topbar a:hover { color:#fff; }
-          .hero { background:linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%); color:#fff; padding:52px 20px 56px; text-align:center; position:relative; overflow:hidden; }
-          .hero::after { content:""; position:absolute; left:0; right:0; bottom:0; height:4px; background:var(--red); }
-          .hero .eyebrow { font-size:12px; letter-spacing:.22em; color:#9fb0cc; margin:0 0 10px; text-transform:uppercase; }
-          .hero h1 { font-size:clamp(26px,4.4vw,40px); margin:0 0 10px; letter-spacing:-.01em; font-weight:800; }
-          .hero p { margin:0 auto; max-width:34em; color:#c7d1e2; font-size:15px; }
-          .wrap { max-width:1120px; margin:0 auto; padding:36px 20px 88px; }
-          .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:18px; }
-          .card { position:relative; display:flex; flex-direction:column; background:var(--surface);
-            border:1px solid var(--line); border-radius:16px; padding:22px 22px 18px; box-shadow:var(--shadow);
-            transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease; overflow:hidden; }
-          .card::before { content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--red); opacity:.85; }
-          .card:hover { transform:translateY(-4px); border-color:color-mix(in srgb, var(--red) 40%, var(--line));
-            box-shadow:0 6px 14px rgba(16,32,46,.1), 0 18px 42px rgba(16,32,46,.14); }
-          .card .cat { align-self:flex-start; font-size:11.5px; font-weight:700; color:var(--red);
-            background:color-mix(in srgb, var(--red) 12%, transparent); border-radius:999px; padding:3px 11px; margin-bottom:12px; }
-          .card .date { font-size:13px; color:var(--muted); font-variant-numeric:tabular-nums; margin-bottom:2px; }
-          .card h2 { font-size:21px; margin:0 0 8px; letter-spacing:-.01em; }
-          .card .desc { color:var(--ink-2); font-size:14px; margin:0 0 18px; flex:1 1 auto; }
-          .card .foot { display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid var(--line); padding-top:14px; }
-          .card .dd { display:inline-flex; align-items:baseline; gap:6px; font-size:12.5px; color:var(--muted); }
-          .card .dd b { font-size:19px; font-weight:800; color:var(--red); font-variant-numeric:tabular-nums; letter-spacing:-.01em; }
-          .card .go { font-size:13.5px; font-weight:700; color:var(--accent); white-space:nowrap; }
-          .card:hover .go { text-decoration:underline; }
-          .tl-link { display:flex; align-items:center; gap:14px; background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--accent);
-            border-radius:14px; padding:14px 18px; margin:0 0 22px; box-shadow:var(--shadow); color:var(--ink); }
-          .tl-link:hover { border-color:color-mix(in srgb, var(--accent) 45%, var(--line)); }
-          .tl-link .tl-ic { font-size:24px; flex:none; }
-          .tl-link small { color:var(--ink-2); font-size:13px; }
-          .tl-link .tl-go { margin-left:auto; color:var(--accent); font-weight:800; font-size:18px; flex:none; }
+          [hidden] { display:none !important; }
+          .wrap { max-width:880px; margin:0 auto; padding:20px 20px 72px; }
+          .pg-head h1 { font-size:clamp(22px,4.4vw,32px); margin:0 0 6px; font-weight:800; letter-spacing:-.01em; line-height:1.35; }
+          .pg-head p { margin:0 0 14px; color:var(--ink-2); font-size:14.5px; line-height:1.7; }
+          .vw-toggle{display:flex;gap:3px;background:color-mix(in srgb,var(--muted) 18%,var(--plane));border-radius:12px;padding:4px;margin:0 0 18px;max-width:420px;}
+          .vw-toggle a{flex:1;text-align:center;font-size:14px;font-weight:800;color:var(--ink-2);padding:9px 4px;border-radius:9px;text-decoration:none;}
+          .vw-toggle a:hover{color:var(--ink);text-decoration:none;}
+          .vw-toggle a[aria-current="page"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(16,32,46,.14);}
+          .hl-controls { margin:0 0 12px; }
+          .hl-chips, .hl-sort { display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; padding:2px 0 6px; }
+          .hl-chips::-webkit-scrollbar, .hl-sort::-webkit-scrollbar { display:none; }
+          .hl-chips button { font:inherit; font-size:13px; font-weight:700; cursor:pointer; padding:6px 14px; border-radius:999px; white-space:nowrap;
+            border:1px solid var(--line); background:var(--surface); color:var(--ink-2); flex:none; }
+          .hl-chips button[aria-pressed="true"] { background:var(--navy); color:#fff; border-color:var(--navy); }
+          .hl-sort { flex-wrap:wrap; overflow:visible; align-items:center; gap:4px 14px; font-size:13px; color:var(--muted); margin-top:4px; }
+          .hl-sort span { flex:none; }
+          .hl-sort button { all:unset; cursor:pointer; flex:none; color:var(--ink-2); font-weight:600; padding:4px 0; white-space:nowrap; }
+          .hl-sort button[aria-pressed="true"] { color:var(--ink); font-weight:800; box-shadow:inset 0 -2px 0 var(--accent); }
+          .hl-sort button:focus-visible, .hl-chips button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+          .hl-list { list-style:none; margin:0; padding:0; background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); overflow:hidden; }
+          .hl-list li + li { border-top:1px solid var(--line); }
+          .hl-list a { display:grid; grid-template-columns:1fr auto auto; align-items:center; gap:4px 16px; padding:13px 18px; }
+          .hl-list a:hover { background:color-mix(in srgb, var(--accent) 6%, transparent); }
+          .hl-main b { display:block; font-size:16px; font-weight:800; letter-spacing:-.01em; }
+          .hl-main small { display:block; font-size:12.5px; color:var(--muted); }
+          .hl-rec { font-size:12.5px; color:var(--ink-2); white-space:nowrap; text-align:right; }
+          .hl-dd { font-size:18px; font-weight:800; color:var(--red); font-variant-numeric:tabular-nums; min-width:3.6em; text-align:right; }
+          .hl-empty { color:var(--muted); text-align:center; padding:20px 0; }
+          .hl-rel { font-size:13.5px; color:var(--ink-2); margin:22px 0 0; display:flex; flex-wrap:wrap; gap:4px 16px; }
+          .hl-rel a { color:var(--accent); font-weight:700; }
+          @media (min-width:561px) { .hl-chips { flex-wrap:wrap; overflow:visible; } }
+          @media (max-width:560px) {
+            .hl-sort { gap:2px 12px; }
+            .hl-sort span { display:none; }
+            .hl-list a { padding:12px 14px; gap:2px 10px; }
+            .hl-main b { font-size:15px; }
+            .hl-rec { font-size:11.5px; }
+            .hl-dd { font-size:16px; }
+          }
           .foot-note { color:var(--muted); font-size:12px; text-align:center; margin-top:34px; }
           .foot-note a { color:var(--accent); }
             .sl-legal { display:flex; flex-wrap:wrap; justify-content:center; gap:4px 18px; margin:14px 0 0; padding-top:14px; border-top:1px solid var(--line); font-size:12.5px; } .sl-legal a { color:var(--ink-2); text-decoration:none; padding:6px 0; } .sl-legal a:hover { text-decoration:underline; }
@@ -85,216 +93,131 @@
 </header>
 <!-- /site-header -->
 
-        <header class="hero">
-            <p class="eyebrow">Nikkei 225 · Timeline</p>
-            <h1>株価が大きく動いた出来事</h1>
-            <p>歴史的な暴落を、週次チャートと当時のニュースで追体験する。カードを選ぶと、その相場の動きが見られます。</p>
-        </header>
-
-        <main class="wrap">
-            <a class="tl-link" href="/crash-ranking">
-                <span class="tl-ic" aria-hidden="true">📊</span>
-                <span><b>日経平均 暴落の歴史ランキング</b><br><small>リーマンショック・バブル崩壊・コロナショックなどを、下落率と回復までの期間で一覧比較</small></span>
-                <span class="tl-go" aria-hidden="true">→</span>
-            </a>
-            <a class="tl-link" href="/timeline">
-                <span class="tl-ic" aria-hidden="true">🗓️</span>
-                <span><b>1953年からの「暴落・暴騰の年表」を見る</b><br><small>スターリン暴落・オイルショック・Brexit・令和のブラックマンデーなど27の出来事を時系列で</small></span>
-                <span class="tl-go" aria-hidden="true">→</span>
-            </a>
-            <a class="tl-link" href="/war-and-stocks">
-                <span class="tl-ic" aria-hidden="true">📜</span>
-                <span><b>特集「戦争と株価」：有名企業の20年と、現代の戦争</b><br><small>戦時中から敗戦・東証再開までの7社の株価と、ウクライナ侵攻やイラン攻撃での日経平均の動き</small></span>
-                <span class="tl-go" aria-hidden="true">→</span>
-            </a>
-            <div class="grid">
-                <a class="card" href="/events/dodge-recession">
-                    <span class="cat">デフレ不況</span>
-                    <div class="date">1949年5月</div>
-                    <h2>ドッジ不況</h2>
-                    <p class="desc">東証再開直後から緊縮政策によるデフレ不況で下落。1950年7月に、いまも破られていない史上最安値85円25銭をつけた。</p>
-                    <div class="foot">
-                        <span class="dd" data-event="dodge-recession">最大下落率 <b>—</b></span>
-                        <span class="go">チャートで見る →</span>
-                    </div>
-                </a>
-
-                <a class="card" href="/events/stalin-crash">
-                    <span class="cat">暴落</span>
-                    <div class="date">1953年3月</div>
-                    <h2>スターリン暴落</h2>
-                    <p class="desc">スターリン首相の死去報道で朝鮮特需の終わりを連想した売りが殺到。1日10%の下落率は34年間破られなかった。</p>
-                    <div class="foot">
-                        <span class="dd" data-event="stalin-crash">最大下落率 <b>—</b></span>
-                        <span class="go">チャートで見る →</span>
-                    </div>
-                </a>
-
-                <a class="card" href="/events/securities-recession">
-                    <span class="cat">金融危機</span>
-                    <div class="date">1965年5月</div>
-                    <h2>証券不況</h2>
-                    <p class="desc">1961年の高値から長い下落が続き、山一證券が経営危機に。日銀の戦後初の特別融資で救済された。</p>
-                    <div class="foot">
-                        <span class="dd" data-event="securities-recession">最大下落率 <b>—</b></span>
-                        <span class="go">チャートで見る →</span>
-                    </div>
-                </a>
-
-                <a class="card" href="/events/nixon-shock">
-                    <span class="cat">通貨危機</span>
-                    <div class="date">1971年8月</div>
-                    <h2>ニクソンショック</h2>
-                    <p class="desc">米国の金・ドル交換停止で固定相場制が崩壊へ。円高懸念から日経平均は4日で約550円下落した。</p>
-                    <div class="foot">
-                        <span class="dd" data-event="nixon-shock">最大下落率 <b>—</b></span>
-                        <span class="go">チャートで見る →</span>
-                    </div>
-                </a>
-
-                <a class="card" href="/events/oil-shock-1973">
-                    <span class="cat">資源危機</span>
-                    <div class="date">1973年10月</div>
-                    <h2>第一次オイルショック</h2>
-                    <p class="desc">中東戦争をきっかけに原油価格が急騰し「狂乱物価」に。日経平均は高値から約37%下落した。</p>
-                    <div class="foot">
-                        <span class="dd" data-event="oil-shock-1973">最大下落率 <b>—</b></span>
-                        <span class="go">チャートで見る →</span>
-                    </div>
-                </a>
-
-                <a class="card" href="/events/black-monday-1987">
-                    <span class="cat">世界同時株安</span>
-                    <div class="date">1987年10月</div>
-                    <h2>ブラックマンデー</h2>
-                    <p class="desc">NY株の1日22.6%暴落が世界に連鎖。日経平均は1日で14.90%下落し、下落率は今も過去最大のまま。</p>
-                    <div class="foot">
-                        <span class="dd" data-event="black-monday-1987">最大下落率 <b>—</b></span>
-                        <span class="go">チャートで見る →</span>
-                    </div>
-                </a>
-
-                <a class="card" href="/events/bubble-collapse">
-                    <span class="cat">バブル崩壊</span>
-                    <div class="date">1990年1月</div>
-                    <h2>バブル崩壊</h2>
-                    <p class="desc">1989年末の史上最高値から利上げと総量規制で急落。高値の回復までに約34年を要した。</p>
-                    <div class="foot">
-                        <span class="dd" data-event="bubble-collapse">最大下落率 <b>—</b></span>
-                        <span class="go">チャートで見る →</span>
-                    </div>
-                </a>
-
-                <a class="card" href="/events/asian-financial-crisis">
-                    <span class="cat">通貨危機</span>
-                    <div class="date">1997年7月</div>
-                    <h2>アジア通貨危機</h2>
-                    <p class="desc">タイ・バーツの急落がアジア各国に波及。国内でも山一證券などの破綻が相次ぎ、1998年10月まで下落が続いた。</p>
-                    <div class="foot">
-                        <span class="dd" data-event="asian-crisis">最大下落率 <b>—</b></span>
-                        <span class="go">チャートで見る →</span>
-                    </div>
-                </a>
-
-                <a class="card" href="/events/it-bubble-collapse">
-                    <span class="cat">バブル崩壊</span>
-                    <div class="date">2000年4月</div>
-                    <h2>ITバブル崩壊</h2>
-                    <p class="desc">ネット株の熱狂がはじけ、米同時多発テロや金融不安も重なって2003年まで下落が続いた。</p>
-                    <div class="foot">
-                        <span class="dd" data-event="it-bubble">最大下落率 <b>—</b></span>
-                        <span class="go">チャートで見る →</span>
-                    </div>
-                </a>
-
-                <a class="card" href="/events/september-11-attacks">
-                    <span class="cat">テロ</span>
-                    <div class="date">2001年9月</div>
-                    <h2>米同時多発テロ</h2>
-                    <p class="desc">テロの翌日、日経平均は682円安で1984年8月以来の1万円割れ。NY市場は9月17日まで取引を再開できなかった。</p>
-                    <div class="foot">
-                        <span class="dd" data-event="sept-11">最大下落率 <b>—</b></span>
-                        <span class="go">チャートで見る →</span>
-                    </div>
-                </a>
-
-                <a class="card" href="/events/lehman-shock">
-                    <span class="cat">金融危機</span>
-                    <div class="date">2008年9月</div>
-                    <h2>リーマンショック</h2>
-                    <p class="desc">リーマン・ブラザーズの経営破綻を引き金に世界的な信用収縮が発生。日経平均は約2か月でバブル後最安値まで急落した。</p>
-                    <div class="foot">
-                        <span class="dd" data-event="lehman">最大下落率 <b>—</b></span>
-                        <span class="go">チャートで見る →</span>
-                    </div>
-                </a>
-
-                <a class="card" href="/events/great-east-japan-earthquake">
-                    <span class="cat">災害</span>
-                    <div class="date">2011年3月</div>
-                    <h2>東日本大震災</h2>
-                    <p class="desc">M9.0の地震・津波と福島第一原発事故が重なりリスクオフが進行。震災後2営業日で大きく下落した。</p>
-                    <div class="foot">
-                        <span class="dd" data-event="great-east-japan">最大下落率 <b>—</b></span>
-                        <span class="go">チャートで見る →</span>
-                    </div>
-                </a>
-
-                <a class="card" href="/events/covid-shock">
-                    <span class="cat">パンデミック</span>
-                    <div class="date">2020年2月</div>
-                    <h2>コロナショック</h2>
-                    <p class="desc">新型コロナウイルスの世界的拡大とロックダウン懸念でグローバル同時株安。急落と急反発が交互に出た局面。</p>
-                    <div class="foot">
-                        <span class="dd" data-event="covid">最大下落率 <b>—</b></span>
-                        <span class="go">チャートで見る →</span>
-                    </div>
-                </a>
-
-                <a class="card" href="/events/reiwa-black-monday">
-                    <span class="cat">世界同時株安</span>
-                    <div class="date">2024年8月</div>
-                    <h2>令和のブラックマンデー</h2>
-                    <p class="desc">利上げと円高、米景気不安が重なり1日4,451円安と過去最大の下げ幅。翌日は過去最大の上げ幅に。</p>
-                    <div class="foot">
-                        <span class="dd" data-event="reiwa-black-monday">最大下落率 <b>—</b></span>
-                        <span class="go">チャートで見る →</span>
-                    </div>
-                </a>
-
-                <a class="card" href="/events/ishiba-shock">
-                    <span class="cat">政治</span>
-                    <div class="date">2024年9月</div>
-                    <h2>石破ショック</h2>
-                    <p class="desc">自民党総裁選の結果を受け、政策不安から週明けに日経平均が大幅反落。円高・先物急落が重なった。</p>
-                    <div class="foot">
-                        <span class="dd" data-event="ishiba">最大下落率 <b>—</b></span>
-                        <span class="go">チャートで見る →</span>
-                    </div>
-                </a>
-            </div>
-
-            <p class="foot-note">
-                株価データは検証用（Stooq/FRED）に基づく参考値です。
-                <a href="/disclosure">免責事項</a>
-            </p>
-            <nav class="sl-legal" aria-label="規約・ポリシー"><a href="/privacy">プライバシーポリシー</a><a href="/privacy#external-transmission">外部送信について</a><a href="/disclosure">アフィリエイト表記・免責事項</a></nav>
-        </main>
-
-        <script>
-            // 各カードに実データの最大下落率を差し込む(取得できなければ「—」のまま)
-            document.querySelectorAll(".dd[data-event]").forEach(function (el) {
-                var id = el.getAttribute("data-event");
-                fetch("/History/events/" + id + ".json", { cache: "no-store" })
-                    .then(function (r) { return r.ok ? r.json() : null; })
-                    .then(function (j) {
-                        // 詳細ページの「30秒でわかる結論」・年表・/now と同じ「高値からの最大下落率」を表示
-                        var dd = j && j.conclusion && typeof j.conclusion.drawdown === "number" ? j.conclusion.drawdown
-                               : (j && j.kpi && typeof j.kpi.max_drawdown === "number" ? j.kpi.max_drawdown : null);
-                        if (dd !== null) el.querySelector("b").textContent = (dd * 100).toFixed(1) + "%";
-                    })
-                    .catch(function () {});
-            });
-        </script>
+<!-- history-list -->
+  <main class="wrap">
+    <div class="pg-head">
+      <h1>日経平均が大きく下げた出来事一覧（15件）</h1>
+      <p>1949年から2024年までに日経平均株価が大きく下げた15の出来事を、高値からの最大下落率と、下落前の高値を回復するまでの期間で比べられます。出来事を選ぶと、週次チャートと当時のニュースを見られます。</p>
+    </div>
+    <nav class="vw-toggle" aria-label="表示の切り替え"><a href="/history" aria-current="page">一覧で見る</a><a href="/timeline">年表で見る</a></nav>
+    <div class="hl-controls" hidden>
+      <div class="hl-chips" role="group" aria-label="種類で絞り込む"><button type="button" data-cat="" aria-pressed="true">すべて</button><button type="button" data-cat="金融危機" aria-pressed="false">金融危機</button><button type="button" data-cat="通貨危機" aria-pressed="false">通貨危機</button><button type="button" data-cat="世界同時株安" aria-pressed="false">世界同時株安</button><button type="button" data-cat="バブル崩壊" aria-pressed="false">バブル崩壊</button><button type="button" data-cat="デフレ不況" aria-pressed="false">デフレ不況</button><button type="button" data-cat="暴落" aria-pressed="false">暴落</button><button type="button" data-cat="資源危機" aria-pressed="false">資源危機</button><button type="button" data-cat="テロ" aria-pressed="false">テロ</button><button type="button" data-cat="災害" aria-pressed="false">災害</button><button type="button" data-cat="パンデミック" aria-pressed="false">パンデミック</button><button type="button" data-cat="政治" aria-pressed="false">政治</button></div>
+      <div class="hl-sort" role="group" aria-label="並べ替え"><span>並べ替え：</span><button type="button" data-sort="dd" aria-pressed="true">下落率が大きい順</button><button type="button" data-sort="new" aria-pressed="false">新しい順</button><button type="button" data-sort="old" aria-pressed="false">古い順</button><button type="button" data-sort="rec" aria-pressed="false">回復が早い順</button></div>
+    </div>
+    <ol class="hl-list" id="hl-list">
+        <li data-cat="バブル崩壊" data-date="2000-04-17" data-dd="-0.6348" data-rec="182"><a href="/events/it-bubble-collapse">
+          <span class="hl-main"><b>ITバブル崩壊</b><small>2000年・バブル崩壊</small></span>
+          <span class="hl-rec">回復 約15年</span>
+          <span class="hl-dd">−63%</span>
+        </a></li>
+        <li data-cat="バブル崩壊" data-date="1990-01-04" data-dd="-0.6323" data-rec="410"><a href="/events/bubble-collapse">
+          <span class="hl-main"><b>バブル崩壊</b><small>1990年・バブル崩壊</small></span>
+          <span class="hl-rec">回復 約34年</span>
+          <span class="hl-dd">−63%</span>
+        </a></li>
+        <li data-cat="金融危機" data-date="2008-09-15" data-dd="-0.6078" data-rec="91"><a href="/events/lehman-shock">
+          <span class="hl-main"><b>リーマンショック</b><small>2008年・金融危機</small></span>
+          <span class="hl-rec">回復 約8年</span>
+          <span class="hl-dd">−61%</span>
+        </a></li>
+        <li data-cat="デフレ不況" data-date="1949-05-16" data-dd="-0.5162" data-rec="32"><a href="/events/dodge-recession">
+          <span class="hl-main"><b>ドッジ不況</b><small>1949年・デフレ不況</small></span>
+          <span class="hl-rec">回復 約3年</span>
+          <span class="hl-dd">−52%</span>
+        </a></li>
+        <li data-cat="金融危機" data-date="1965-05-28" data-dd="-0.4423" data-rec="86"><a href="/events/securities-recession">
+          <span class="hl-main"><b>証券不況</b><small>1965年・金融危機</small></span>
+          <span class="hl-rec">回復 約7年</span>
+          <span class="hl-dd">−44%</span>
+        </a></li>
+        <li data-cat="暴落" data-date="1953-03-05" data-dd="-0.3778" data-rec="38"><a href="/events/stalin-crash">
+          <span class="hl-main"><b>スターリン暴落</b><small>1953年・暴落</small></span>
+          <span class="hl-rec">回復 約3年</span>
+          <span class="hl-dd">−38%</span>
+        </a></li>
+        <li data-cat="通貨危機" data-date="1997-07-02" data-dd="-0.3772" data-rec="33"><a href="/events/asian-financial-crisis">
+          <span class="hl-main"><b>アジア通貨危機</b><small>1997年・通貨危機</small></span>
+          <span class="hl-rec">回復 約3年</span>
+          <span class="hl-dd">−38%</span>
+        </a></li>
+        <li data-cat="資源危機" data-date="1973-10-16" data-dd="-0.374" data-rec="62"><a href="/events/oil-shock-1973">
+          <span class="hl-main"><b>第一次オイルショック</b><small>1973年・資源危機</small></span>
+          <span class="hl-rec">回復 約5年</span>
+          <span class="hl-dd">−37%</span>
+        </a></li>
+        <li data-cat="パンデミック" data-date="2020-02-25" data-dd="-0.3127" data-rec="10"><a href="/events/covid-shock">
+          <span class="hl-main"><b>コロナショック</b><small>2020年・パンデミック</small></span>
+          <span class="hl-rec">回復 約10ヶ月</span>
+          <span class="hl-dd">−31%</span>
+        </a></li>
+        <li data-cat="世界同時株安" data-date="2024-08-05" data-dd="-0.255" data-rec="13"><a href="/events/reiwa-black-monday">
+          <span class="hl-main"><b>令和のブラックマンデー</b><small>2024年・世界同時株安</small></span>
+          <span class="hl-rec">回復 約13ヶ月</span>
+          <span class="hl-dd">−25%</span>
+        </a></li>
+        <li data-cat="災害" data-date="2011-03-11" data-dd="-0.2411" data-rec="34"><a href="/events/great-east-japan-earthquake">
+          <span class="hl-main"><b>東日本大震災</b><small>2011年・災害</small></span>
+          <span class="hl-rec">回復 約3年</span>
+          <span class="hl-dd">−24%</span>
+        </a></li>
+        <li data-cat="世界同時株安" data-date="1987-10-20" data-dd="-0.2105" data-rec="6"><a href="/events/black-monday-1987">
+          <span class="hl-main"><b>ブラックマンデー</b><small>1987年・世界同時株安</small></span>
+          <span class="hl-rec">回復 約6ヶ月</span>
+          <span class="hl-dd">−21%</span>
+        </a></li>
+        <li data-cat="通貨危機" data-date="1971-08-16" data-dd="-0.2071" data-rec="5"><a href="/events/nixon-shock">
+          <span class="hl-main"><b>ニクソンショック</b><small>1971年・通貨危機</small></span>
+          <span class="hl-rec">回復 約5ヶ月</span>
+          <span class="hl-dd">−21%</span>
+        </a></li>
+        <li data-cat="政治" data-date="2024-09-27" data-dd="-0.1046" data-rec="13"><a href="/events/ishiba-shock">
+          <span class="hl-main"><b>石破ショック</b><small>2024年・政治</small></span>
+          <span class="hl-rec">回復 約13ヶ月</span>
+          <span class="hl-dd">−10%</span>
+        </a></li>
+        <li data-cat="テロ" data-date="2001-09-11" data-dd="-0.0766" data-rec="1"><a href="/events/september-11-attacks">
+          <span class="hl-main"><b>米同時多発テロ</b><small>2001年・テロ</small></span>
+          <span class="hl-rec">回復 約1ヶ月</span>
+          <span class="hl-dd">−8%</span>
+        </a></li>
+    </ol>
+    <p class="hl-empty" hidden>該当する出来事はありません。</p>
+    <p class="hl-rel">あわせて見る：<a href="/crash-ranking">暴落ランキング（1日の下落率・回復の早さ）</a>　<a href="/war-and-stocks">特集「戦争と株価」</a></p>
+    <p class="foot-note">
+      下落率は高値から底値までの終値ベース、回復は下落前の高値を終値で上回るまでの期間です。株価データは検証用（Stooq/FRED）に基づく参考値です。
+      <a href="/disclosure">免責事項</a>
+    </p>
+    <nav class="sl-legal" aria-label="規約・ポリシー"><a href="/privacy">プライバシーポリシー</a><a href="/privacy#external-transmission">外部送信について</a><a href="/disclosure">アフィリエイト表記・免責事項</a></nav>
+  </main>
+  <script>
+  (function () {
+    var box = document.querySelector(".hl-controls"), list = document.getElementById("hl-list");
+    if (!box || !list) return;
+    box.hidden = false; // JSが動く環境でだけ絞り込み・並べ替えを出す
+    var items = [].slice.call(list.children), cat = "", sort = "dd";
+    var key = {
+      dd: function (a, b) { return a.dataset.dd - b.dataset.dd; },
+      "new": function (a, b) { return a.dataset.date < b.dataset.date ? 1 : -1; },
+      old: function (a, b) { return a.dataset.date < b.dataset.date ? -1 : 1; },
+      rec: function (a, b) { return (a.dataset.rec - b.dataset.rec) || (a.dataset.dd - b.dataset.dd); }
+    };
+    function apply() {
+      items.sort(key[sort]).forEach(function (it) { list.appendChild(it); it.hidden = !!cat && it.dataset.cat !== cat; });
+      document.querySelector(".hl-empty").hidden = items.some(function (it) { return !it.hidden; });
+    }
+    function group(sel, attr, set) {
+      var btns = [].slice.call(box.querySelectorAll(sel + " button"));
+      btns.forEach(function (b) {
+        b.addEventListener("click", function () {
+          btns.forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+          set(b.getAttribute(attr)); apply();
+        });
+      });
+    }
+    group(".hl-chips", "data-cat", function (v) { cat = v; });
+    group(".hl-sort", "data-sort", function (v) { sort = v; });
+  })();
+  </script>
+  <!-- /history-list -->
     </body>
 </html>
