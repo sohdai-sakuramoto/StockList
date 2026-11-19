@@ -440,3 +440,14 @@ test("トップのハブ: いまの日経平均株価・ランキング・出来
   }
   assert.ok(!/href="\/timeline#d\d+"/.test(hub[1]) || /id="d\d{4}"/.test(fs.readFileSync(path.join(root, "timeline.html"), "utf8")), "年代リンク先のidが年表にある");
 });
+
+test("暴落ランキング: タブの切り替え先がすべて存在し、全表がHTMLに入っている(JSなしでも読める)", () => {
+  const html = fs.readFileSync(path.resolve(SCRIPT_DIR, "..", "crash-ranking.html"), "utf8");
+  const seg = html.match(/<nav class="rk-seg"[\s\S]*?<\/nav>/);
+  assert.ok(seg, "タブがある");
+  const ids = [...seg[0].matchAll(/href="#([^"]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(ids, ["h-day", "h-pt-day", "h-dd", "h-rec"]);
+  for (const id of ids) assert.ok(html.includes(`<h2 id="${id}">`), `#${id} の表がある`);
+  assert.ok(!/<section[^>]*\shidden/.test(html), "初期HTMLでは表を隠さない");
+  assert.ok(html.includes('class="rk-dock"'), "画面下の次の一歩");
+});
