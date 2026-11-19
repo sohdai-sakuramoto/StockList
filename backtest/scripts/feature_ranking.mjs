@@ -184,14 +184,30 @@ export function crashRankingHtml({ rows, daily = null, slugOf = {}, siteUrl }) {
     body{margin:0;background:var(--plane);color:var(--ink);line-height:1.8;
       font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI",system-ui,-apple-system,sans-serif;}
     a{color:var(--accent);text-decoration:none;} a:hover{text-decoration:underline;}
-    .topbar{background:var(--navy);color:#fff;padding:12px 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;}
-    .topbar a{color:#cdd7ea;font-weight:600;font-size:14px;} .topbar a:hover{color:#fff;text-decoration:none;}
-    .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 100%);color:#fff;padding:46px 20px 50px;text-align:center;position:relative;}
-    .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--red);}
-    .hero .eyebrow{font-size:12px;letter-spacing:.22em;color:#9fb0cc;margin:0 0 10px;text-transform:uppercase;}
-    .hero h1{font-size:clamp(24px,4.6vw,38px);margin:0 0 12px;font-weight:800;letter-spacing:-.01em;line-height:1.35;}
-    .hero p{margin:0 auto;max-width:40em;color:#c7d1e2;font-size:15px;}
-    .wrap{max-width:1040px;margin:0 auto;padding:28px 20px 72px;}
+    .wrap{max-width:1040px;margin:0 auto;padding:20px 20px 72px;}
+    .pg-head h1{font-size:clamp(22px,4.4vw,32px);margin:0 0 6px;font-weight:800;letter-spacing:-.01em;line-height:1.35;}
+    .pg-head p{margin:0 0 14px;color:var(--ink-2);font-size:14.5px;line-height:1.7;}
+    /* タブ(JS有効時のみ切り替え。JSなしは全表を表示) */
+    .rk-seg{display:flex;gap:3px;background:color-mix(in srgb,var(--muted) 18%,var(--plane));border-radius:12px;padding:4px;margin:0 0 18px;position:sticky;top:0;z-index:5;}
+    .rk-seg a{flex:1;text-align:center;font-size:13.5px;font-weight:800;color:var(--ink-2);padding:9px 4px;border-radius:9px;white-space:nowrap;}
+    .rk-seg a:hover{text-decoration:none;color:var(--ink);}
+    .rk-tabs.js .rk-seg a[aria-current="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(16,32,46,.14);}
+    .rk-tabs:not(.js) .rk-seg{position:static;}
+    .rk-tabs.js section{margin-bottom:28px;}
+    .rk-tabs.js section h2{scroll-margin-top:70px;}
+    /* 画面下の「次の一歩」(PC・スマホ共通) */
+    .rk-dock{display:flex;justify-content:center;gap:10px;position:fixed;left:0;right:0;bottom:0;z-index:40;padding:10px 20px calc(10px + env(safe-area-inset-bottom));
+      background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(16,32,46,.08);}
+    .rk-dock a{flex:0 1 260px;text-align:center;font-size:14px;font-weight:800;padding:11px 6px;border-radius:10px;border:1px solid var(--line);color:var(--ink);}
+    .rk-dock a.p{background:var(--red);border-color:var(--red);color:#fff;}
+    .rk-dock a:hover{text-decoration:none;filter:brightness(1.04);}
+    body{padding-bottom:76px;}
+    @media (max-width:760px){
+      .rk-dock{gap:8px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));}
+      .rk-dock a{flex:1;font-size:13.5px;}
+      body{padding-bottom:72px;}
+      .rk-seg a{font-size:12px;padding:8px 2px;}
+    }
     section{margin:0 0 44px;}
     h2{font-size:21px;margin:0 0 6px;letter-spacing:-.01em;padding-left:12px;border-left:4px solid var(--accent);}
     .lead{color:var(--ink-2);font-size:15px;margin:0 0 12px;}
@@ -226,18 +242,18 @@ export function crashRankingHtml({ rows, daily = null, slugOf = {}, siteUrl }) {
 </head>
 <body>
   ${siteHeaderHtml({ active: "ranking", crumbs })}
-  <header class="hero">
-    <p class="eyebrow">Nikkei 225 · Crash Ranking</p>
-    <h1>日経平均 暴落ランキング</h1>
-    <p>${d ? "日経平均株価が1日で大きく下げた日の下落率・下げ幅の歴代ランキングと、" : ""}${y0}年から${y1}年まで大きく下げた${f.n}の局面の、最大下落率と下落前の高値を回復するまでの期間を比べます。</p>
-  </header>
   <main class="wrap">
-    <div class="tiles">
-      ${d ? `<div class="tile"><div class="k">1日の下落率が最も大きい</div><div class="v" style="color:var(--red)">${pct2(r1.pct)}</div><div class="n">${esc(ymd(r1.date))}${r1.label ? `（${esc(r1.label)}）` : ""}</div></div>` : ""}
-      <div class="tile"><div class="k">高値から底までの下落率が最も大きい</div><div class="v" style="color:var(--red)">${ddPct(f.deepest.c.drawdown)}</div><div class="n">${esc(f.deepest.title)}（${esc(f.deepest.year)}年）</div></div>
-      ${f.fastest ? `<div class="tile"><div class="k">高値の回復が最も早い</div><div class="v">${esc(recoverStr(f.fastest.c))}</div><div class="n">${esc(f.fastest.title)}（${esc(f.fastest.year)}年）</div></div>` : ""}
-      <div class="tile"><div class="k">1年以内に高値を回復</div><div class="v">${f.withinYear.length}<span style="font-size:16px">／${f.n}件</span></div><div class="n">${esc(names(f.withinYear))}</div></div>
+    <div class="pg-head">
+      <h1>日経平均 暴落ランキング</h1>
+      <p>${d ? "日経平均株価が1日で大きく下げた日の下落率・下げ幅の歴代ランキングと、" : ""}${y0}年から${y1}年まで大きく下げた${f.n}の局面の、最大下落率と下落前の高値を回復するまでの期間を比べます。</p>
     </div>
+
+    <!-- ランキングはタブで切り替え(JSなしでは全表を縦に表示。どの表もHTMLに入っているのでクローラブル) -->
+    <div class="rk-tabs" data-rk-tabs>
+    <nav class="rk-seg" aria-label="ランキングの種類">
+      ${d ? `<a href="#h-day">1日の下落率</a><a href="#h-pt-day">1日の下げ幅</a>` : ""}<a href="#h-dd">高値から</a><a href="#h-rec">回復の早さ</a>
+    </nav>
+
 
 ${d ? dailyHtml(d, daily, { pct2, yenDown, dayName }) : ""}
     <section aria-labelledby="h-dd">
@@ -263,8 +279,33 @@ ${d ? dailyHtml(d, daily, { pct2, yenDown, dayName }) : ""}
       </table></div>
     </section>
 
+    </div>
+    <script>
+    (function () {
+      var box = document.querySelector("[data-rk-tabs]"); if (!box) return;
+      var tabs = [].slice.call(box.querySelectorAll(".rk-seg a"));
+      var secs = tabs.map(function (a) { var h = document.getElementById(a.hash.slice(1)); return h && h.closest("section"); });
+      function show(i, push) {
+        tabs.forEach(function (a, j) { a.setAttribute("aria-current", j === i ? "true" : "false"); if (secs[j]) secs[j].hidden = j !== i; });
+        if (push && history.replaceState) history.replaceState(null, "", tabs[i].hash);
+      }
+      box.classList.add("js");
+      tabs.forEach(function (a, i) { a.addEventListener("click", function (e) { e.preventDefault(); show(i, true); }); });
+      var i0 = tabs.findIndex(function (a) { return a.hash === location.hash; });
+      show(i0 < 0 ? 0 : i0, false);
+      if (i0 >= 0) box.scrollIntoView();
+      window.addEventListener("hashchange", function () { var k = tabs.findIndex(function (a) { return a.hash === location.hash; }); if (k >= 0) { show(k, false); box.scrollIntoView(); } });
+    })();
+    </script>
+
     <section aria-labelledby="h-pt">
       <h2 id="h-pt">ランキングから分かること</h2>
+      <div class="tiles">
+      ${d ? `<div class="tile"><div class="k">1日の下落率が最も大きい</div><div class="v" style="color:var(--red)">${pct2(r1.pct)}</div><div class="n">${esc(ymd(r1.date))}${r1.label ? `（${esc(r1.label)}）` : ""}</div></div>` : ""}
+      <div class="tile"><div class="k">高値から底までの下落率が最も大きい</div><div class="v" style="color:var(--red)">${ddPct(f.deepest.c.drawdown)}</div><div class="n">${esc(f.deepest.title)}（${esc(f.deepest.year)}年）</div></div>
+      ${f.fastest ? `<div class="tile"><div class="k">高値の回復が最も早い</div><div class="v">${esc(recoverStr(f.fastest.c))}</div><div class="n">${esc(f.fastest.title)}（${esc(f.fastest.year)}年）</div></div>` : ""}
+      <div class="tile"><div class="k">1年以内に高値を回復</div><div class="v">${f.withinYear.length}<span style="font-size:16px">／${f.n}件</span></div><div class="n">${esc(names(f.withinYear))}</div></div>
+      </div>
       <div class="points"><ul>
         ${d ? `<li>1日の下げ幅（円）の上位には近年の下落が多く入りますが、下落率の上位は${esc(ymd(r1.date))}など過去の暴落が中心です。株価の水準が高いと、同じ下落率でも下げ幅は大きくなります。</li>` : ""}
         <li>下落率が大きい上位3件（${esc(names(f.top3))}）は、いずれも高値の回復に${f.top3MinYears}年以上かかりました。</li>
@@ -298,6 +339,7 @@ ${d ? dailyHtml(d, daily, { pct2, yenDown, dayName }) : ""}
     </p>
     <nav class="sl-legal" aria-label="規約・ポリシー"><a href="/privacy">プライバシーポリシー</a><a href="/privacy#external-transmission">外部送信について</a><a href="/disclosure">アフィリエイト表記・免責事項</a></nav>
   </main>
+  <nav class="rk-dock" aria-label="次に見る"><a href="/history">出来事一覧</a><a class="p" href="/now">いまの下落と比べる</a></nav>
 </body>
 </html>
 `;
