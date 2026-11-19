@@ -462,6 +462,7 @@ test("出来事ページ: 目次の移動先がすべてあり、前後の出来
     const html = fs.readFileSync(path.join(root, "events", f), "utf8");
     const jump = html.match(/<nav class="slv-jump"[\s\S]*?<\/nav>/);
     assert.ok(jump, `${f}: 目次がある`);
+    assert.ok(html.includes("StockListViewer.fold("), `${f}: セクションを折りたためる`);
     for (const [, id] of jump[0].matchAll(/href="#([^"]+)"/g)) {
       assert.ok(html.includes(`id="${id}"`) || viewer.includes(`"${id}"`), `${f}: #${id} がある`);
     }

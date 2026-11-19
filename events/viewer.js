@@ -205,6 +205,16 @@
         (n.source ? '<div class="src">' + (n.url ? '<a href="' + esc(n.url) + '" target="_blank" rel="noopener noreferrer">' + esc(n.source) + ' ↗</a>' : esc(n.source)) + '</div>' : '') +
       '</div>';
     }).join("");
+    // スマホではニュースを最初の4件だけ見せ、残りはボタンで開く(PCは枠内スクロール)
+    var SHOW = 4, rest = items.length - SHOW;
+    if (rest > 0) {
+      box.querySelectorAll(".slv-item").forEach(function (it, i) { if (i >= SHOW) it.classList.add("slv-more-item"); });
+      var more = document.createElement("button");
+      more.type = "button"; more.className = "slv-news-more";
+      more.textContent = "残り" + rest + "件のニュースを表示";
+      more.addEventListener("click", function () { box.classList.add("all"); more.remove(); });
+      box.appendChild(more);
+    }
     box.querySelectorAll(".slv-item").forEach(function (it) {
       it.addEventListener("click", function (e) {
         if (e.target.closest("a")) return;
@@ -214,6 +224,47 @@
       });
     });
   }
+
+  // セクションの折りたたみ: 見出しをボタンにして本文を開閉する(初期状態はすべて開く)。
+  // JSが動かない環境では見出しも本文もそのまま表示される。
+  function setOpen(sec, open) {
+    var btn = sec.querySelector(":scope > h2 > .slv-fold-btn"), body = sec.querySelector(":scope > .slv-fold-body");
+    if (!btn || !body) return;
+    sec.classList.toggle("folded", !open);
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+    body.hidden = !open;
+  }
+  NS.fold = function (sections) {
+    sections.forEach(function (sec, k) {
+      var h = sec && sec.querySelector(":scope > h2");
+      if (!h || h.querySelector(".slv-fold-btn")) return;
+      var body = document.createElement("div");
+      body.className = "slv-fold-body"; body.id = (sec.id || "slv-sec" + k) + "-body";
+      while (h.nextSibling) body.appendChild(h.nextSibling);
+      sec.appendChild(body);
+      var btn = document.createElement("button");
+      btn.type = "button"; btn.className = "slv-fold-btn";
+      btn.setAttribute("aria-expanded", "true"); btn.setAttribute("aria-controls", body.id);
+      while (h.firstChild) btn.appendChild(h.firstChild);
+      var ic = document.createElement("span"); ic.className = "slv-fold-ic"; ic.setAttribute("aria-hidden", "true");
+      btn.appendChild(ic);
+      h.appendChild(btn);
+      sec.classList.add("slv-foldable");
+      btn.addEventListener("click", function () { setOpen(sec, sec.classList.contains("folded")); });
+    });
+    // 目次やリンクで閉じたセクションへ移動したときは開く
+    var openFor = function (hash) {
+      var t = hash && hash.length > 1 && document.getElementById(decodeURIComponent(hash.slice(1)));
+      var sec = t && t.closest(".slv-foldable");
+      if (sec && sec.classList.contains("folded")) setOpen(sec, true);
+    };
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest && e.target.closest('a[href^="#"]');
+      if (a) openFor(a.getAttribute("href"));
+    });
+    window.addEventListener("hashchange", function () { openFor(location.hash); });
+    openFor(location.hash);
+  };
 
   function highlightWeek(root, wk, weekIndex) {
     var g = NS._geom; if (!g || !(wk in weekIndex)) return;

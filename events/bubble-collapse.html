@@ -181,6 +181,7 @@
       var D = JSON.parse(document.getElementById("slv-data").textContent);
       StockListViewer.render(document.getElementById("slv-root"), D.cfg, D.series);
       StockListSimulator.render(document.getElementById("slv-sim"), D.cfg, D.series);
+      StockListViewer.fold([].slice.call(document.querySelectorAll("#slv-chart, #slv-news, #slv-sim, .slv-cmp, .slv-co")));
       // 比較ブロック: スマホ(640px以下)はチャートの直後・ニュースの前へ移す(PCはニュースの後のまま)
       var cmp = document.querySelector(".slv-cmp"), grid = document.querySelector("#slv-root .slv-grid");
       if (cmp && grid && grid.children.length > 1 && window.matchMedia) {
