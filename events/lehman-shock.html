@@ -47,11 +47,9 @@
   <nav class="sh-bc" aria-label="パンくずリスト"><ol><li><a href="/">ホーム</a></li><li><a href="/history">出来事一覧</a></li><li><span aria-current="page">リーマンショック</span></li></ol></nav>
 </header>
   <div class="slv-wrap">
-    <nav class="slv-picker" aria-label="出来事を選ぶ"><a href="/events/dodge-recession">ドッジ不況</a><a href="/events/stalin-crash">スターリン暴落</a><a href="/events/securities-recession">証券不況</a><a href="/events/nixon-shock">ニクソンショック</a><a href="/events/oil-shock-1973">第一次オイルショック</a><a href="/events/black-monday-1987">ブラックマンデー</a><a href="/events/bubble-collapse">バブル崩壊</a><a href="/events/asian-financial-crisis">アジア通貨危機</a><a href="/events/it-bubble-collapse">ITバブル崩壊</a><a href="/events/september-11-attacks">米同時多発テロ</a><a href="/events/lehman-shock" aria-current="true">リーマンショック</a><a href="/events/great-east-japan-earthquake">東日本大震災</a><a href="/events/covid-shock">コロナショック</a><a href="/events/reiwa-black-monday">令和のブラックマンデー</a><a href="/events/ishiba-shock">石破ショック</a></nav>
-    <script>(function(){var p=document.currentScript.previousElementSibling,c=p&&p.querySelector('[aria-current="true"]');if(c&&p.scrollWidth>p.clientWidth)p.scrollLeft=c.offsetLeft-p.offsetLeft-20;})();</script>
     <div class="slv-intro">
     <div class="slv-head">
-      <h1>リーマンショック</h1>
+      <h1>リーマンショック<span class="yr">（2008年）</span></h1>
       <span class="cat">金融危機</span>
       <time class="date" datetime="2008-09-15">2008年9月15日</time>
     </div>
@@ -67,15 +65,23 @@
       </div>
     </section>
     </div>
+    <nav class="slv-jump" aria-label="このページの目次"><a href="#slv-chart">チャート</a><a href="#slv-news">当時のニュース</a><a href="#slv-sim">シミュレーター</a><a href="#slv-cmp">過去と比較</a><a href="#slv-faq">FAQ</a></nav>
     <div id="slv-root"></div>
+
+    <aside class="slv-dayrank">
+      <p>この出来事の1日の下落率は、歴代<b>3位</b>（2008年10月16日　<span class="neg">−11.41%</span>）です。</p>
+      <a href="/crash-ranking#h-day">暴落ランキングで比べる →</a>
+    </aside>
     <section class="slv-sim" id="slv-sim" aria-labelledby="slv-sim-h"></section>
+
+    <nav class="slv-pn" aria-label="前後の出来事（年代順）"><a class="slv-pn-prev" href="/events/september-11-attacks"><span class="k">← 前の出来事</span><b>米同時多発テロ</b><span class="y">2001年</span></a><a class="slv-pn-next" href="/events/great-east-japan-earthquake"><span class="k">次の出来事 →</span><b>東日本大震災</b><span class="y">2011年</span></a></nav>
 
     <noscript>
       <h2>当時の主なニュース</h2>
       <ul><li><strong>2008-09-15｜リーマン・ブラザーズが経営破綻</strong><br>米連邦倒産法第11章の適用を申請。世界的な金融不安が一気に高まった。日本は敬老の日で休場。（各種報道）</li><li><strong>2008-09-16｜日経平均、前週末比605円安（-4.95%）</strong><br>NY株の急落を受け3年2か月ぶりの安値。金融株を中心に全面安となった。（日本経済新聞）</li><li><strong>2008-10-08｜世界同時株安で-9.38%</strong><br>各国の協調利下げも売りを止められず、終値は9,203円台まで下落。（各種報道）</li><li><strong>2008-10-16｜-11.41%、歴史的な下落率</strong><br>世界景気後退への懸念が強まり、終値は8,458円台。（各種報道）</li><li><strong>2008-10-28｜バブル後最安値 7,162円台</strong><br>売りが一巡し、この日を底に急反発に転じた。（各種報道）</li><li><strong>2009-03-10｜世界的な金融緩和を背景に底入れ、反発局面へ</strong><br>各国の大規模緩和や金融安定化策が進み、この頃を安値圏に下げ止まった。以後は緩やかな回復基調に転じた。（各種報道）</li><li><strong>2012-11-14｜衆院解散でアベノミクス相場が始動</strong><br>大規模な金融緩和と円安への期待から株価が急伸し、本格的な回復局面に入った。（各種報道）</li><li><strong>2013-04-04｜日銀が「量的・質的金融緩和」(異次元緩和)を導入</strong><br>大規模緩和の導入で円安・株高が加速。回復を大きく後押しした。（各種報道）</li><li><strong>2015-02-19｜リーマン前(2007年)の高値水準を回復</strong><br>約6年半ぶりに18,000円台を回復し、暴落前の水準に戻した。（各種報道）</li></ul>
     </noscript>
 
-    <section class="slv-cmp" aria-labelledby="slv-cmp-h">
+    <section class="slv-cmp" id="slv-cmp" aria-labelledby="slv-cmp-h">
       <h2 id="slv-cmp-h">この下落は、過去の暴落と比べてどれくらい大きかった？</h2>
       <p class="slv-cmp-sub">日経平均の最大下落率（高値→底・終値）と、高値を回復するまでの期間</p>
       <ol class="slv-cmp-list">
@@ -113,7 +119,7 @@
       <a class="slv-cmp-all" href="/crash-ranking">暴落ランキングで全件を比べる<span aria-hidden="true">→</span></a>
     </section>
 
-    <section class="slv-faq" aria-label="よくある質問">
+    <section class="slv-faq" id="slv-faq" aria-label="よくある質問">
       <h2 class="slv-faq-h">よくある質問</h2>
       <details><summary>リーマンショックはいつ起きた?</summary><div class="slv-faq-a">2008年9月15日です。米大手投資銀行リーマン・ブラザーズが経営破綻し、翌16日の日経平均は605円安（−4.95%）となりました。10月28日には7,162円台と、バブル後最安値（当時）まで下がりました。</div></details>
       <details><summary>リーマンショックで日経平均は何%下がった?</summary><div class="slv-faq-a">2007年夏の高値(約18,300円)から2009年の大底(約7,000円)まで、およそ6割下落しました。金融株を中心に全面安となり、当時として歴史的な下落率を記録しました。</div></details>
@@ -179,6 +185,7 @@
       var D = JSON.parse(document.getElementById("slv-data").textContent);
       StockListViewer.render(document.getElementById("slv-root"), D.cfg, D.series);
       StockListSimulator.render(document.getElementById("slv-sim"), D.cfg, D.series);
+      StockListViewer.fold([].slice.call(document.querySelectorAll("#slv-chart, #slv-news, #slv-sim, .slv-cmp, .slv-co")));
       // 比較ブロック: スマホ(640px以下)はチャートの直後・ニュースの前へ移す(PCはニュースの後のまま)
       var cmp = document.querySelector(".slv-cmp"), grid = document.querySelector("#slv-root .slv-grid");
       if (cmp && grid && grid.children.length > 1 && window.matchMedia) {

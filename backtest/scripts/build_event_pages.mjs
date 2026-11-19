@@ -157,13 +157,40 @@ function pageHtml(cfg, series) {
   const companiesHtml = companiesTableHtml(cfg.companies);
 
   const faqHtml = faq.length ? `
-    <section class="slv-faq" aria-label="よくある質問">
+    <section class="slv-faq" id="slv-faq" aria-label="よくある質問">
       <h2 class="slv-faq-h">よくある質問</h2>
       ${faq.map((f) => `<details><summary>${esc(f.q)}</summary><div class="slv-faq-a">${esc(f.a)}</div></details>`).join("\n      ")}
     </section>` : "";
 
-  const nav = ALL.map((e) =>
-    `<a href="/events/${e.slug}"${e.id === cfg.id ? ' aria-current="true"' : ""}>${esc(e.title)}</a>`).join("");
+  // ページ内目次(スクロール中も上に残る)。対象の節があるものだけ
+  const compareSel = selectCompare(cfg.id, EVS, NAV, cfg.compare);
+  const jumps = [
+    ["#slv-chart", "チャート"],
+    ["#slv-news", "当時のニュース"],
+    ["#slv-sim", "シミュレーター"],
+    ...(compareSel.length >= 2 ? [["#slv-cmp", "過去と比較"]] : []),
+    ...(faq.length ? [["#slv-faq", "FAQ"]] : []),
+  ];
+  const jumpHtml = `<nav class="slv-jump" aria-label="このページの目次">${jumps.map(([h, t]) => `<a href="${h}">${t}</a>`).join("")}</nav>`;
+
+  // 前後の出来事(年代順)
+  const byDate = [...ALL].filter((e) => e.date).sort((a, b) => a.date.localeCompare(b.date));
+  const idx = byDate.findIndex((e) => e.id === cfg.id);
+  const prev = idx > 0 ? byDate[idx - 1] : null, next = idx >= 0 && idx < byDate.length - 1 ? byDate[idx + 1] : null;
+  const pnCard = (e, dir) => e
+    ? `<a class="slv-pn-${dir}" href="/events/${e.slug}"><span class="k">${dir === "prev" ? "← 前の出来事" : "次の出来事 →"}</span><b>${esc(e.title)}</b><span class="y">${e.date.slice(0, 4)}年</span></a>`
+    : `<span class="slv-pn-${dir} empty"></span>`;
+  const prevNextHtml = `
+    <nav class="slv-pn" aria-label="前後の出来事（年代順）">${pnCard(prev, "prev")}${pnCard(next, "next")}</nav>`;
+
+  // 1日の下落ランキングでの順位(daily-drops.json に載っている出来事だけ)
+  const dayItems = DAILY && DAILY.by_rate ? DAILY.by_rate.items : [];
+  const dayRank = dayItems.findIndex((it) => it.event === cfg.id);
+  const dayRankHtml = dayRank >= 0 ? `
+    <aside class="slv-dayrank">
+      <p>この出来事の1日の下落率は、歴代<b>${dayRank + 1}位</b>（${jaDate(dayItems[dayRank].date)}　<span class="neg">${dayItems[dayRank].pct < 0 ? "−" : ""}${Math.abs(dayItems[dayRank].pct).toFixed(2)}%</span>）です。</p>
+      <a href="/crash-ranking#h-day">暴落ランキングで比べる →</a>
+    </aside>` : "";
 
   // クロール可能なニュース(noscript フォールバック兼、初期HTMLの本文)
   const newsHtml = (cfg.news || []).map((n) =>
@@ -208,25 +235,26 @@ function pageHtml(cfg, series) {
 <body>
   ${siteHeaderHtml({ active: "events", crumbs })}
   <div class="slv-wrap">
-    <nav class="slv-picker" aria-label="出来事を選ぶ">${nav}</nav>
-    <script>(function(){var p=document.currentScript.previousElementSibling,c=p&&p.querySelector('[aria-current="true"]');if(c&&p.scrollWidth>p.clientWidth)p.scrollLeft=c.offsetLeft-p.offsetLeft-20;})();</script>
     <div class="slv-intro">
     <div class="slv-head">
-      <h1>${esc(cfg.title)}</h1>
+      <h1>${esc(cfg.title)}${cfg.date ? `<span class="yr">（${cfg.date.slice(0, 4)}年）</span>` : ""}</h1>
       <span class="cat">${esc(cfg.category || "")}</span>
       ${cfg.date ? `<time class="date" datetime="${esc(cfg.date)}">${jaDate(cfg.date)}</time>` : ""}
     </div>
     <p class="slv-summary">${esc(cfg.summary || "")}</p>
 ${verdictHtml}
     </div>
+    ${jumpHtml}
     <div id="slv-root"></div>
+${dayRankHtml}
     <section class="slv-sim" id="slv-sim" aria-labelledby="slv-sim-h"></section>
+${prevNextHtml}
 ${companiesHtml}
     <noscript>
       <h2>当時の主なニュース</h2>
       <ul>${newsHtml}</ul>
     </noscript>
-${compareHtml(cfg.id, selectCompare(cfg.id, EVS, NAV, cfg.compare))}
+${compareHtml(cfg.id, compareSel)}
 ${faqHtml}
 ${nextReadHtml(selectRelated(cfg.id, EVS, NAV, cfg.related), EVS.length)}
 ${followHtml(NAV.follow)}
@@ -261,6 +289,7 @@ ${followHtml(NAV.follow)}
       var D = JSON.parse(document.getElementById("slv-data").textContent);
       StockListViewer.render(document.getElementById("slv-root"), D.cfg, D.series);
       StockListSimulator.render(document.getElementById("slv-sim"), D.cfg, D.series);
+      StockListViewer.fold([].slice.call(document.querySelectorAll("#slv-chart, #slv-news, #slv-sim, .slv-cmp, .slv-co")));
       // 比較ブロック: スマホ(640px以下)はチャートの直後・ニュースの前へ移す(PCはニュースの後のまま)
       var cmp = document.querySelector(".slv-cmp"), grid = document.querySelector("#slv-root .slv-grid");
       if (cmp && grid && grid.children.length > 1 && window.matchMedia) {
@@ -484,9 +513,12 @@ function timelineHtml(items, info) {
 
 let ALL = [];
 let NAV = {};  // navigation.json
+let DAILY = null; // features/daily-drops.json(1日の下落ランキング)
 let EVS = [];  // 回遊導線用のイベント要約(結論データのあるイベントのみ。数値は conclusion から)
 function main() {
   ALL = JSON.parse(fs.readFileSync(EVENTS_JSON, "utf8"));
+  const dailyJson = path.join(DATA_DIR, "features", "daily-drops.json");
+  DAILY = fs.existsSync(dailyJson) ? JSON.parse(fs.readFileSync(dailyJson, "utf8")) : null;
   NAV = fs.existsSync(NAV_JSON) ? JSON.parse(fs.readFileSync(NAV_JSON, "utf8")) : {};
   EVS = [];
   for (const cfg of ALL) {

@@ -47,11 +47,9 @@
   <nav class="sh-bc" aria-label="パンくずリスト"><ol><li><a href="/">ホーム</a></li><li><a href="/history">出来事一覧</a></li><li><span aria-current="page">ブラックマンデー</span></li></ol></nav>
 </header>
   <div class="slv-wrap">
-    <nav class="slv-picker" aria-label="出来事を選ぶ"><a href="/events/dodge-recession">ドッジ不況</a><a href="/events/stalin-crash">スターリン暴落</a><a href="/events/securities-recession">証券不況</a><a href="/events/nixon-shock">ニクソンショック</a><a href="/events/oil-shock-1973">第一次オイルショック</a><a href="/events/black-monday-1987" aria-current="true">ブラックマンデー</a><a href="/events/bubble-collapse">バブル崩壊</a><a href="/events/asian-financial-crisis">アジア通貨危機</a><a href="/events/it-bubble-collapse">ITバブル崩壊</a><a href="/events/september-11-attacks">米同時多発テロ</a><a href="/events/lehman-shock">リーマンショック</a><a href="/events/great-east-japan-earthquake">東日本大震災</a><a href="/events/covid-shock">コロナショック</a><a href="/events/reiwa-black-monday">令和のブラックマンデー</a><a href="/events/ishiba-shock">石破ショック</a></nav>
-    <script>(function(){var p=document.currentScript.previousElementSibling,c=p&&p.querySelector('[aria-current="true"]');if(c&&p.scrollWidth>p.clientWidth)p.scrollLeft=c.offsetLeft-p.offsetLeft-20;})();</script>
     <div class="slv-intro">
     <div class="slv-head">
-      <h1>ブラックマンデー</h1>
+      <h1>ブラックマンデー<span class="yr">（1987年）</span></h1>
       <span class="cat">世界同時株安</span>
       <time class="date" datetime="1987-10-20">1987年10月20日</time>
     </div>
@@ -66,15 +64,23 @@
       </div>
     </section>
     </div>
+    <nav class="slv-jump" aria-label="このページの目次"><a href="#slv-chart">チャート</a><a href="#slv-news">当時のニュース</a><a href="#slv-sim">シミュレーター</a><a href="#slv-cmp">過去と比較</a><a href="#slv-faq">FAQ</a></nav>
     <div id="slv-root"></div>
+
+    <aside class="slv-dayrank">
+      <p>この出来事の1日の下落率は、歴代<b>1位</b>（1987年10月20日　<span class="neg">−14.90%</span>）です。</p>
+      <a href="/crash-ranking#h-day">暴落ランキングで比べる →</a>
+    </aside>
     <section class="slv-sim" id="slv-sim" aria-labelledby="slv-sim-h"></section>
+
+    <nav class="slv-pn" aria-label="前後の出来事（年代順）"><a class="slv-pn-prev" href="/events/oil-shock-1973"><span class="k">← 前の出来事</span><b>第一次オイルショック</b><span class="y">1973年</span></a><a class="slv-pn-next" href="/events/bubble-collapse"><span class="k">次の出来事 →</span><b>バブル崩壊</b><span class="y">1990年</span></a></nav>
 
     <noscript>
       <h2>当時の主なニュース</h2>
       <ul><li><strong>1987-10-19｜NY株が1日で22.6%暴落（ブラックマンデー）</strong><br>ダウ工業株30種平均が508ドル安。下落率は1929年の大恐慌時を上回る史上最大となり、世界の市場に連鎖した。（各種報道）</li><li><strong>1987-10-20｜日経平均、3,836円安の2万1,910円</strong><br>下落率14.90%は日経平均の歴史で今も破られていない過去最大。東京市場はほぼ全面安となった。（日経平均 読む・知る・学ぶ）</li><li><strong>1987-10-20｜米FRBが流動性の供給を表明</strong><br>金融システム不安の広がりを防ぐため、グリーンスパン議長（当時）の下でFRBが市場に資金を供給する姿勢を示した。（各種報道）</li><li><strong>1987-10-21｜一転、2,037円高と急反発</strong><br>前日の暴落から一転して大幅反発。世界的な株安の連鎖に歯止めがかかるきっかけとなった。（日経平均 読む・知る・学ぶ）</li><li><strong>1988-04-07｜暴落直前の高値水準を回復</strong><br>超低金利が続く中で株価は持ち直し、約半年で暴落直前の高値を上回った。その後のバブル相場へとつながった。（各種報道）</li></ul>
     </noscript>
 
-    <section class="slv-cmp" aria-labelledby="slv-cmp-h">
+    <section class="slv-cmp" id="slv-cmp" aria-labelledby="slv-cmp-h">
       <h2 id="slv-cmp-h">この下落は、過去の暴落と比べてどれくらい大きかった？</h2>
       <p class="slv-cmp-sub">日経平均の最大下落率（高値→底・終値）と、高値を回復するまでの期間</p>
       <ol class="slv-cmp-list">
@@ -112,7 +118,7 @@
       <a class="slv-cmp-all" href="/crash-ranking">暴落ランキングで全件を比べる<span aria-hidden="true">→</span></a>
     </section>
 
-    <section class="slv-faq" aria-label="よくある質問">
+    <section class="slv-faq" id="slv-faq" aria-label="よくある質問">
       <h2 class="slv-faq-h">よくある質問</h2>
       <details><summary>ブラックマンデーはいつ起きた?</summary><div class="slv-faq-a">1987年10月19日（月）です。ニューヨーク株式市場が1日で22.6%暴落し、翌20日の東京市場で日経平均は3,836円安（−14.90%）となりました。</div></details>
       <details><summary>ブラックマンデーで日経平均は何%下がった?</summary><div class="slv-faq-a">1987年10月20日、日経平均は1日で3,836円48銭(−14.90%)下落しました。この下落率は今も日経平均の過去最大です。直前の高値からの下落は、およそ2割に達しました。</div></details>
@@ -178,6 +184,7 @@
       var D = JSON.parse(document.getElementById("slv-data").textContent);
       StockListViewer.render(document.getElementById("slv-root"), D.cfg, D.series);
       StockListSimulator.render(document.getElementById("slv-sim"), D.cfg, D.series);
+      StockListViewer.fold([].slice.call(document.querySelectorAll("#slv-chart, #slv-news, #slv-sim, .slv-cmp, .slv-co")));
       // 比較ブロック: スマホ(640px以下)はチャートの直後・ニュースの前へ移す(PCはニュースの後のまま)
       var cmp = document.querySelector(".slv-cmp"), grid = document.querySelector("#slv-root .slv-grid");
       if (cmp && grid && grid.children.length > 1 && window.matchMedia) {

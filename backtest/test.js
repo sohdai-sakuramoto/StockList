@@ -452,3 +452,29 @@ test("暴落ランキング: タブの切り替え先がすべて存在し、全
   assert.ok(tabs && !/<section[^>]*\shidden/.test(tabs[0]), "初期HTMLでは表を隠さない");
   assert.ok(html.includes('class="rk-dock"'), "画面下の次の一歩");
 });
+
+test("出来事ページ: 目次の移動先がすべてあり、前後の出来事が年代順に正しくつながる", () => {
+  const root = path.resolve(SCRIPT_DIR, "..");
+  const viewer = fs.readFileSync(path.join(root, "events/viewer.js"), "utf8");
+  const files = fs.readdirSync(path.join(root, "events")).filter((f) => f.endsWith(".html"));
+  const pn = {};
+  for (const f of files) {
+    const html = fs.readFileSync(path.join(root, "events", f), "utf8");
+    const jump = html.match(/<nav class="slv-jump"[\s\S]*?<\/nav>/);
+    assert.ok(jump, `${f}: 目次がある`);
+    assert.ok(html.includes("StockListViewer.fold("), `${f}: セクションを折りたためる`);
+    for (const [, id] of jump[0].matchAll(/href="#([^"]+)"/g)) {
+      assert.ok(html.includes(`id="${id}"`) || viewer.includes(`"${id}"`), `${f}: #${id} がある`);
+    }
+    const nav = html.match(/<nav class="slv-pn"[\s\S]*?<\/nav>/);
+    assert.ok(nav, `${f}: 前後の出来事がある`);
+    const link = (dir) => (nav[0].match(new RegExp(`class="slv-pn-${dir}" href="/events/([^"]+)"`)) || [])[1] || null;
+    pn[f.replace(/\.html$/, "")] = { prev: link("prev"), next: link("next") };
+  }
+  for (const [slug, { prev, next }] of Object.entries(pn)) {
+    if (next) assert.equal(pn[next]?.prev, slug, `${slug} → ${next} の戻り先`);
+    if (prev) assert.equal(pn[prev]?.next, slug, `${slug} ← ${prev} の進み先`);
+  }
+  assert.equal(Object.values(pn).filter((x) => !x.prev).length, 1, "最初の出来事は1つ");
+  assert.equal(Object.values(pn).filter((x) => !x.next).length, 1, "最後の出来事は1つ");
+});
