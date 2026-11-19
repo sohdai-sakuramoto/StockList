@@ -49,7 +49,7 @@
 
     var metricsHtml =
       '<div class="cm-metrics">' +
-      '<span>ドローダウン <b>' + pct(m.drawdown) + "</b></span>" +
+      '<span class="cm-dd"><i class="cm-k">ドローダウン</i><i class="cm-k-sp">高値から</i> <b>' + pct(m.drawdown) + "</b></span>" +
       (m.close != null ? '<span>終値 <b>' + Number(m.close).toLocaleString("ja-JP") + "</b></span>" : "") +
       "</div>";
 

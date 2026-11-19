@@ -21,12 +21,13 @@
   <meta name="twitter:image" content="https://www.stocklist.jp/og/events/ishiba-shock.png" />
   <meta name="twitter:image:alt" content="石破ショック：日経平均の最大下落率−10%、高値回復まで約13ヶ月" />
   <link rel="stylesheet" href="/crash-mode.css" />
+  <link rel="stylesheet" href="/site-header.css" />
   <link rel="stylesheet" href="/events/viewer.css" />
   <link rel="stylesheet" href="/newsletter.css" />
   <script src="/crash-mode.js" data-state="/state.json" defer></script>
   <script src="/newsletter-config.js" defer></script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"石破ショック（2024年）の日経平均チャート｜何%下落?回復まで何年?｜StockList","description":"石破ショック（2024年）で日経平均は高値から約−10%下落。底は2024年10月（この局面の底）、回復までの最安値は2025年4月の31,137円（−26%）、高値回復まで約13ヶ月。チャートと当時のニュースで振り返ります。","datePublished":"2024-09-27","dateModified":"2026-11-18","about":"石破ショック","keywords":"石破ショック,日経平均,下落率,底,回復,チャート","mainEntityOfPage":"https://www.stocklist.jp/events/ishiba-shock","image":"https://www.stocklist.jp/og/events/ishiba-shock.png","author":{"@type":"Organization","name":"StockList"},"publisher":{"@type":"Organization","name":"StockList","url":"https://www.stocklist.jp/"}}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://www.stocklist.jp/"},{"@type":"ListItem","position":2,"name":"相場の歴史","item":"https://www.stocklist.jp/history"},{"@type":"ListItem","position":3,"name":"石破ショック","item":"https://www.stocklist.jp/events/ishiba-shock"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://www.stocklist.jp/"},{"@type":"ListItem","position":2,"name":"出来事一覧","item":"https://www.stocklist.jp/history"},{"@type":"ListItem","position":3,"name":"石破ショック","item":"https://www.stocklist.jp/events/ishiba-shock"}]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"石破ショックはいつ起きた?","acceptedAnswer":{"@type":"Answer","text":"2024年9月30日です。9月27日の自民党総裁選で石破氏が勝利し、週明け30日に日経平均が大きく下落しました（終値37,919円）。"}},{"@type":"Question","name":"石破ショックで日経平均は何%下がった?","acceptedAnswer":{"@type":"Answer","text":"自民党総裁選で石破氏勝利が伝わると、週明け9月30日に日経平均は一時37,797円まで下落しました(終値37,919円)。金融所得課税への警戒などが売りにつながったとされます。"}},{"@type":"Question","name":"株価はどのくらいで戻った?","acceptedAnswer":{"@type":"Answer","text":"急落は数日で一巡し、石破首相の発言などを受けて翌週にかけて円安・株高方向に戻しました。ただし7月につけた最高値の水準は、その後しばらく回復していません。"}},{"@type":"Question","name":"当時の報道はどんな様子だった?","acceptedAnswer":{"@type":"Answer","text":"『石破ショック』という言葉が市況報道で使われ、円高・先物安が伝えられました。政策の方向性をめぐる見方が交錯し、短期間で値動きが大きくなりました。"}}]}</script>
   <script defer src="/site-config.js"></script>
   <script defer src="/analytics-config.js"></script>
@@ -34,10 +35,17 @@
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
-  <div class="slv-topbar">
-    <a class="back" href="/history">← 年表へ戻る</a>
-    <span class="brand">日経平均と大きな出来事</span>
+  <header class="sh">
+  <div class="sh-bar">
+    <a class="sh-logo" href="/" aria-label="StockList ホーム">Stock<span>List</span></a>
+    <nav class="sh-nav" aria-label="メインメニュー"><a href="/">ホーム</a><a href="/crash-ranking">暴落ランキング</a><a href="/history" aria-current="page">出来事一覧</a><a href="/timeline">年表</a><a href="/now">いまの相場</a></nav>
+    <details class="sh-more">
+      <summary aria-label="メニューを開く"><span class="sh-burger" aria-hidden="true"></span></summary>
+      <nav class="sh-drawer" aria-label="すべてのページ"><button type="button" class="sh-close" aria-label="メニューを閉じる" onclick="this.closest('details').open=false">×</button><p class="sh-group">相場の歴史</p><a href="/crash-ranking">暴落ランキング</a><a href="/history">出来事一覧</a><a href="/timeline">年表</a><p class="sh-group">特集</p><a href="/war-and-stocks">戦争と株価</a><p class="sh-group">いまの相場</p><a href="/now">いまの下落と過去の暴落を比べる</a><a href="/start">はじめての証券口座</a><p class="sh-group">StockList</p><a href="/">ホーム</a><a href="/ContactForm">お問い合わせ</a></nav>
+    </details>
   </div>
+  <nav class="sh-bc" aria-label="パンくずリスト"><ol><li><a href="/">ホーム</a></li><li><a href="/history">出来事一覧</a></li><li><span aria-current="page">石破ショック</span></li></ol></nav>
+</header>
   <div class="slv-wrap">
     <nav class="slv-picker" aria-label="出来事を選ぶ"><a href="/events/dodge-recession">ドッジ不況</a><a href="/events/stalin-crash">スターリン暴落</a><a href="/events/securities-recession">証券不況</a><a href="/events/nixon-shock">ニクソンショック</a><a href="/events/oil-shock-1973">第一次オイルショック</a><a href="/events/black-monday-1987">ブラックマンデー</a><a href="/events/bubble-collapse">バブル崩壊</a><a href="/events/asian-financial-crisis">アジア通貨危機</a><a href="/events/it-bubble-collapse">ITバブル崩壊</a><a href="/events/september-11-attacks">米同時多発テロ</a><a href="/events/lehman-shock">リーマンショック</a><a href="/events/great-east-japan-earthquake">東日本大震災</a><a href="/events/covid-shock">コロナショック</a><a href="/events/reiwa-black-monday">令和のブラックマンデー</a><a href="/events/ishiba-shock" aria-current="true">石破ショック</a></nav>
     <script>(function(){var p=document.currentScript.previousElementSibling,c=p&&p.querySelector('[aria-current="true"]');if(c&&p.scrollWidth>p.clientWidth)p.scrollLeft=c.offsetLeft-p.offsetLeft-20;})();</script>

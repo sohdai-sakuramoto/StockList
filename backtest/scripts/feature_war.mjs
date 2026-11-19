@@ -7,6 +7,8 @@
  * グラフはサーバー側でSVGを生成(JSなしでも読める・クローラブル)。ホバーのツールチップのみJS。
  * 色は単一系列(アクセント青)のみ。前身企業の期間などの区別は色ではなくラベルで示す。
  */
+import { siteHeaderHtml, breadcrumbLd } from "./site_header.mjs";
+
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const yen = (v) => Number(v).toLocaleString("ja-JP", { maximumFractionDigits: 1 });
 const pct = (x, digits = 1) => `${x > 0 ? "+" : x < 0 ? "−" : "±"}${Math.abs(x * 100).toFixed(digits)}%`;
@@ -166,13 +168,8 @@ export function warFeatureHtml({ book, war, siteUrl }) {
     datePublished: "2026-10-11", dateModified: (war && war.as_of) || "2026-10-11", mainEntityOfPage: url, image: ogImg,
     author: { "@type": "Organization", name: "StockList" }, publisher: { "@type": "Organization", name: "StockList", url: `${siteUrl}/` },
   };
-  const breadcrumb = {
-    "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
-      { "@type": "ListItem", position: 1, name: "ホーム", item: `${siteUrl}/` },
-      { "@type": "ListItem", position: 2, name: "相場の歴史", item: `${siteUrl}/history` },
-      { "@type": "ListItem", position: 3, name: "戦争と株価", item: url },
-    ],
-  };
+  const crumbs = [{ label: "戦争と株価" }];
+  const breadcrumb = breadcrumbLd(siteUrl, crumbs, url);
   const src = book.source;
 
   return `<!DOCTYPE html>
@@ -191,6 +188,7 @@ export function warFeatureHtml({ book, war, siteUrl }) {
   <meta property="og:image" content="${ogImg}" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="stylesheet" href="/crash-mode.css" />
+  <link rel="stylesheet" href="/site-header.css" />
   <link rel="stylesheet" href="/newsletter.css" />
   <script src="/crash-mode.js" data-state="/state.json" defer></script>
   <script src="/newsletter-config.js" defer></script>
@@ -261,7 +259,7 @@ export function warFeatureHtml({ book, war, siteUrl }) {
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
-  <div class="topbar"><a href="/">← StockList トップ</a><a href="/history">相場の歴史</a><a href="/timeline">年表</a></div>
+  ${siteHeaderHtml({ active: null, crumbs })}
   <header class="hero">
     <p class="eyebrow">Special Feature · War and the Stock Market</p>
     <h1>戦争と株価<br>有名企業の20年と、現代の戦争</h1>

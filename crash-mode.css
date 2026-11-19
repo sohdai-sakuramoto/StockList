@@ -95,18 +95,26 @@
 .cm-sep { opacity: 0.4; flex: none; }
 .cm-delay { flex: none; margin-left: auto; font-size: 11px; opacity: 0.65; }
 
-/* ══════════ スマホ最適化(PCは不変)。情報に強弱をつけ、ドローダウン率を主役に ══════════ */
+/* 「ドローダウン」の短縮表記はスマホだけ */
+.cm-metrics i { font-style: normal; }
+.cm-k-sp { display: none; }
+
+/* ══════════ スマホ: 1行(高さ約36px)に収め、本文をすぐ見せる。PCは不変 ══════════
+ * 表示: ● モード名 / 高値から −16.50% / 過去と比べる →
+ * メッセージ・終値・時点・株価ストリップはスマホでは出さない(PCと /now で確認できる)。 */
 @media (max-width: 720px) {
-  .cm-banner { flex-wrap: wrap; gap: 4px 12px; font-size: 13px; padding: 9px 14px; }
-  .cm-label { font-size: 15px; }                 /* モード名を少し強く */
-  .cm-text { flex-basis: 100%; order: 2; }       /* メッセージは独立行に */
-  /* 改修4: ドローダウン率をこのバーで最も目立つ数字にする(終値は脇役) */
-  .cm-metrics { order: 3; width: 100%; align-items: baseline; gap: 14px; margin-top: 2px; }
-  .cm-metrics > span:first-child b { font-size: 20px; line-height: 1.1; }
-  .cm-metrics > span:last-child { font-size: 11.5px; opacity: 0.75; }
-  .cm-asof { display: none; }
-  /* 株価は1行の横スクロールティッカー、遅延表記はその下に(縦を圧迫しない) */
-  .cm-quotes { order: 4; flex-wrap: wrap; gap: 4px 12px; }
-  .cm-quotes-scroll { flex-basis: 100%; }
-  .cm-delay { flex-basis: 100%; margin-left: 0; }
+  .cm-banner { flex-wrap: nowrap; gap: 8px; font-size: 12.5px; padding: 7px 14px; border-bottom-width: 2px; min-height: 36px; }
+  .cm-dot { width: 8px; height: 8px; }
+  .cm-label { font-size: 13px; white-space: nowrap; }
+  .cm-text, .cm-asof, .cm-quotes { display: none; }
+  .cm-metrics { gap: 0; font-size: 12.5px; white-space: nowrap; min-width: 0; }
+  .cm-metrics > span:not(.cm-dd) { display: none; }
+  .cm-k { display: none; }
+  .cm-k-sp { display: inline; }
+  .cm-metrics b { margin-left: 2px; }
+  .cm-more { margin-left: auto; font-size: 11.5px; padding: 2px 10px; }
+}
+@media (max-width: 360px) {
+  .cm-banner { padding: 7px 10px; gap: 6px; }
+  .cm-more { padding: 2px 8px; font-size: 11px; }
 }

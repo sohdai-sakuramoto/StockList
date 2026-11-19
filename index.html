@@ -14,6 +14,7 @@
         <meta property="og:image" content="https://www.stocklist.jp/IMG_3857.jpg">
         <meta name="twitter:card" content="summary_large_image">
         <link rel="stylesheet" href="crash-mode.css">
+        <link rel="stylesheet" href="/site-header.css" />
         <script src="crash-mode.js" data-state="state.json" defer></script>
         <!-- 構造化データ: サイト全体を表す WebSite スキーマ -->
         <script type="application/ld+json">
@@ -51,13 +52,6 @@
             line-height:1.7; }
           a { text-decoration:none; color:inherit; }
 
-          /* ナビ */
-          .nav { background:var(--navy); color:#fff; display:flex; align-items:center; gap:6px 22px;
-            padding:14px 22px; flex-wrap:wrap; }
-          .nav .logo { font-weight:800; font-size:17px; letter-spacing:.01em; margin-right:auto; }
-          .nav a { color:#cdd7ea; font-size:14px; font-weight:600; padding:4px 2px; }
-          .nav a:hover, .nav a.active { color:#fff; }
-          .nav a.active { border-bottom:2px solid var(--red); }
 
           /* ヒーロー */
           .hero { position:relative; min-height:62vh; display:flex; align-items:center; justify-content:center;
@@ -103,13 +97,18 @@
         <script defer src="/_vercel/insights/script.js"></script>
     </head>
     <body>
-        <nav class="nav">
-            <a href="/" class="logo">StockList</a>
-            <a href="/" class="active">ホーム</a>
-            <a href="/history">相場の歴史</a>
-            <a href="/start">はじめての証券口座</a>
-            <a href="ContactForm.html">お問い合わせ</a>
-        </nav>
+        <!-- site-header -->
+<header class="sh">
+  <div class="sh-bar">
+    <a class="sh-logo" href="/" aria-label="StockList ホーム">Stock<span>List</span></a>
+    <nav class="sh-nav" aria-label="メインメニュー"><a href="/" aria-current="page">ホーム</a><a href="/crash-ranking">暴落ランキング</a><a href="/history">出来事一覧</a><a href="/timeline">年表</a><a href="/now">いまの相場</a></nav>
+    <details class="sh-more">
+      <summary aria-label="メニューを開く"><span class="sh-burger" aria-hidden="true"></span></summary>
+      <nav class="sh-drawer" aria-label="すべてのページ"><button type="button" class="sh-close" aria-label="メニューを閉じる" onclick="this.closest('details').open=false">×</button><p class="sh-group">相場の歴史</p><a href="/crash-ranking">暴落ランキング</a><a href="/history">出来事一覧</a><a href="/timeline">年表</a><p class="sh-group">特集</p><a href="/war-and-stocks">戦争と株価</a><p class="sh-group">いまの相場</p><a href="/now">いまの下落と過去の暴落を比べる</a><a href="/start">はじめての証券口座</a><p class="sh-group">StockList</p><a href="/">ホーム</a><a href="/ContactForm">お問い合わせ</a></nav>
+    </details>
+  </div>
+</header>
+<!-- /site-header -->
 
         <header class="hero">
             <div class="hero-inner">
@@ -133,7 +132,7 @@
                     </span>
                     <h3>相場が動いた歴史を振り返る</h3>
                     <p>リーマン・コロナ・令和のブラックマンデー…。相場が大きく動いた局面を、週次チャートと当時のニュースでたどれます。</p>
-                    <span class="go">年表を見る →</span>
+                    <span class="go">出来事一覧を見る →</span>
                 </a>
                 <a class="card" href="/start">
                     <span class="ic" aria-hidden="true">
@@ -143,7 +142,7 @@
                     <p>歴史的に、暴落はいつか回復してきました。次に備える「はじめての証券口座」をやさしく診断・比較。</p>
                     <span class="go">証券口座を見る →</span>
                 </a>
-                <a class="card" href="/history">
+                <a class="card" href="/now">
                     <span class="ic" aria-hidden="true">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/></svg>
                     </span>

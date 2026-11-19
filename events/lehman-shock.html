@@ -21,12 +21,13 @@
   <meta name="twitter:image" content="https://www.stocklist.jp/og/events/lehman-shock.png" />
   <meta name="twitter:image:alt" content="リーマンショック：日経平均の最大下落率−61%、高値回復まで約8年" />
   <link rel="stylesheet" href="/crash-mode.css" />
+  <link rel="stylesheet" href="/site-header.css" />
   <link rel="stylesheet" href="/events/viewer.css" />
   <link rel="stylesheet" href="/newsletter.css" />
   <script src="/crash-mode.js" data-state="/state.json" defer></script>
   <script src="/newsletter-config.js" defer></script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"リーマンショック（2008年）の日経平均チャート｜何%下落?回復まで何年?｜StockList","description":"リーマンショック（2008年）で日経平均は高値から約−61%下落。底は2008年10月（第一の底）、回復までの最安値は2009年3月の7,055円（−61%）、高値回復まで約8年。チャートと当時のニュースで振り返ります。","datePublished":"2008-09-15","dateModified":"2026-11-18","about":"リーマンショック","keywords":"リーマンショック,日経平均,下落率,底,回復,チャート","mainEntityOfPage":"https://www.stocklist.jp/events/lehman-shock","image":"https://www.stocklist.jp/og/events/lehman-shock.png","author":{"@type":"Organization","name":"StockList"},"publisher":{"@type":"Organization","name":"StockList","url":"https://www.stocklist.jp/"}}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://www.stocklist.jp/"},{"@type":"ListItem","position":2,"name":"相場の歴史","item":"https://www.stocklist.jp/history"},{"@type":"ListItem","position":3,"name":"リーマンショック","item":"https://www.stocklist.jp/events/lehman-shock"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://www.stocklist.jp/"},{"@type":"ListItem","position":2,"name":"出来事一覧","item":"https://www.stocklist.jp/history"},{"@type":"ListItem","position":3,"name":"リーマンショック","item":"https://www.stocklist.jp/events/lehman-shock"}]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"リーマンショックはいつ起きた?","acceptedAnswer":{"@type":"Answer","text":"2008年9月15日です。米大手投資銀行リーマン・ブラザーズが経営破綻し、翌16日の日経平均は605円安（−4.95%）となりました。10月28日には7,162円台と、バブル後最安値（当時）まで下がりました。"}},{"@type":"Question","name":"リーマンショックで日経平均は何%下がった?","acceptedAnswer":{"@type":"Answer","text":"2007年夏の高値(約18,300円)から2009年の大底(約7,000円)まで、およそ6割下落しました。金融株を中心に全面安となり、当時として歴史的な下落率を記録しました。"}},{"@type":"Question","name":"株価が戻るまでどのくらいかかった?","acceptedAnswer":{"@type":"Answer","text":"高値をつけた2007年から、リーマン前の水準を回復したのは2015年ごろで、およそ7年かかりました。回復を後押ししたのは2013年以降のいわゆるアベノミクス相場でした。"}},{"@type":"Question","name":"当時の報道はどんな様子だった?","acceptedAnswer":{"@type":"Answer","text":"連日『世界同時株安』といった見出しが並び、底がどこかは誰にも分からない状況でした。過去を振り返ると、暴落の最中に底を正確に当てるのは難しく、大底は後になって判明しています。"}}]}</script>
   <script defer src="/site-config.js"></script>
   <script defer src="/analytics-config.js"></script>
@@ -34,10 +35,17 @@
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
-  <div class="slv-topbar">
-    <a class="back" href="/history">← 年表へ戻る</a>
-    <span class="brand">日経平均と大きな出来事</span>
+  <header class="sh">
+  <div class="sh-bar">
+    <a class="sh-logo" href="/" aria-label="StockList ホーム">Stock<span>List</span></a>
+    <nav class="sh-nav" aria-label="メインメニュー"><a href="/">ホーム</a><a href="/crash-ranking">暴落ランキング</a><a href="/history" aria-current="page">出来事一覧</a><a href="/timeline">年表</a><a href="/now">いまの相場</a></nav>
+    <details class="sh-more">
+      <summary aria-label="メニューを開く"><span class="sh-burger" aria-hidden="true"></span></summary>
+      <nav class="sh-drawer" aria-label="すべてのページ"><button type="button" class="sh-close" aria-label="メニューを閉じる" onclick="this.closest('details').open=false">×</button><p class="sh-group">相場の歴史</p><a href="/crash-ranking">暴落ランキング</a><a href="/history">出来事一覧</a><a href="/timeline">年表</a><p class="sh-group">特集</p><a href="/war-and-stocks">戦争と株価</a><p class="sh-group">いまの相場</p><a href="/now">いまの下落と過去の暴落を比べる</a><a href="/start">はじめての証券口座</a><p class="sh-group">StockList</p><a href="/">ホーム</a><a href="/ContactForm">お問い合わせ</a></nav>
+    </details>
   </div>
+  <nav class="sh-bc" aria-label="パンくずリスト"><ol><li><a href="/">ホーム</a></li><li><a href="/history">出来事一覧</a></li><li><span aria-current="page">リーマンショック</span></li></ol></nav>
+</header>
   <div class="slv-wrap">
     <nav class="slv-picker" aria-label="出来事を選ぶ"><a href="/events/dodge-recession">ドッジ不況</a><a href="/events/stalin-crash">スターリン暴落</a><a href="/events/securities-recession">証券不況</a><a href="/events/nixon-shock">ニクソンショック</a><a href="/events/oil-shock-1973">第一次オイルショック</a><a href="/events/black-monday-1987">ブラックマンデー</a><a href="/events/bubble-collapse">バブル崩壊</a><a href="/events/asian-financial-crisis">アジア通貨危機</a><a href="/events/it-bubble-collapse">ITバブル崩壊</a><a href="/events/september-11-attacks">米同時多発テロ</a><a href="/events/lehman-shock" aria-current="true">リーマンショック</a><a href="/events/great-east-japan-earthquake">東日本大震災</a><a href="/events/covid-shock">コロナショック</a><a href="/events/reiwa-black-monday">令和のブラックマンデー</a><a href="/events/ishiba-shock">石破ショック</a></nav>
     <script>(function(){var p=document.currentScript.previousElementSibling,c=p&&p.querySelector('[aria-current="true"]');if(c&&p.scrollWidth>p.clientWidth)p.scrollLeft=c.offsetLeft-p.offsetLeft-20;})();</script>

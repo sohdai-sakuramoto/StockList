@@ -17,6 +17,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { warFeatureHtml } from "./feature_war.mjs";
 import { crashRankingHtml } from "./feature_ranking.mjs";
+import { siteHeaderHtml, breadcrumbLd, injectStaticPages } from "./site_header.mjs";
 import { selectCompare, selectRelated, compareHtml, nextReadHtml, followHtml } from "./event_nav.mjs";
 
 const SITE_URL = "https://www.stocklist.jp"; // ← 独自ドメイン導入時に変更
@@ -124,15 +125,8 @@ function pageHtml(cfg, series) {
     author: { "@type": "Organization", name: "StockList" },
     publisher: { "@type": "Organization", name: "StockList", url: `${SITE_URL}/` },
   };
-  const breadcrumb = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "ホーム", item: `${SITE_URL}/` },
-      { "@type": "ListItem", position: 2, name: "相場の歴史", item: `${SITE_URL}/history` },
-      { "@type": "ListItem", position: 3, name: cfg.title, item: url },
-    ],
-  };
+  const crumbs = [{ label: "出来事一覧", href: "/history" }, { label: cfg.title }];
+  const breadcrumb = breadcrumbLd(SITE_URL, crumbs, url);
   // FAQPage: 画面表示のFAQと完全に同一文言(events.json の faq)
   const faq = Array.isArray(cfg.faq) ? cfg.faq : [];
   const faqLd = faq.length ? {
@@ -197,6 +191,7 @@ function pageHtml(cfg, series) {
   <meta name="twitter:image" content="${ogImg}" />
   <meta name="twitter:image:alt" content="${esc(og.alt)}" />
   <link rel="stylesheet" href="/crash-mode.css" />
+  <link rel="stylesheet" href="/site-header.css" />
   <link rel="stylesheet" href="/events/viewer.css" />
   <link rel="stylesheet" href="/newsletter.css" />
   <script src="/crash-mode.js" data-state="/state.json" defer></script>
@@ -210,10 +205,7 @@ function pageHtml(cfg, series) {
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
-  <div class="slv-topbar">
-    <a class="back" href="/history">← 年表へ戻る</a>
-    <span class="brand">日経平均と大きな出来事</span>
-  </div>
+  ${siteHeaderHtml({ active: "events", crumbs })}
   <div class="slv-wrap">
     <nav class="slv-picker" aria-label="出来事を選ぶ">${nav}</nav>
     <script>(function(){var p=document.currentScript.previousElementSibling,c=p&&p.querySelector('[aria-current="true"]');if(c&&p.scrollWidth>p.clientWidth)p.scrollLeft=c.offsetLeft-p.offsetLeft-20;})();</script>
@@ -298,14 +290,8 @@ function timelineHtml(items, info) {
   const title = "日本株 暴落・暴騰の年表（1945〜2026）｜StockList";
   const desc = "終戦後のドッジ不況、スターリン暴落、ブラックマンデー、バブル崩壊、リーマンショック、令和のブラックマンデーまで。日経平均・日本株を大きく動かした暴落・暴騰を年表で解説。主要な出来事はチャートと当時のニュースで振り返れます。";
   const ogImg = `${SITE_URL}/IMG_3857.jpg`;
-  const breadcrumb = {
-    "@context": "https://schema.org", "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "ホーム", item: `${SITE_URL}/` },
-      { "@type": "ListItem", position: 2, name: "相場の歴史", item: `${SITE_URL}/history` },
-      { "@type": "ListItem", position: 3, name: "暴落・暴騰の年表", item: url },
-    ],
-  };
+  const crumbs = [{ label: "年表" }];
+  const breadcrumb = breadcrumbLd(SITE_URL, crumbs, url);
   let lastDecade = null;
   const rows = items.map((e) => {
     let head = "";
@@ -357,6 +343,7 @@ function timelineHtml(items, info) {
   <meta property="og:image" content="${ogImg}" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="stylesheet" href="/crash-mode.css" />
+  <link rel="stylesheet" href="/site-header.css" />
   <link rel="stylesheet" href="/newsletter.css" />
   <script src="/crash-mode.js" data-state="/state.json" defer></script>
   <script src="/newsletter-config.js" defer></script>
@@ -429,7 +416,7 @@ function timelineHtml(items, info) {
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
-  <div class="topbar"><a href="/">← StockList トップ</a><a href="/history">相場の歴史</a><a href="/crash-ranking">暴落ランキング</a><a href="/now">今の下落と比べる</a></div>
+  ${siteHeaderHtml({ active: "timeline", crumbs })}
   <header class="hero">
     <p class="eyebrow">Nikkei 225 · 1945–2026</p>
     <h1>日本株 暴落・暴騰の年表</h1>
@@ -583,6 +570,10 @@ function main() {
   const robots = `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`;
   fs.writeFileSync(path.join(REPO_ROOT, "robots.txt"), robots, "utf8");
   console.log("[out] robots.txt");
+
+  // 手書きページ(index・history・now など)の共通ヘッダーも同じ定義で更新
+  const hdr = injectStaticPages(REPO_ROOT);
+  if (hdr.length) console.log(`[out] site header: ${hdr.join(", ")}`);
 }
 
 main();
