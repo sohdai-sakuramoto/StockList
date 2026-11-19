@@ -422,3 +422,21 @@ test("共通ヘッダー: 全ページに同じメニュー・☰・パンくず
     }
   }
 });
+
+test("トップのハブ: いまの日経平均株価・ランキング・出来事カードが最新データと一致する", () => {
+  const root = path.resolve(SCRIPT_DIR, "..");
+  const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
+  const hub = html.match(/<!-- home-hub -->([\s\S]*?)<!-- \/home-hub -->/);
+  assert.ok(hub, "index.html にハブのマーカーがある");
+  const state = JSON.parse(fs.readFileSync(path.join(root, "state.json"), "utf8"));
+  const daily = JSON.parse(fs.readFileSync(path.join(root, "History/events/features/daily-drops.json"), "utf8"));
+  const summary = JSON.parse(fs.readFileSync(path.join(root, "events/summary.json"), "utf8"));
+  assert.ok(hub[1].includes(Math.round(state.metrics.close).toLocaleString("ja-JP")), "終値が state.json と一致");
+  const top = daily.by_rate.items[0];
+  assert.ok(hub[1].includes(`${Math.abs(top.pct).toFixed(2)}%`), "ランキング1位の下落率");
+  assert.ok(hub[1].includes(`${summary.length}件すべて`), "出来事の件数");
+  for (const e of [...summary].sort((a, b) => a.drawdown - b.drawdown).slice(0, 4)) {
+    assert.ok(hub[1].includes(`href="${e.url}"`), `下落率上位 ${e.title} へのリンク`);
+  }
+  assert.ok(!/href="\/timeline#d\d+"/.test(hub[1]) || /id="d\d{4}"/.test(fs.readFileSync(path.join(root, "timeline.html"), "utf8")), "年代リンク先のidが年表にある");
+});

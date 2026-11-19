@@ -18,6 +18,7 @@ import { fileURLToPath } from "node:url";
 import { warFeatureHtml } from "./feature_war.mjs";
 import { crashRankingHtml } from "./feature_ranking.mjs";
 import { siteHeaderHtml, breadcrumbLd, injectStaticPages } from "./site_header.mjs";
+import { injectHomeHub } from "./home_hub.mjs";
 import { selectCompare, selectRelated, compareHtml, nextReadHtml, followHtml } from "./event_nav.mjs";
 
 const SITE_URL = "https://www.stocklist.jp"; // ← 独自ドメイン導入時に変更
@@ -296,7 +297,7 @@ function timelineHtml(items, info) {
   const rows = items.map((e) => {
     let head = "";
     const dec = `${Math.floor(Number(e.y) / 10) * 10}年代`;
-    if (dec !== lastDecade) { head = `\n      <h2 class="decade">${dec}</h2>`; lastDecade = dec; }
+    if (dec !== lastDecade) { head = `\n      <h2 class="decade" id="d${dec.replace("年代", "")}">${dec}</h2>`; lastDecade = dec; }
     const ev = e.event ? info[e.event] : null;
     const rel = e.related ? info[e.related] : null;
     const c = ev && ev.c ? ev.c : null;
@@ -570,6 +571,11 @@ function main() {
   const robots = `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`;
   fs.writeFileSync(path.join(REPO_ROOT, "robots.txt"), robots, "utf8");
   console.log("[out] robots.txt");
+
+  // トップページのハブ(いまの日経平均・ランキング・出来事カード)を最新データで更新
+  const statePath = path.join(REPO_ROOT, "state.json");
+  const state = fs.existsSync(statePath) ? JSON.parse(fs.readFileSync(statePath, "utf8")) : null;
+  if (injectHomeHub(REPO_ROOT, { state, daily, events: summary, slugOf })) console.log("[out] index.html (home hub)");
 
   // 手書きページ(index・history・now など)の共通ヘッダーも同じ定義で更新
   const hdr = injectStaticPages(REPO_ROOT);

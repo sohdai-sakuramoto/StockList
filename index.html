@@ -53,39 +53,51 @@
           a { text-decoration:none; color:inherit; }
 
 
-          /* ヒーロー */
-          .hero { position:relative; min-height:62vh; display:flex; align-items:center; justify-content:center;
-            text-align:center; color:#fff; padding:64px 22px; overflow:hidden;
-            background:linear-gradient(180deg, rgba(15,22,38,.72), rgba(15,22,38,.86)), url("IMG_3857.jpg") center/cover no-repeat; }
-          .hero-inner { max-width:720px; }
-          .hero .eyebrow { font-size:12px; letter-spacing:.24em; color:#a9b8d4; margin:0 0 16px; text-transform:uppercase; }
-          .hero h1 { font-size:clamp(32px,6vw,56px); line-height:1.28; margin:0 0 18px; font-weight:800; letter-spacing:.01em; }
-          .hero p.sub { font-size:clamp(15px,2.2vw,17px); color:#e4e9f2; margin:0 auto 30px; max-width:30em; }
-          .cta-col { display:flex; flex-direction:column; align-items:center; gap:16px; }
-          .btn { display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:15px;
-            padding:14px 26px; border-radius:12px; transition:.16s; }
-          .btn-primary { background:var(--red); color:#fff; }
-          .btn-primary:hover { filter:brightness(1.06); transform:translateY(-2px); }
-          .btn-lg { font-size:18px; padding:18px 42px; border-radius:14px; box-shadow:0 10px 26px rgba(218,60,65,.4); }
-          .link-secondary { color:#dbe3f0; font-size:14.5px; font-weight:600;
-            border-bottom:1px solid rgba(219,227,240,.4); padding-bottom:2px; }
-          .link-secondary:hover { color:#fff; border-color:#fff; }
-
-          /* できること */
-          .wrap { max-width:1080px; margin:0 auto; padding:56px 22px 72px; }
-          .sec-title { text-align:center; font-size:22px; font-weight:800; margin:0 0 6px; letter-spacing:-.01em; }
-          .sec-sub { text-align:center; color:var(--muted); font-size:14px; margin:0 0 32px; }
-          .cards { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:18px; }
-          .card { display:flex; flex-direction:column; background:var(--surface); border:1px solid var(--line);
-            border-radius:16px; padding:24px 22px; box-shadow:var(--shadow);
-            transition:transform .18s ease, border-color .18s ease; }
-          .card:hover { transform:translateY(-4px); border-color:color-mix(in srgb, var(--red) 35%, var(--line)); }
-          .card .ic { width:44px; height:44px; border-radius:12px; display:grid; place-items:center; margin-bottom:14px;
-            background:color-mix(in srgb, var(--red) 12%, transparent); }
-          .card h3 { font-size:17px; margin:0 0 6px; }
-          .card p { color:var(--ink-2); font-size:14px; margin:0 0 16px; flex:1 1 auto; }
-          .card .go { color:var(--accent); font-weight:700; font-size:14px; }
-          .card:hover .go { text-decoration:underline; }
+          /* ハブ(本文は backtest/scripts/home_hub.mjs が生成) */
+          .hub-wrap { max-width:880px; margin:0 auto; padding:18px 16px 56px; }
+          .hub-hero h1 { font-size:clamp(22px,4.4vw,32px); line-height:1.4; margin:6px 0 8px; font-weight:800; letter-spacing:-.01em; }
+          .hub-hero .lead { color:var(--ink-2); font-size:14.5px; margin:0; }
+          .hub-now { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 16px; margin:16px 0 0; box-shadow:var(--shadow); }
+          .hub-now-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+          .hub-now .k { margin:0; font-size:12px; color:var(--muted); }
+          .hub-now .v { margin:2px 0 0; font-size:24px; font-weight:800; font-variant-numeric:tabular-nums; line-height:1.3; }
+          .hub-now .v small { font-size:13px; margin-left:2px; font-weight:700; }
+          .hub-now .v.neg, .hub-ev .p, .hub-rank .p { color:var(--red); }
+          .hub-btn { display:block; text-align:center; background:var(--red); color:#fff; font-weight:800; font-size:15px;
+            border-radius:10px; padding:12px 14px; margin-top:12px; transition:.15s; }
+          .hub-btn:hover { filter:brightness(1.06); }
+          .hub-btn.sub { background:var(--surface); color:var(--ink); border:1px solid var(--line); }
+          .hub-note { margin:8px 0 0; font-size:11.5px; color:var(--muted); line-height:1.6; }
+          .hub-sec { margin-top:28px; }
+          .hub-sec-h { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:10px; }
+          .hub-sec-h h2 { margin:0; font-size:18px; font-weight:800; border-left:4px solid var(--accent); padding-left:10px; line-height:1.4; }
+          .hub-sec-h a { color:var(--accent); font-size:13px; font-weight:700; white-space:nowrap; }
+          .hub-sec-h a:hover { text-decoration:underline; }
+          .hub-rank { list-style:none; margin:0; padding:0; background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+          .hub-rank li { display:flex; align-items:center; gap:10px; padding:10px 14px; border-top:1px solid var(--line); font-size:14px; }
+          .hub-rank li:first-child { border-top:0; }
+          .hub-rank .n { width:20px; font-weight:800; color:var(--muted); font-variant-numeric:tabular-nums; }
+          .hub-rank .d { flex:1; min-width:0; }
+          .hub-rank .d a, .hub-rank .d b { display:block; font-weight:700; }
+          .hub-rank .d a { color:var(--accent); }
+          .hub-rank .d a:hover { text-decoration:underline; }
+          .hub-rank .d i { display:block; font-style:normal; font-size:12px; color:var(--muted); }
+          .hub-rank .p { font-weight:800; font-variant-numeric:tabular-nums; }
+          .hub-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; }
+          @media (min-width:720px) { .hub-grid { grid-template-columns:repeat(4, 1fr); } }
+          .hub-ev { display:flex; flex-direction:column; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px; transition:.15s; }
+          .hub-ev:hover { border-color:var(--accent); transform:translateY(-2px); }
+          .hub-ev .t { font-weight:800; font-size:15px; line-height:1.4; }
+          .hub-ev .y { font-size:12px; color:var(--muted); }
+          .hub-ev .p { font-size:24px; font-weight:800; margin-top:4px; font-variant-numeric:tabular-nums; }
+          .hub-ev .c { font-size:12px; color:var(--ink-2); }
+          .hub-box { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 16px; }
+          .hub-box p { margin:0; font-size:14px; color:var(--ink-2); }
+          .hub-chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+          .hub-chips a { font-size:13px; font-weight:700; padding:6px 12px; border-radius:999px; border:1px solid var(--line); color:var(--ink); }
+          .hub-chips a:hover { border-color:var(--accent); color:var(--accent); }
+          .hub-cta { border-left:4px solid var(--red); }
+          .hub-cta h2 { margin:0 0 6px; font-size:17px; font-weight:800; }
 
           /* フッター */
           footer.site { background:var(--navy); color:#cdd7ea; text-align:center; padding:22px; font-size:12.5px; }
@@ -110,48 +122,53 @@
 </header>
 <!-- /site-header -->
 
-        <header class="hero">
-            <div class="hero-inner">
-                <p class="eyebrow">Nikkei 225 Market History</p>
-                <h1>相場が荒れても、<br>焦らないこと。</h1>
-                <p class="sub">日経平均が大きく動いた歴史的な局面を、週次チャートと当時のニュースで追体験。市場が急落すると、サイトが自動で「急落モード」に切り替わります。</p>
-                <div class="cta-col">
-                    <a class="btn btn-primary btn-lg" href="/history">相場が動いた歴史を見る</a>
-                    <a class="link-secondary" href="/start">はじめての証券口座 →</a>
-                </div>
-            </div>
-        </header>
+<!-- home-hub -->
+<main class="hub">
+  <div class="hub-wrap">
+    <section class="hub-hero">
+      <h1>日経平均株価の暴落・急騰を、<br>当時のニュースとともに振り返る</h1>
+      <p class="lead">1949年からの15の出来事を、週次チャートと当時のニュースで記録しています。</p>
+    </section>
 
-        <main class="wrap">
-            <h2 class="sec-title">このサイトでできること</h2>
-            <p class="sec-sub">恐怖で来た人を、落ち着いて次の一歩へ。</p>
-            <div class="cards">
-                <a class="card" href="/history">
-                    <span class="ic" aria-hidden="true">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M19 9l-5 5-4-4-4 4"/></svg>
-                    </span>
-                    <h3>相場が動いた歴史を振り返る</h3>
-                    <p>リーマン・コロナ・令和のブラックマンデー…。相場が大きく動いた局面を、週次チャートと当時のニュースでたどれます。</p>
-                    <span class="go">出来事一覧を見る →</span>
-                </a>
-                <a class="card" href="/start">
-                    <span class="ic" aria-hidden="true">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                    </span>
-                    <h3>暴落に備える第一歩</h3>
-                    <p>歴史的に、暴落はいつか回復してきました。次に備える「はじめての証券口座」をやさしく診断・比較。</p>
-                    <span class="go">証券口座を見る →</span>
-                </a>
-                <a class="card" href="/now">
-                    <span class="ic" aria-hidden="true">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/></svg>
-                    </span>
-                    <h3>いまの相場の状態</h3>
-                    <p>市場が下げると、画面上部のバーが「警戒」「急落」モードに自動で切り替わり、現在のドローダウンを表示します。</p>
-                    <span class="go">状態を確認 →</span>
-                </a>
-            </div>
-        </main>
+    <section class="hub-now" aria-label="いまの日経平均株価">
+      <div class="hub-now-grid">
+        <div><p class="k">日経平均株価（2026年11月18日終値）</p><p class="v">59,024<small>円</small></p></div>
+        <div><p class="k">直近高値（2026年10月6日）から</p><p class="v neg">−16.50%</p></div>
+      </div>
+      <a class="hub-btn" href="/now">いまの下落を過去の暴落と比べる →</a>
+      <p class="hub-note">※検証用データ（Stooq/FRED）に基づく参考値です。</p>
+    </section>
+
+    <section class="hub-sec" aria-labelledby="hub-rank-h">
+      <div class="hub-sec-h"><h2 id="hub-rank-h">1日の下落率ランキング</h2><a href="/crash-ranking">すべて見る →</a></div>
+      <ol class="hub-rank"><li><span class="n">1</span><span class="d"><a href="/events/black-monday-1987">1987年10月20日</a><i>ブラックマンデー</i></span><span class="p">−14.90%</span></li><li><span class="n">2</span><span class="d"><a href="/events/reiwa-black-monday">2024年8月5日</a><i>令和のブラックマンデー</i></span><span class="p">−12.40%</span></li><li><span class="n">3</span><span class="d"><a href="/events/lehman-shock">2008年10月16日</a><i>リーマンショック</i></span><span class="p">−11.41%</span></li><li><span class="n">4</span><span class="d"><a href="/events/great-east-japan-earthquake">2011年3月15日</a><i>東日本大震災</i></span><span class="p">−10.55%</span></li><li><span class="n">5</span><span class="d"><a href="/events/stalin-crash">1953年3月5日</a><i>スターリン暴落</i></span><span class="p">−10.00%</span></li></ol>
+      <p class="hub-note">出典：日本経済新聞社のデータをもとに三菱UFJアセットマネジメントが作成した表(2024年8月7日現在)</p>
+    </section>
+    <section class="hub-sec" aria-labelledby="hub-recent-h">
+      <div class="hub-sec-h"><h2 id="hub-recent-h">最近の出来事</h2><a href="/history">15件すべて →</a></div>
+      <div class="hub-grid"><a class="hub-ev" href="/events/ishiba-shock"><span class="t">石破ショック</span><span class="y">2024年・政治</span><span class="p">−10%</span><span class="c">高値回復まで 約13ヶ月</span></a><a class="hub-ev" href="/events/reiwa-black-monday"><span class="t">令和のブラックマンデー</span><span class="y">2024年・世界同時株安</span><span class="p">−25%</span><span class="c">高値回復まで 約13ヶ月</span></a><a class="hub-ev" href="/events/covid-shock"><span class="t">コロナショック</span><span class="y">2020年・パンデミック</span><span class="p">−31%</span><span class="c">高値回復まで 約10ヶ月</span></a><a class="hub-ev" href="/events/great-east-japan-earthquake"><span class="t">東日本大震災</span><span class="y">2011年・災害</span><span class="p">−24%</span><span class="c">高値回復まで 約3年</span></a></div>
+    </section>
+    <section class="hub-sec" aria-labelledby="hub-deep-h">
+      <div class="hub-sec-h"><h2 id="hub-deep-h">下落率が大きかった出来事</h2><a href="/crash-ranking#h-dd">ランキングへ →</a></div>
+      <div class="hub-grid"><a class="hub-ev" href="/events/it-bubble-collapse"><span class="t">ITバブル崩壊</span><span class="y">2000年・バブル崩壊</span><span class="p">−63%</span><span class="c">高値回復まで 約15年</span></a><a class="hub-ev" href="/events/bubble-collapse"><span class="t">バブル崩壊</span><span class="y">1990年・バブル崩壊</span><span class="p">−63%</span><span class="c">高値回復まで 約34年</span></a><a class="hub-ev" href="/events/lehman-shock"><span class="t">リーマンショック</span><span class="y">2008年・金融危機</span><span class="p">−61%</span><span class="c">高値回復まで 約8年</span></a><a class="hub-ev" href="/events/dodge-recession"><span class="t">ドッジ不況</span><span class="y">1949年・デフレ不況</span><span class="p">−52%</span><span class="c">高値回復まで 約3年</span></a></div>
+    </section>
+    <section class="hub-sec" aria-labelledby="hub-tl-h">
+      <div class="hub-sec-h"><h2 id="hub-tl-h">年表で見る</h2><a href="/timeline">年表へ →</a></div>
+      <div class="hub-box">
+        <p>1945年から現在まで、日本株の暴落・暴騰・転換点を時系列でたどれます。</p>
+        <div class="hub-chips"><a href="/timeline#d1940">1940年代</a><a href="/timeline#d1950">1950年代</a><a href="/timeline#d1960">1960年代</a><a href="/timeline#d1970">1970年代</a><a href="/timeline#d1980">1980年代</a><a href="/timeline#d1990">1990年代</a><a href="/timeline#d2000">2000年代</a><a href="/timeline#d2010">2010年代</a><a href="/timeline#d2020">2020年代</a></div>
+      </div>
+    </section>
+    <section class="hub-sec">
+      <div class="hub-box hub-cta">
+        <h2>暴落に備える第一歩</h2>
+        <p>歴史的に、暴落はいつか回復してきました。長期・積立の第一歩は口座づくりから。</p>
+        <a class="hub-btn" href="/start">はじめての証券口座を見る →</a>
+      </div>
+    </section>
+  </div>
+</main>
+<!-- /home-hub -->
 
         <footer class="site">
             <p class="tagline">相場が荒れても、焦らないこと。 — powered by StockList</p>
