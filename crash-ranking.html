@@ -47,14 +47,16 @@
     .rk-tabs:not(.js) .rk-seg{position:static;}
     .rk-tabs.js section{margin-bottom:28px;}
     .rk-tabs.js section h2{scroll-margin-top:70px;}
-    /* 画面下の「次の一歩」(スマホのみ) */
-    .rk-dock{display:none;}
+    /* 画面下の「次の一歩」(PC・スマホ共通) */
+    .rk-dock{display:flex;justify-content:center;gap:10px;position:fixed;left:0;right:0;bottom:0;z-index:40;padding:10px 20px calc(10px + env(safe-area-inset-bottom));
+      background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(16,32,46,.08);}
+    .rk-dock a{flex:0 1 260px;text-align:center;font-size:14px;font-weight:800;padding:11px 6px;border-radius:10px;border:1px solid var(--line);color:var(--ink);}
+    .rk-dock a.p{background:var(--red);border-color:var(--red);color:#fff;}
+    .rk-dock a:hover{text-decoration:none;filter:brightness(1.04);}
+    body{padding-bottom:76px;}
     @media (max-width:760px){
-      .rk-dock{display:flex;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:40;padding:8px 10px calc(8px + env(safe-area-inset-bottom));
-        background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(16,32,46,.08);}
-      .rk-dock a{flex:1;text-align:center;font-size:13.5px;font-weight:800;padding:11px 6px;border-radius:10px;border:1px solid var(--line);color:var(--ink);}
-      .rk-dock a.p{background:var(--red);border-color:var(--red);color:#fff;}
-      .rk-dock a:hover{text-decoration:none;}
+      .rk-dock{gap:8px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));}
+      .rk-dock a{flex:1;font-size:13.5px;}
       body{padding-bottom:72px;}
       .rk-seg a{font-size:12px;padding:8px 2px;}
     }
