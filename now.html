@@ -17,6 +17,7 @@
   <meta name="twitter:description" content="現在の下落率を過去の暴落と比較。過去の暴落は歴史的にいつか回復してきました。" />
   <meta name="twitter:image" content="https://www.stocklist.jp/IMG_3857.jpg" />
   <link rel="stylesheet" href="/crash-mode.css" />
+  <link rel="stylesheet" href="/site-header.css" />
   <link rel="stylesheet" href="/newsletter.css" />
   <script src="/crash-mode.js" data-state="/state.json" defer></script>
   <script src="/newsletter-config.js" defer></script>
@@ -83,10 +84,19 @@
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
-  <div class="topbar">
-    <a href="/">← StockList トップ</a>
-    <a href="/history">相場の歴史</a>
+  <!-- site-header -->
+<header class="sh">
+  <div class="sh-bar">
+    <a class="sh-logo" href="/" aria-label="StockList ホーム">Stock<span>List</span></a>
+    <nav class="sh-nav" aria-label="メインメニュー"><a href="/">ホーム</a><a href="/crash-ranking">暴落ランキング</a><a href="/history">出来事一覧</a><a href="/timeline">年表</a><a href="/now" aria-current="page">いまの相場</a></nav>
+    <details class="sh-more">
+      <summary aria-label="メニューを開く"><span class="sh-burger" aria-hidden="true"></span></summary>
+      <nav class="sh-drawer" aria-label="すべてのページ"><button type="button" class="sh-close" aria-label="メニューを閉じる" onclick="this.closest('details').open=false">×</button><p class="sh-group">相場の歴史</p><a href="/crash-ranking">暴落ランキング</a><a href="/history">出来事一覧</a><a href="/timeline">年表</a><p class="sh-group">特集</p><a href="/war-and-stocks">戦争と株価</a><p class="sh-group">いまの相場</p><a href="/now">いまの下落と過去の暴落を比べる</a><a href="/start">はじめての証券口座</a><p class="sh-group">StockList</p><a href="/">ホーム</a><a href="/ContactForm">お問い合わせ</a></nav>
+    </details>
   </div>
+  <nav class="sh-bc" aria-label="パンくずリスト"><ol><li><a href="/">ホーム</a></li><li><span aria-current="page">いまの相場</span></li></ol></nav>
+</header>
+<!-- /site-header -->
 
   <div class="wrap">
     <h1>いまの日経平均の下落は、<br>過去の暴落と比べてどれくらい？</h1>

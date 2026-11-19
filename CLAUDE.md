@@ -51,6 +51,7 @@ StocList claude.md
   - `History/events/` … イベントのデータ（events.json・<id>.json・navigation.json・timeline.json・books/）
   - `og/events/` … イベント別の OGP 画像（1200×630）
   - `backtest/` … データ取得・急落モード判定・ページ生成のスクリプト（scripts/）とテスト（test.js）
+  - `site-header.css` + `backtest/scripts/site_header.mjs` … 全ページ共通ヘッダー（メニュー・☰・パンくず）。メニューの変更は site_header.mjs だけを直し、ページ再生成で全ページに反映
   - `analytics-config.js` … 計測の読み込みと自分のアクセス除外（?va-disable=1）
   - `affiliate-config.js` `newsletter-config.js` `crash-mode.js` … アフィリエイト・メルマガ・急落モード表示
   - `.github/workflows/` … 市場データの自動更新（平日18時 JST）・株価スナップショット（市場時間中15分毎）

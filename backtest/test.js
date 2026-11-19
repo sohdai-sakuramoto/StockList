@@ -399,3 +399,26 @@ test("1日の下落ランキング: 値の順に並び、データに出典と�
   }
   for (const it of real.recent.items) assert.ok(it.source, `${it.date} に出典がある`);
 });
+
+test("共通ヘッダー: 全ページに同じメニュー・☰・パンくずがあり、構造化データのパンくずと一致する", async () => {
+  const root = path.resolve(SCRIPT_DIR, "..");
+  const { NAV, STATIC_PAGES } = await import("./scripts/site_header.mjs");
+  const events = fs.readdirSync(path.join(root, "events")).filter((f) => f.endsWith(".html")).map((f) => `events/${f}`);
+  const pages = [...STATIC_PAGES.map((p) => p.file), "timeline.html", "crash-ranking.html", "war-and-stocks.html", ...events];
+  for (const f of pages) {
+    const html = fs.readFileSync(path.join(root, f), "utf8");
+    assert.equal((html.match(/<header class="sh">/g) || []).length, 1, `${f}: 共通ヘッダーが1つ`);
+    assert.ok(html.includes('href="/site-header.css"'), `${f}: site-header.css を読み込む`);
+    for (const n of NAV) assert.ok(html.includes(`<a href="${n.href}"`), `${f}: メニュー ${n.label}`);
+    assert.ok(html.includes('href="/war-and-stocks">戦争と株価</a>'), `${f}: ☰ に特集「戦争と株価」`);
+    assert.ok(!/class="(slv-)?topbar"/.test(html), `${f}: 旧トップバーが残っていない`);
+    const ld = html.match(/"@type":"BreadcrumbList".*?<\/script>/);
+    const bc = html.match(/<nav class="sh-bc"[\s\S]*?<\/nav>/);
+    if (ld) {
+      assert.ok(bc, `${f}: 構造化データがあるなら画面にもパンくず`);
+      const ldNames = [...ld[0].matchAll(/"name":"([^"]+)"/g)].map((m) => m[1]);
+      const bcNames = [...bc[0].matchAll(/<(?:a|span)[^>]*>([^<]+)<\/(?:a|span)>/g)].map((m) => m[1]);
+      assert.deepEqual(bcNames, ldNames, `${f}: 画面と構造化データのパンくずが一致`);
+    }
+  }
+});

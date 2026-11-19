@@ -22,10 +22,6 @@ body {
   line-height: 1.7;
 }
 a { color: var(--accent); }
-.slv-topbar { background: var(--navy); color: #fff; padding: 12px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.slv-topbar a.back { color: #cdd7ea; text-decoration: none; font-weight: 600; font-size: 14px; }
-.slv-topbar a.back:hover { color: #fff; }
-.slv-topbar .brand { font-weight: 700; }
 .slv-wrap { max-width: 1180px; margin: 0 auto; padding: 22px 20px 64px; }
 
 .slv-picker { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 20px; }

@@ -5,6 +5,8 @@
  * 表示する数値はすべて結論データから機械的に算出する(手書きの数値は置かない)。
  * 狙う検索: 「株 暴落 歴史」「日経平均 暴落 ランキング」「暴落 回復 期間」など。
  */
+import { siteHeaderHtml, breadcrumbLd } from "./site_header.mjs";
+
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const ym = (d) => { const [y, m] = d.split("-"); return `${y}年${Number(m)}月`; };
 const ymd = (d) => { const [y, m, dd] = d.split("-"); return `${y}年${Number(m)}月${Number(dd)}日`; };
@@ -110,14 +112,8 @@ export function crashRankingHtml({ rows, daily = null, slugOf = {}, siteUrl }) {
     author: { "@type": "Organization", name: "StockList" },
     publisher: { "@type": "Organization", name: "StockList", url: `${siteUrl}/` },
   };
-  const breadcrumb = {
-    "@context": "https://schema.org", "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "ホーム", item: `${siteUrl}/` },
-      { "@type": "ListItem", position: 2, name: "相場の歴史", item: `${siteUrl}/history` },
-      { "@type": "ListItem", position: 3, name: "暴落の歴史ランキング", item: url },
-    ],
-  };
+  const crumbs = [{ label: "暴落ランキング" }];
+  const breadcrumb = breadcrumbLd(siteUrl, crumbs, url);
   const itemList = {
     "@context": "https://schema.org", "@type": "ItemList", name: "日経平均 暴落の下落率ランキング",
     itemListElement: byDrawdown.map((r, i) => ({ "@type": "ListItem", position: i + 1, name: r.title, url: `${siteUrl}/events/${r.slug}` })),
@@ -166,6 +162,7 @@ export function crashRankingHtml({ rows, daily = null, slugOf = {}, siteUrl }) {
   <meta property="og:image" content="${ogImg}" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="stylesheet" href="/crash-mode.css" />
+  <link rel="stylesheet" href="/site-header.css" />
   <link rel="stylesheet" href="/newsletter.css" />
   <script src="/crash-mode.js" data-state="/state.json" defer></script>
   <script src="/newsletter-config.js" defer></script>
@@ -228,7 +225,7 @@ export function crashRankingHtml({ rows, daily = null, slugOf = {}, siteUrl }) {
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
-  <div class="topbar"><a href="/">← StockList トップ</a><a href="/history">相場の歴史</a><a href="/timeline">年表</a><a href="/now">今の下落と比べる</a></div>
+  ${siteHeaderHtml({ active: "ranking", crumbs })}
   <header class="hero">
     <p class="eyebrow">Nikkei 225 · Crash Ranking</p>
     <h1>日経平均 暴落ランキング</h1>

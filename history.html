@@ -13,6 +13,7 @@
         <meta property="og:url" content="https://www.stocklist.jp/history">
         <meta property="og:image" content="https://www.stocklist.jp/IMG_3857.jpg">
         <link rel="stylesheet" href="/crash-mode.css">
+        <link rel="stylesheet" href="/site-header.css" />
         <script src="/crash-mode.js" data-state="/state.json" defer></script>
         <script defer src="/site-config.js"></script>
         <script defer src="/analytics-config.js"></script>
@@ -70,7 +71,19 @@
         <script defer src="/_vercel/insights/script.js"></script>
     </head>
     <body>
-        <div class="topbar"><a href="/">← StockList トップ</a></div>
+        <!-- site-header -->
+<header class="sh">
+  <div class="sh-bar">
+    <a class="sh-logo" href="/" aria-label="StockList ホーム">Stock<span>List</span></a>
+    <nav class="sh-nav" aria-label="メインメニュー"><a href="/">ホーム</a><a href="/crash-ranking">暴落ランキング</a><a href="/history" aria-current="page">出来事一覧</a><a href="/timeline">年表</a><a href="/now">いまの相場</a></nav>
+    <details class="sh-more">
+      <summary aria-label="メニューを開く"><span class="sh-burger" aria-hidden="true"></span></summary>
+      <nav class="sh-drawer" aria-label="すべてのページ"><button type="button" class="sh-close" aria-label="メニューを閉じる" onclick="this.closest('details').open=false">×</button><p class="sh-group">相場の歴史</p><a href="/crash-ranking">暴落ランキング</a><a href="/history">出来事一覧</a><a href="/timeline">年表</a><p class="sh-group">特集</p><a href="/war-and-stocks">戦争と株価</a><p class="sh-group">いまの相場</p><a href="/now">いまの下落と過去の暴落を比べる</a><a href="/start">はじめての証券口座</a><p class="sh-group">StockList</p><a href="/">ホーム</a><a href="/ContactForm">お問い合わせ</a></nav>
+    </details>
+  </div>
+  <nav class="sh-bc" aria-label="パンくずリスト"><ol><li><a href="/">ホーム</a></li><li><span aria-current="page">出来事一覧</span></li></ol></nav>
+</header>
+<!-- /site-header -->
 
         <header class="hero">
             <p class="eyebrow">Nikkei 225 · Timeline</p>
