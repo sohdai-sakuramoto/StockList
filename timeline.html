@@ -35,14 +35,18 @@
     body{margin:0;background:var(--plane);color:var(--ink);line-height:1.7;
       font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI",system-ui,-apple-system,sans-serif;}
     a{color:var(--accent);text-decoration:none;}
-    .topbar{background:var(--navy);color:#fff;padding:12px 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;}
-    .topbar a{color:#cdd7ea;font-weight:600;font-size:14px;} .topbar a:hover{color:#fff;}
-    .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 100%);color:#fff;padding:46px 20px 50px;text-align:center;position:relative;overflow:hidden;}
-    .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--red);}
-    .hero .eyebrow{font-size:12px;letter-spacing:.22em;color:#9fb0cc;margin:0 0 10px;text-transform:uppercase;}
-    .hero h1{font-size:clamp(24px,4.4vw,38px);margin:0 0 10px;font-weight:800;letter-spacing:-.01em;}
-    .hero p{margin:0 auto;max-width:36em;color:#c7d1e2;font-size:15px;}
-    .wrap{max-width:900px;margin:0 auto;padding:26px 20px 72px;}
+    .pg-head h1{font-size:clamp(22px,4.4vw,32px);margin:0 0 6px;font-weight:800;letter-spacing:-.01em;line-height:1.35;}
+    .pg-head p{margin:0 0 14px;color:var(--ink-2);font-size:14.5px;line-height:1.7;}
+    .vw-toggle{display:flex;gap:3px;background:color-mix(in srgb,var(--muted) 18%,var(--plane));border-radius:12px;padding:4px;margin:0 0 18px;max-width:420px;}
+    .vw-toggle a{flex:1;text-align:center;font-size:14px;font-weight:800;color:var(--ink-2);padding:9px 4px;border-radius:9px;text-decoration:none;}
+    .vw-toggle a:hover{color:var(--ink);text-decoration:none;}
+    .vw-toggle a[aria-current="page"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(16,32,46,.14);}
+    .dec-jump{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:-8px 0 4px;padding:2px 0 6px;}
+    .dec-jump::-webkit-scrollbar{display:none;}
+    .dec-jump a{flex:none;font-size:12.5px;font-weight:700;color:var(--ink-2);border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:4px 10px;}
+    .dec-jump a:hover{color:var(--accent);text-decoration:none;}
+    .decade{scroll-margin-top:12px;}
+    .wrap{max-width:900px;margin:0 auto;padding:20px 20px 72px;}
     .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin:0 0 22px;}
     .filters{display:flex;gap:8px;flex-wrap:wrap;}
     .filters button{font:inherit;font-size:13.5px;font-weight:700;cursor:pointer;padding:7px 16px;border-radius:999px;
@@ -98,12 +102,12 @@
   </div>
   <nav class="sh-bc" aria-label="パンくずリスト"><ol><li><a href="/">ホーム</a></li><li><span aria-current="page">年表</span></li></ol></nav>
 </header>
-  <header class="hero">
-    <p class="eyebrow">Nikkei 225 · 1945–2026</p>
-    <h1>日本株 暴落・暴騰の年表</h1>
-    <p>東証再開（1949年）以降、日本株を大きく揺らした出来事を時系列で。青い線のある15つの出来事は、週次チャートと当時のニュースで詳しく振り返れます。</p>
-  </header>
   <main class="wrap">
+    <div class="pg-head">
+      <h1>日本株 暴落・暴騰の年表（1945年〜）</h1>
+      <p>東証再開（1949年）以降、日本株を大きく揺らした出来事を時系列でたどれます。青い線のある15つの出来事は、週次チャートと当時のニュースで詳しく振り返れます。</p>
+    </div>
+    <nav class="vw-toggle" aria-label="表示の切り替え"><a href="/history">一覧で見る</a><a href="/timeline" aria-current="page">年表で見る</a></nav>
     <div class="controls">
       <div class="filters" hidden>
         <button type="button" data-filter="all" aria-pressed="true">すべて</button>
@@ -112,6 +116,7 @@
       </div>
       <p class="legend"><span><i class="dot crash"></i>暴落</span><span><i class="dot boom"></i>暴騰</span><span><i class="dot turn"></i>転換点</span><span><i class="dot note"></i>出来事</span></p>
     </div>
+    <nav class="dec-jump" aria-label="年代へ移動"><a href="#d1940">1940年代</a><a href="#d1950">1950年代</a><a href="#d1960">1960年代</a><a href="#d1970">1970年代</a><a href="#d1980">1980年代</a><a href="#d1990">1990年代</a><a href="#d2000">2000年代</a><a href="#d2010">2010年代</a><a href="#d2020">2020年代</a></nav>
     <div id="tl">
       <h2 class="decade" id="d1940">1940年代</h2>
       <article class="tl-item" data-type="note">
