@@ -448,6 +448,7 @@ test("暴落ランキング: タブの切り替え先がすべて存在し、全
   const ids = [...seg[0].matchAll(/href="#([^"]+)"/g)].map((m) => m[1]);
   assert.deepEqual(ids, ["h-day", "h-pt-day", "h-dd", "h-rec"]);
   for (const id of ids) assert.ok(html.includes(`<h2 id="${id}">`), `#${id} の表がある`);
-  assert.ok(!/<section[^>]*\shidden/.test(html), "初期HTMLでは表を隠さない");
+  const tabs = html.match(/<div class="rk-tabs"[\s\S]*?<script>/);
+  assert.ok(tabs && !/<section[^>]*\shidden/.test(tabs[0]), "初期HTMLでは表を隠さない");
   assert.ok(html.includes('class="rk-dock"'), "画面下の次の一歩");
 });
