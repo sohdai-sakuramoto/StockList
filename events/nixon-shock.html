@@ -47,11 +47,9 @@
   <nav class="sh-bc" aria-label="パンくずリスト"><ol><li><a href="/">ホーム</a></li><li><a href="/history">出来事一覧</a></li><li><span aria-current="page">ニクソンショック</span></li></ol></nav>
 </header>
   <div class="slv-wrap">
-    <nav class="slv-picker" aria-label="出来事を選ぶ"><a href="/events/dodge-recession">ドッジ不況</a><a href="/events/stalin-crash">スターリン暴落</a><a href="/events/securities-recession">証券不況</a><a href="/events/nixon-shock" aria-current="true">ニクソンショック</a><a href="/events/oil-shock-1973">第一次オイルショック</a><a href="/events/black-monday-1987">ブラックマンデー</a><a href="/events/bubble-collapse">バブル崩壊</a><a href="/events/asian-financial-crisis">アジア通貨危機</a><a href="/events/it-bubble-collapse">ITバブル崩壊</a><a href="/events/september-11-attacks">米同時多発テロ</a><a href="/events/lehman-shock">リーマンショック</a><a href="/events/great-east-japan-earthquake">東日本大震災</a><a href="/events/covid-shock">コロナショック</a><a href="/events/reiwa-black-monday">令和のブラックマンデー</a><a href="/events/ishiba-shock">石破ショック</a></nav>
-    <script>(function(){var p=document.currentScript.previousElementSibling,c=p&&p.querySelector('[aria-current="true"]');if(c&&p.scrollWidth>p.clientWidth)p.scrollLeft=c.offsetLeft-p.offsetLeft-20;})();</script>
     <div class="slv-intro">
     <div class="slv-head">
-      <h1>ニクソンショック</h1>
+      <h1>ニクソンショック<span class="yr">（1971年）</span></h1>
       <span class="cat">通貨危機</span>
       <time class="date" datetime="1971-08-16">1971年8月16日</time>
     </div>
@@ -66,15 +64,19 @@
       </div>
     </section>
     </div>
+    <nav class="slv-jump" aria-label="このページの目次"><a href="#slv-chart">チャート</a><a href="#slv-news">当時のニュース</a><a href="#slv-sim">シミュレーター</a><a href="#slv-cmp">過去と比較</a><a href="#slv-faq">FAQ</a></nav>
     <div id="slv-root"></div>
+
     <section class="slv-sim" id="slv-sim" aria-labelledby="slv-sim-h"></section>
+
+    <nav class="slv-pn" aria-label="前後の出来事（年代順）"><a class="slv-pn-prev" href="/events/securities-recession"><span class="k">← 前の出来事</span><b>証券不況</b><span class="y">1965年</span></a><a class="slv-pn-next" href="/events/oil-shock-1973"><span class="k">次の出来事 →</span><b>第一次オイルショック</b><span class="y">1973年</span></a></nav>
 
     <noscript>
       <h2>当時の主なニュース</h2>
       <ul><li><strong>1971-08-15｜米国が金・ドル交換停止を発表</strong><br>ニクソン大統領がドルと金の交換停止などの新経済政策を発表(日本時間16日)。固定相場制の崩壊と円高への懸念が一気に高まった。（各種報道）</li><li><strong>1971-08-16｜日経平均7.68%の急落</strong><br>発表を受けて東京市場は全面安。下落幅は当時の過去最大となった。（日経平均 読む・知る・学ぶ）</li><li><strong>1971-08-19｜4日間で約550円下落</strong><br>円高への警戒から売りが続き、日経平均は16日からの4日間で約550円下げた。（日経平均 読む・知る・学ぶ）</li><li><strong>1971-08-28｜円が変動相場制に移行</strong><br>固定相場の維持を断念し、円は事実上の切り上げに向かった。（各種報道）</li><li><strong>1971-12-18｜スミソニアン合意、1ドル=308円に</strong><br>主要国が為替レートの調整で合意し、円は1ドル=360円から308円へ切り上げられた(20日から実施)。（国立公文書館）</li><li><strong>1972-01-05｜ショック前の水準を回復</strong><br>金融緩和で余った資金が株式に流れ込む「過剰流動性相場」の中で、株価は急速に回復した。（日経平均 読む・知る・学ぶ）</li></ul>
     </noscript>
 
-    <section class="slv-cmp" aria-labelledby="slv-cmp-h">
+    <section class="slv-cmp" id="slv-cmp" aria-labelledby="slv-cmp-h">
       <h2 id="slv-cmp-h">この下落は、過去の暴落と比べてどれくらい大きかった？</h2>
       <p class="slv-cmp-sub">日経平均の最大下落率（高値→底・終値）と、高値を回復するまでの期間</p>
       <ol class="slv-cmp-list">
@@ -118,7 +120,7 @@
       <a class="slv-cmp-all" href="/crash-ranking">暴落ランキングで全件を比べる<span aria-hidden="true">→</span></a>
     </section>
 
-    <section class="slv-faq" aria-label="よくある質問">
+    <section class="slv-faq" id="slv-faq" aria-label="よくある質問">
       <h2 class="slv-faq-h">よくある質問</h2>
       <details><summary>ニクソンショックはいつ起きた?</summary><div class="slv-faq-a">1971年8月15日（米国時間）です。ニクソン米大統領が金とドルの交換停止を発表し、日本時間16日の日経平均は7.68%急落しました。</div></details>
       <details><summary>ニクソンショックで日経平均は何%下がった?</summary><div class="slv-faq-a">発表を受けた1971年8月16日に7.68%下落し、直前の高値2,727円から8月24日の2,162円まで、およそ21%下落しました。</div></details>

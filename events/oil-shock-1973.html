@@ -47,11 +47,9 @@
   <nav class="sh-bc" aria-label="パンくずリスト"><ol><li><a href="/">ホーム</a></li><li><a href="/history">出来事一覧</a></li><li><span aria-current="page">第一次オイルショック</span></li></ol></nav>
 </header>
   <div class="slv-wrap">
-    <nav class="slv-picker" aria-label="出来事を選ぶ"><a href="/events/dodge-recession">ドッジ不況</a><a href="/events/stalin-crash">スターリン暴落</a><a href="/events/securities-recession">証券不況</a><a href="/events/nixon-shock">ニクソンショック</a><a href="/events/oil-shock-1973" aria-current="true">第一次オイルショック</a><a href="/events/black-monday-1987">ブラックマンデー</a><a href="/events/bubble-collapse">バブル崩壊</a><a href="/events/asian-financial-crisis">アジア通貨危機</a><a href="/events/it-bubble-collapse">ITバブル崩壊</a><a href="/events/september-11-attacks">米同時多発テロ</a><a href="/events/lehman-shock">リーマンショック</a><a href="/events/great-east-japan-earthquake">東日本大震災</a><a href="/events/covid-shock">コロナショック</a><a href="/events/reiwa-black-monday">令和のブラックマンデー</a><a href="/events/ishiba-shock">石破ショック</a></nav>
-    <script>(function(){var p=document.currentScript.previousElementSibling,c=p&&p.querySelector('[aria-current="true"]');if(c&&p.scrollWidth>p.clientWidth)p.scrollLeft=c.offsetLeft-p.offsetLeft-20;})();</script>
     <div class="slv-intro">
     <div class="slv-head">
-      <h1>第一次オイルショック</h1>
+      <h1>第一次オイルショック<span class="yr">（1973年）</span></h1>
       <span class="cat">資源危機</span>
       <time class="date" datetime="1973-10-16">1973年10月16日</time>
     </div>
@@ -66,15 +64,19 @@
       </div>
     </section>
     </div>
+    <nav class="slv-jump" aria-label="このページの目次"><a href="#slv-chart">チャート</a><a href="#slv-news">当時のニュース</a><a href="#slv-sim">シミュレーター</a><a href="#slv-cmp">過去と比較</a><a href="#slv-faq">FAQ</a></nav>
     <div id="slv-root"></div>
+
     <section class="slv-sim" id="slv-sim" aria-labelledby="slv-sim-h"></section>
+
+    <nav class="slv-pn" aria-label="前後の出来事（年代順）"><a class="slv-pn-prev" href="/events/nixon-shock"><span class="k">← 前の出来事</span><b>ニクソンショック</b><span class="y">1971年</span></a><a class="slv-pn-next" href="/events/black-monday-1987"><span class="k">次の出来事 →</span><b>ブラックマンデー</b><span class="y">1987年</span></a></nav>
 
     <noscript>
       <h2>当時の主なニュース</h2>
       <ul><li><strong>1973-01-24｜日経平均が5,359円の高値</strong><br>過剰流動性相場がピークを迎え、日経平均は5,359円74銭の高値をつけた。（日経平均 読む・知る・学ぶ）</li><li><strong>1973-02-14｜円が変動相場制に移行</strong><br>固定相場制から完全に離れ、円高が進んだ。（各種報道）</li><li><strong>1973-10-06｜第四次中東戦争が勃発</strong><br>中東での戦争をきっかけに、原油の供給不安が一気に高まった。（各種報道）</li><li><strong>1973-10-16｜湾岸産油国が原油価格を約70%引き上げ</strong><br>OPEC加盟の湾岸6カ国が原油公示価格の大幅引き上げを発表し、第一次石油危機が始まった。（各種報道）</li><li><strong>1973-11-01｜トイレットペーパー騒動</strong><br>物不足への不安から日用品の買いだめが広がり、「狂乱物価」と呼ばれる激しいインフレが進んだ。（各種報道）</li><li><strong>1973-12-22｜日銀が公定歩合を9%に引き上げ</strong><br>インフレを抑えるため、総需要抑制策の一環として大幅な利上げに踏み切った。（各種報道）</li><li><strong>1974-10-09｜日経平均3,355円の安値</strong><br>高値から約37%の下落。1974年は戦後初めて経済がマイナス成長となった。（各種報道）</li><li><strong>1978-03-28｜1973年の高値を回復</strong><br>企業の減量経営などで業績が持ち直し、約5年ぶりに高値を上回った。（各種報道）</li></ul>
     </noscript>
 
-    <section class="slv-cmp" aria-labelledby="slv-cmp-h">
+    <section class="slv-cmp" id="slv-cmp" aria-labelledby="slv-cmp-h">
       <h2 id="slv-cmp-h">この下落は、過去の暴落と比べてどれくらい大きかった？</h2>
       <p class="slv-cmp-sub">日経平均の最大下落率（高値→底・終値）と、高値を回復するまでの期間</p>
       <ol class="slv-cmp-list">
@@ -118,7 +120,7 @@
       <a class="slv-cmp-all" href="/crash-ranking">暴落ランキングで全件を比べる<span aria-hidden="true">→</span></a>
     </section>
 
-    <section class="slv-faq" aria-label="よくある質問">
+    <section class="slv-faq" id="slv-faq" aria-label="よくある質問">
       <h2 class="slv-faq-h">よくある質問</h2>
       <details><summary>第一次オイルショックはいつ起きた?</summary><div class="slv-faq-a">1973年10月です。10月6日に始まった第四次中東戦争をきっかけに、10月16日に湾岸産油国が原油価格を約70%引き上げました。日経平均は1974年10月に3,355円まで下落しました。</div></details>
       <details><summary>オイルショックで日経平均は何%下がった?</summary><div class="slv-faq-a">1973年1月の高値5,359円から1974年10月の3,355円まで、およそ37%下落しました。石油危機の前から、金融引き締めで下落が始まっていた点も特徴です。</div></details>

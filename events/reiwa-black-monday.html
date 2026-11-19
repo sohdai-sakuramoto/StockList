@@ -47,11 +47,9 @@
   <nav class="sh-bc" aria-label="パンくずリスト"><ol><li><a href="/">ホーム</a></li><li><a href="/history">出来事一覧</a></li><li><span aria-current="page">令和のブラックマンデー</span></li></ol></nav>
 </header>
   <div class="slv-wrap">
-    <nav class="slv-picker" aria-label="出来事を選ぶ"><a href="/events/dodge-recession">ドッジ不況</a><a href="/events/stalin-crash">スターリン暴落</a><a href="/events/securities-recession">証券不況</a><a href="/events/nixon-shock">ニクソンショック</a><a href="/events/oil-shock-1973">第一次オイルショック</a><a href="/events/black-monday-1987">ブラックマンデー</a><a href="/events/bubble-collapse">バブル崩壊</a><a href="/events/asian-financial-crisis">アジア通貨危機</a><a href="/events/it-bubble-collapse">ITバブル崩壊</a><a href="/events/september-11-attacks">米同時多発テロ</a><a href="/events/lehman-shock">リーマンショック</a><a href="/events/great-east-japan-earthquake">東日本大震災</a><a href="/events/covid-shock">コロナショック</a><a href="/events/reiwa-black-monday" aria-current="true">令和のブラックマンデー</a><a href="/events/ishiba-shock">石破ショック</a></nav>
-    <script>(function(){var p=document.currentScript.previousElementSibling,c=p&&p.querySelector('[aria-current="true"]');if(c&&p.scrollWidth>p.clientWidth)p.scrollLeft=c.offsetLeft-p.offsetLeft-20;})();</script>
     <div class="slv-intro">
     <div class="slv-head">
-      <h1>令和のブラックマンデー</h1>
+      <h1>令和のブラックマンデー<span class="yr">（2024年）</span></h1>
       <span class="cat">世界同時株安</span>
       <time class="date" datetime="2024-08-05">2024年8月5日</time>
     </div>
@@ -67,15 +65,23 @@
       </div>
     </section>
     </div>
+    <nav class="slv-jump" aria-label="このページの目次"><a href="#slv-chart">チャート</a><a href="#slv-news">当時のニュース</a><a href="#slv-sim">シミュレーター</a><a href="#slv-cmp">過去と比較</a><a href="#slv-faq">FAQ</a></nav>
     <div id="slv-root"></div>
+
+    <aside class="slv-dayrank">
+      <p>この出来事の1日の下落率は、歴代<b>2位</b>（2024年8月5日　<span class="neg">−12.40%</span>）です。</p>
+      <a href="/crash-ranking#h-day">暴落ランキングで比べる →</a>
+    </aside>
     <section class="slv-sim" id="slv-sim" aria-labelledby="slv-sim-h"></section>
+
+    <nav class="slv-pn" aria-label="前後の出来事（年代順）"><a class="slv-pn-prev" href="/events/covid-shock"><span class="k">← 前の出来事</span><b>コロナショック</b><span class="y">2020年</span></a><a class="slv-pn-next" href="/events/ishiba-shock"><span class="k">次の出来事 →</span><b>石破ショック</b><span class="y">2024年</span></a></nav>
 
     <noscript>
       <h2>当時の主なニュース</h2>
       <ul><li><strong>2024-07-11｜日経平均が史上最高値4万2,224円</strong><br>終値で4万2,224円をつけ、史上最高値を更新した。（各種報道）</li><li><strong>2024-07-31｜日銀が追加利上げを決定</strong><br>政策金利を0.25%程度に引き上げ、国債買い入れの減額計画も決めた。円高が進んだ。（各種報道）</li><li><strong>2024-08-02｜米景気後退懸念で2,216円安</strong><br>米国の経済指標の悪化で景気後退への警戒が強まり、急速な円高も重なって大幅安となった。（各種報道）</li><li><strong>2024-08-05｜4,451円安、過去最大の下げ幅</strong><br>終値は3万1,458円。下げ幅は1987年のブラックマンデー(3,836円)を超えて過去最大、下落率12.40%は歴代2位だった。（日本経済新聞）</li><li><strong>2024-08-06｜一転3,217円高、過去最大の上げ幅</strong><br>前日の急落から買い戻しが入り、終値は3万4,675円。上げ幅は過去最大となった。（日本経済新聞）</li><li><strong>2024-08-07｜日銀副総裁「市場が不安定な状況で利上げしない」</strong><br>内田副総裁の講演での発言が伝わり、市場の動揺は落ち着きに向かった。（各種報道）</li><li><strong>2025-04-07｜米関税政策で再び急落、2,644円安</strong><br>米国の相互関税の発表を受けて世界的な株安となり、日経平均は3万1,136円まで下落した。下げ幅は歴代3位。（日本経済新聞）</li><li><strong>2025-08-12｜史上最高値を更新、暴落前の水準を回復</strong><br>日経平均は終値4万2,718円となり、2024年7月の最高値を約13か月ぶりに上回った。（日本経済新聞）</li></ul>
     </noscript>
 
-    <section class="slv-cmp" aria-labelledby="slv-cmp-h">
+    <section class="slv-cmp" id="slv-cmp" aria-labelledby="slv-cmp-h">
       <h2 id="slv-cmp-h">この下落は、過去の暴落と比べてどれくらい大きかった？</h2>
       <p class="slv-cmp-sub">日経平均の最大下落率（高値→底・終値）と、高値を回復するまでの期間</p>
       <ol class="slv-cmp-list">
@@ -113,7 +119,7 @@
       <a class="slv-cmp-all" href="/crash-ranking">暴落ランキングで全件を比べる<span aria-hidden="true">→</span></a>
     </section>
 
-    <section class="slv-faq" aria-label="よくある質問">
+    <section class="slv-faq" id="slv-faq" aria-label="よくある質問">
       <h2 class="slv-faq-h">よくある質問</h2>
       <details><summary>令和のブラックマンデーはいつ起きた?</summary><div class="slv-faq-a">2024年8月5日です。日経平均は4,451円安と過去最大の下げ幅を記録しました。翌6日には一転して3,217円高と、過去最大の上げ幅となりました。</div></details>
       <details><summary>令和のブラックマンデーで日経平均は何%下がった?</summary><div class="slv-faq-a">7月11日の史上最高値(4万2,224円)から8月5日の3万1,458円まで、およそ25%下落しました。8月5日の1日だけで12.40%下落しています。</div></details>

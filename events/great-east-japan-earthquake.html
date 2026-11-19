@@ -47,11 +47,9 @@
   <nav class="sh-bc" aria-label="パンくずリスト"><ol><li><a href="/">ホーム</a></li><li><a href="/history">出来事一覧</a></li><li><span aria-current="page">東日本大震災</span></li></ol></nav>
 </header>
   <div class="slv-wrap">
-    <nav class="slv-picker" aria-label="出来事を選ぶ"><a href="/events/dodge-recession">ドッジ不況</a><a href="/events/stalin-crash">スターリン暴落</a><a href="/events/securities-recession">証券不況</a><a href="/events/nixon-shock">ニクソンショック</a><a href="/events/oil-shock-1973">第一次オイルショック</a><a href="/events/black-monday-1987">ブラックマンデー</a><a href="/events/bubble-collapse">バブル崩壊</a><a href="/events/asian-financial-crisis">アジア通貨危機</a><a href="/events/it-bubble-collapse">ITバブル崩壊</a><a href="/events/september-11-attacks">米同時多発テロ</a><a href="/events/lehman-shock">リーマンショック</a><a href="/events/great-east-japan-earthquake" aria-current="true">東日本大震災</a><a href="/events/covid-shock">コロナショック</a><a href="/events/reiwa-black-monday">令和のブラックマンデー</a><a href="/events/ishiba-shock">石破ショック</a></nav>
-    <script>(function(){var p=document.currentScript.previousElementSibling,c=p&&p.querySelector('[aria-current="true"]');if(c&&p.scrollWidth>p.clientWidth)p.scrollLeft=c.offsetLeft-p.offsetLeft-20;})();</script>
     <div class="slv-intro">
     <div class="slv-head">
-      <h1>東日本大震災</h1>
+      <h1>東日本大震災<span class="yr">（2011年）</span></h1>
       <span class="cat">災害</span>
       <time class="date" datetime="2011-03-11">2011年3月11日</time>
     </div>
@@ -67,15 +65,23 @@
       </div>
     </section>
     </div>
+    <nav class="slv-jump" aria-label="このページの目次"><a href="#slv-chart">チャート</a><a href="#slv-news">当時のニュース</a><a href="#slv-sim">シミュレーター</a><a href="#slv-cmp">過去と比較</a><a href="#slv-faq">FAQ</a></nav>
     <div id="slv-root"></div>
+
+    <aside class="slv-dayrank">
+      <p>この出来事の1日の下落率は、歴代<b>4位</b>（2011年3月15日　<span class="neg">−10.55%</span>）です。</p>
+      <a href="/crash-ranking#h-day">暴落ランキングで比べる →</a>
+    </aside>
     <section class="slv-sim" id="slv-sim" aria-labelledby="slv-sim-h"></section>
+
+    <nav class="slv-pn" aria-label="前後の出来事（年代順）"><a class="slv-pn-prev" href="/events/lehman-shock"><span class="k">← 前の出来事</span><b>リーマンショック</b><span class="y">2008年</span></a><a class="slv-pn-next" href="/events/covid-shock"><span class="k">次の出来事 →</span><b>コロナショック</b><span class="y">2020年</span></a></nav>
 
     <noscript>
       <h2>当時の主なニュース</h2>
       <ul><li><strong>2011-03-11｜東北地方太平洋沖地震が発生（14:46）</strong><br>引け間際に発生し、売り注文が殺到して急落。（日本経済新聞）</li><li><strong>2011-03-14｜震災後初の取引、633円安（-6.2%）</strong><br>寄り付きから売り殺到。原発事故の影響で東京電力はストップ安、大引けまで取引成立せず。（日本経済新聞）</li><li><strong>2011-03-15｜-10.55%、過去3番目の下落率</strong><br>原発事故への懸念が拡大し、東証一部は歴史的な下落率を記録した。（日本経済新聞）</li><li><strong>2011-03-16｜買い戻しで大幅反発、9,000円台回復（+488円）</strong><br>震災後続いた下げが止まり、自律反発の買いが入った。（日本経済新聞）</li><li><strong>2011-03-18｜G7の協調介入合意で円高懸念後退、246円高</strong><br>為替の協調介入が合意され、輸出関連を中心に買い戻された。（日本経済新聞）</li><li><strong>2011-11-24｜欧州債務危機で年初来安値圏に下落</strong><br>ギリシャなど欧州発の信用不安が広がり、震災直後に迫る安値まで売られた。（各種報道）</li><li><strong>2012-11-14｜衆院解散、アベノミクス相場が始動</strong><br>円安・株高への期待から急伸。震災後の低迷局面を抜け、回復に向かった。（各種報道）</li><li><strong>2013-02-06｜震災前の水準を回復</strong><br>円安の進行を背景に11,000円台を回復し、震災前の水準に戻した。（各種報道）</li></ul>
     </noscript>
 
-    <section class="slv-cmp" aria-labelledby="slv-cmp-h">
+    <section class="slv-cmp" id="slv-cmp" aria-labelledby="slv-cmp-h">
       <h2 id="slv-cmp-h">この下落は、過去の暴落と比べてどれくらい大きかった？</h2>
       <p class="slv-cmp-sub">日経平均の最大下落率（高値→底・終値）と、高値を回復するまでの期間</p>
       <ol class="slv-cmp-list">
@@ -119,7 +125,7 @@
       <a class="slv-cmp-all" href="/crash-ranking">暴落ランキングで全件を比べる<span aria-hidden="true">→</span></a>
     </section>
 
-    <section class="slv-faq" aria-label="よくある質問">
+    <section class="slv-faq" id="slv-faq" aria-label="よくある質問">
       <h2 class="slv-faq-h">よくある質問</h2>
       <details><summary>東日本大震災はいつ起きた?</summary><div class="slv-faq-a">2011年3月11日（14時46分）です。震災後初の取引となった3月14日に日経平均は633円安（−6.2%）、15日には−10.55%と大きく下落しました。</div></details>
       <details><summary>東日本大震災で日経平均は何%下がった?</summary><div class="slv-faq-a">震災直前の水準(約10,900円)から3月15日の8,605円まで、2営業日で約2割下落しました。3月15日の −10.55% は、当時として過去3番目の下落率でした。</div></details>

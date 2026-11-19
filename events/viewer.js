@@ -41,7 +41,7 @@
       '<div class="slv-demo' + (series.source && series.source !== "real" ? " show" : "") + '">' +
         '<span aria-hidden="true">⚠</span><span>表示中の株価は<b>動作確認用のデモデータ</b>です。</span></div>' +
       '<div class="slv-grid">' +
-        '<section class="slv-card">' +
+        '<section class="slv-card" id="slv-chart">' +
           '<h2>日経平均（' + (MONTHLY ? "月次" : "週次") + '）</h2>' + cap +
           '<div class="slv-chartwrap"><div class="slv-tip"></div></div>' +
           '<div class="slv-kpis">' +
@@ -50,7 +50,7 @@
             '<div class="slv-kpi"><div class="k">表示期間（回復まで）</div><div class="v" data-kpi="weeks">-</div></div>' +
           '</div>' +
         '</section>' +
-        '<section class="slv-card">' +
+        '<section class="slv-card" id="slv-news">' +
           '<h2>大きな出来事（その' + (MONTHLY ? "月" : "週") + 'のニュース）</h2>' +
           '<p class="slv-cap">株価に影響した当時の報道。日付とチャートの' + (MONTHLY ? "月" : "週") + 'が対応します。</p>' +
           '<div class="slv-news"></div>' +

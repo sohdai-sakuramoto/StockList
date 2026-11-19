@@ -47,11 +47,9 @@
   <nav class="sh-bc" aria-label="パンくずリスト"><ol><li><a href="/">ホーム</a></li><li><a href="/history">出来事一覧</a></li><li><span aria-current="page">コロナショック</span></li></ol></nav>
 </header>
   <div class="slv-wrap">
-    <nav class="slv-picker" aria-label="出来事を選ぶ"><a href="/events/dodge-recession">ドッジ不況</a><a href="/events/stalin-crash">スターリン暴落</a><a href="/events/securities-recession">証券不況</a><a href="/events/nixon-shock">ニクソンショック</a><a href="/events/oil-shock-1973">第一次オイルショック</a><a href="/events/black-monday-1987">ブラックマンデー</a><a href="/events/bubble-collapse">バブル崩壊</a><a href="/events/asian-financial-crisis">アジア通貨危機</a><a href="/events/it-bubble-collapse">ITバブル崩壊</a><a href="/events/september-11-attacks">米同時多発テロ</a><a href="/events/lehman-shock">リーマンショック</a><a href="/events/great-east-japan-earthquake">東日本大震災</a><a href="/events/covid-shock" aria-current="true">コロナショック</a><a href="/events/reiwa-black-monday">令和のブラックマンデー</a><a href="/events/ishiba-shock">石破ショック</a></nav>
-    <script>(function(){var p=document.currentScript.previousElementSibling,c=p&&p.querySelector('[aria-current="true"]');if(c&&p.scrollWidth>p.clientWidth)p.scrollLeft=c.offsetLeft-p.offsetLeft-20;})();</script>
     <div class="slv-intro">
     <div class="slv-head">
-      <h1>コロナショック</h1>
+      <h1>コロナショック<span class="yr">（2020年）</span></h1>
       <span class="cat">パンデミック</span>
       <time class="date" datetime="2020-02-25">2020年2月25日</time>
     </div>
@@ -66,15 +64,19 @@
       </div>
     </section>
     </div>
+    <nav class="slv-jump" aria-label="このページの目次"><a href="#slv-chart">チャート</a><a href="#slv-news">当時のニュース</a><a href="#slv-sim">シミュレーター</a><a href="#slv-cmp">過去と比較</a><a href="#slv-faq">FAQ</a></nav>
     <div id="slv-root"></div>
+
     <section class="slv-sim" id="slv-sim" aria-labelledby="slv-sim-h"></section>
+
+    <nav class="slv-pn" aria-label="前後の出来事（年代順）"><a class="slv-pn-prev" href="/events/great-east-japan-earthquake"><span class="k">← 前の出来事</span><b>東日本大震災</b><span class="y">2011年</span></a><a class="slv-pn-next" href="/events/reiwa-black-monday"><span class="k">次の出来事 →</span><b>令和のブラックマンデー</b><span class="y">2024年</span></a></nav>
 
     <noscript>
       <h2>当時の主なニュース</h2>
       <ul><li><strong>2020-02-25｜感染の世界拡大懸念で急落開始</strong><br>欧米での感染拡大が伝わり、リスク回避の売りが強まった。（各種報道）</li><li><strong>2020-03-09｜原油急落も重なり-5.07%</strong><br>産油国の協調減産決裂による原油急落が加わり、下げが加速。（各種報道）</li><li><strong>2020-03-13｜-6.08%、コロナショック本格化</strong><br>WHOのパンデミック宣言を受け、世界的に株安が進行した。（各種報道）</li><li><strong>2020-03-19｜一時16,358円まで下落（底値圏）</strong><br>この週を底に、各国の大規模な金融・財政策への期待で反発に転じた。（各種報道）</li><li><strong>2020-04-01｜感染拡大で警戒感、851円安（-4.50%）</strong><br>経済活動停滞の警戒感から米株先物が大幅安、下げ幅は一時1000円超。（日本経済新聞）</li><li><strong>2020-04-07｜緊急事態宣言、756円高</strong><br>感染ピークアウト期待や短期筋の買いで急反発。7都府県に緊急事態宣言。（日本経済新聞）</li><li><strong>2020-05-25｜緊急事態宣言が全面解除、経済再開へ期待</strong><br>国内の宣言が全面解除され、段階的な経済再開への期待から戻りを試す展開になった。（各種報道）</li><li><strong>2020-11-05｜コロナ前の水準を回復</strong><br>大規模な金融・財政政策やワクチンへの期待を背景に、約9か月で下落前の水準を回復した。（各種報道）</li></ul>
     </noscript>
 
-    <section class="slv-cmp" aria-labelledby="slv-cmp-h">
+    <section class="slv-cmp" id="slv-cmp" aria-labelledby="slv-cmp-h">
       <h2 id="slv-cmp-h">この下落は、過去の暴落と比べてどれくらい大きかった？</h2>
       <p class="slv-cmp-sub">日経平均の最大下落率（高値→底・終値）と、高値を回復するまでの期間</p>
       <ol class="slv-cmp-list">
@@ -112,7 +114,7 @@
       <a class="slv-cmp-all" href="/crash-ranking">暴落ランキングで全件を比べる<span aria-hidden="true">→</span></a>
     </section>
 
-    <section class="slv-faq" aria-label="よくある質問">
+    <section class="slv-faq" id="slv-faq" aria-label="よくある質問">
       <h2 class="slv-faq-h">よくある質問</h2>
       <details><summary>コロナショックはいつ起きた?</summary><div class="slv-faq-a">2020年2月下旬から3月にかけてです。2月25日に感染の世界的な拡大への懸念から急落が始まり、3月19日には一時16,358円まで下落しました。</div></details>
       <details><summary>コロナショックで日経平均は何%下がった?</summary><div class="slv-faq-a">2020年初の高値(約24,000円)から3月19日の約16,358円まで、およそ3割下落しました。感染拡大に原油急落が重なり、短期間で急落しました。</div></details>
