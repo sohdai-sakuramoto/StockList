@@ -2,7 +2,7 @@
   "id": "sept-11",
   "title": "米同時多発テロ",
   "source": "real",
-  "generated_at": "2026-11-19T18:06:34.607Z",
+  "generated_at": "2026-11-20T17:40:03.475Z",
   "granularity": "week",
   "window": [
     "2001-09-11",
@@ -42,7 +42,7 @@
       "close": 10292.95
     },
     "later_low": null,
-    "as_of": "2026-11-19"
+    "as_of": "2026-11-20"
   },
   "points": [
     {
