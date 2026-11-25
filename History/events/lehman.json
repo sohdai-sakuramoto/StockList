@@ -2,7 +2,7 @@
   "id": "lehman",
   "title": "リーマンショック",
   "source": "real",
-  "generated_at": "2026-11-24T20:03:13.778Z",
+  "generated_at": "2026-11-25T19:03:51.171Z",
   "granularity": "week",
   "window": [
     "2008-08-18",
@@ -46,7 +46,7 @@
       "close": 7054.98,
       "drawdown": -0.6137
     },
-    "as_of": "2026-11-20"
+    "as_of": "2026-11-25"
   },
   "points": [
     {
